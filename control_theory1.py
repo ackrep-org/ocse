@@ -770,3 +770,72 @@ I1371 = p.create_item(
     R11__has_range_of_result=I9923["scalar field"],
     # TODO: add defining equation
 )
+
+
+# < Model Properties>
+
+# reminder of already existing entities
+assert I5356["general system property"]
+assert I5357["differential flatness"]
+assert I5358["exact input-to-state linearizability"]
+assert p.R17["is subproperty of"]
+
+
+I4101 = p.create_item(
+    R1__has_label="general time variance",
+    R2__has_description="states that the model of a dynamical system (i.e. its parameters) might change over time",
+    R4__is_instance_of=I5356["general system property"],
+)
+
+I7733 = p.create_item(
+    R1__has_label="time invariance",
+    R2__has_description="states that the model of a dynamical system (i.e. its parameters) does not change over time",
+    R4__is_instance_of=I5356["general system property"],
+    R17__is_subproperty_of=I4101["general time variance"]
+)
+
+I9030 = p.create_item(
+    R1__has_label="strict time variance",
+    R2__has_description="states that the model of a dynamical system (i.e. its parameters) do change over time",
+    R4__is_instance_of=I5356["general system property"],
+    R17__is_subproperty_of=I4101["general time variance"],
+    R43__is_opposite_of=I7733["time invariance"],
+)
+
+"""
+key reservoir 
+
+I9210
+I7864
+I9853
+I3227
+I3321
+I5247
+I1793
+I2827
+I6091
+I2928
+I4761
+I1898
+I7641
+I4478
+I8978
+I5031
+I5718
+I7062
+I9820
+I1664
+I5236
+I9642
+I4900
+I5082
+I2931
+I9987
+I6548
+I6189
+I4274
+I3712
+I6338
+I2613
+I2983
+"""
