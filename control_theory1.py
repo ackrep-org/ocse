@@ -802,14 +802,53 @@ I9030 = p.create_item(
     R43__is_opposite_of=I7733["time invariance"],
 )
 
+I9210 = p.create_item(
+    R1__has_label="stabilizability",
+    R2__has_description="states that for the model of a dynamical system there exists a state feedback such that the \
+        system is asymptotically stable",
+    R4__is_instance_of=I5356["general system property"],
+)
+
+I7864 = p.create_item(
+    R1__has_label="controllability",
+    R2__has_description="states that the state of the model of a dynamical system can be changed from any arbitrary \
+        starting state to any desired state in a finite amount of time using an external input",
+    R4__is_instance_of=I5356["general system property"],
+    R17__is_subproperty_of=I9210["stabilizability"],
+)
+
+I9853 = p.create_item(
+    R1__has_label="detectability",
+    R2__has_description="states that all unobservable state components of the model of a dynamical system are \
+        asymptotically stable",
+    R4__is_instance_of=I5356["general system property"],
+)
+
+I3227 = p.create_item(
+    R1__has_label="observability",
+    R2__has_description="states that all state components of the model of a dynamical system can be reconstructed using\
+        only information of the system outputs",
+    R4__is_instance_of=I5356["general system property"],
+    R17__is_subproperty_of=I9853["detectability"],
+)
+
+I3321 = p.create_item(
+    R1__has_label="minimum phase",
+    R2__has_description="states that the model of a dynamical system has asymptotically stable zero dynamics",
+    R4__is_instance_of=I5356["general system property"],
+)
+
 """
+template:
+= p.create_item(
+    R1__has_label="",
+    R2__has_description="",
+    R4__is_instance_of=I5356["general system property"],
+    R4__is_instance_of=I1793["general model representation property"],
+)
+
 key reservoir J
 
-I9210
-I7864
-I9853
-I3227
-I3321
 I5247
 I1793
 I2827
