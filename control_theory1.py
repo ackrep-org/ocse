@@ -22,6 +22,18 @@ I5948 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],  # this means: this Item is an ordinary class
 )
 
+I7641 = p.create_item(
+    R1__has_label="general system model",
+    R2__has_description="model of a dynamical system",
+    R4__is_instance_of=p.I2["Metaclass"], 
+)
+
+R7641 = p.create_relation(
+    R1__has_label="is approximation of",
+    R2__has_description="object or class which is an approximation of a dynamical system"
+)
+
+I7641["general system model"].set_relation(R7641["is approximation of"], I5948["dynamical system"])
 
 I4466 = p.create_item(
     R1__has_label="Systems Theory",
@@ -30,7 +42,7 @@ I4466 = p.create_item(
     R5__is_part_of=[p.I4["Mathematics"], p.I5["Engineering"]],
 )
 
-R1001 = p.create_relation(R1__has_label="studies", R2__has_description="object or class wich an academic field studies")
+R1001 = p.create_relation(R1__has_label="studies", R2__has_description="object or class which an academic field studies")
 
 I4466["Systems Theory"].set_relation(R1001["studies"], I5948["dynamical system"])
 
@@ -59,14 +71,36 @@ R4349 = p.create_relation(
 
 R9125 = p.create_relation(
     R1__has_label="has input dimension",
-    # R8__has_domain_of_argument_1= generic dynamical system
+    R8__has_domain_of_argument_1=I7641["general system model"],
     # R11__has_range_of_result= nonnegative integer
+    R22__is_functional=True,
 )
+
+I1793 = p.create_item(
+    R1__has_label="general model representation property",
+    R2__has_description="general property of the representation of a model of a dynamical system \
+        (not an intrinsic system property)",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
+
+I2928 = p.create_item(
+    R1__has_label="general model representation",
+    R2__has_description="general (mathematical) representation of a model of a dynamical system",
+    R4__is_instance_of=p.I2["Metaclass"],
+    R16__has_property=I1793["general model representation property"]
+)
+
+R2928 = p.create_relation(
+    R1__has_label="has model representation",
+    R2__has_description="system model has a mathematical representation"
+)
+
+I7641["general system model"].set_relation(R2928["has model representation"], I2928["general model representation"])
 
 I6886 = p.create_item(
     R1__has_label="general ode state space representation",
     R2__has_description="explicit first order ODE system description of a dynamical system",
-    R4__is_instance_of=p.I2["Metaclass"],
+    R3__is_subclass_of=I2928["general model representation"],
     # TODO: this has to use create_equation (to be implemented)
     R6__has_defining_equation=p.create_expression(r"$\dot x = f(x, u)$"),
 )
@@ -76,6 +110,8 @@ I5356 = p.create_item(
     R2__has_description="general property of a model of a dynamical system (not of its representation)",
     R4__is_instance_of=p.I2["Metaclass"],
 )
+
+I7641["general system model"].set_relation(p.R16["has property"], I5356["general system property"])
 
 I5357 = p.create_item(
     R1__has_label="differential flatness",
@@ -838,6 +874,43 @@ I3321 = p.create_item(
     R4__is_instance_of=I5356["general system property"],
 )
 
+I2827 = p.create_item(
+    R1__has_label="general nonlinearity",
+    R2__has_description="states that the system model equations might not be linear",
+    R4__is_instance_of=I1793["general model representation property"],
+)
+
+I6091 = p.create_item(
+    R1__has_label="input affine",
+    R2__has_description="states that in the system model equations the input only appears linearly",
+    R4__is_instance_of=I1793["general model representation property"],
+    R6__has_defining_equation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
+    R17__is_subproperty_of=I2827["general nonlinearity"]
+)
+
+I5247 = p.create_item(
+    R1__has_label="polynomial",
+    R2__has_description="states that the system model equations are polynomial w.r.t. the state components",
+    R4__is_instance_of=I1793["general model representation property"],
+    R17__is_subproperty_of=I6091["input affine"]
+)
+
+I4761 = p.create_item(
+    R1__has_label="linearity",
+    R2__has_description="states that the system model equations are linear",
+    R4__is_instance_of=I1793["general model representation property"],
+    R17__is_subproperty_of=I5247["polynomial"],    
+)
+
+I1898 = p.create_item(
+    R1__has_label="lti",
+    R2__has_description="states that the system model is linear and time-invariant",
+    R4__is_instance_of=I5356["general system property"],
+    R17__is_subproperty_of=[I4761["linearity"], I7733["time invariance"]]
+)
+
+
+
 """
 template:
 = p.create_item(
@@ -849,14 +922,7 @@ template:
 
 key reservoir J
 
-I5247
-I1793
-I2827
-I6091
-I2928
-I4761
-I1898
-I7641
+
 I4478
 I8978
 I5031
