@@ -33,7 +33,8 @@ R7641 = p.create_relation(
     R2__has_description="object or class which is an approximation of a dynamical system"
 )
 
-I7641["general system model"].set_relation(R7641["is approximation of"], I5948["dynamical system"])
+# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result
+# I7641["general system model"].set_relation(R7641["is approximation of"], I5948["dynamical system"])
 
 I4466 = p.create_item(
     R1__has_label="Systems Theory",
@@ -94,7 +95,9 @@ I2928 = p.create_item(
     R1__has_label="general model representation",
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
     R4__is_instance_of=p.I2["Metaclass"],
-    R16__has_property=I1793["general model representation property"]
+    
+    # !! ck: this is imho unintended usage of R16 –> see also (and maby improve) R16.R18__has_usage_hint
+    # R16__has_property=I1793["general model representation property"]
 )
 
 R2928 = p.create_relation(
@@ -102,7 +105,8 @@ R2928 = p.create_relation(
     R2__has_description="system model has a mathematical representation"
 )
 
-I7641["general system model"].set_relation(R2928["has model representation"], I2928["general model representation"])
+# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result
+# I7641["general system model"].set_relation(R2928["has model representation"], I2928["general model representation"])
 
 I6886 = p.create_item(
     R1__has_label="general ode state space representation",
@@ -126,7 +130,9 @@ I5356 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],
 )
 
-I7641["general system model"].set_relation(p.R16["has property"], I5356["general system property"])
+# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result (maybe)
+# Challenge: R16__has_property is so generic that it probably deserves many domain-range-pairs
+# I7641["general system model"].set_relation(p.R16["has property"], I5356["general system property"])
 
 I5357 = p.create_item(
     R1__has_label="differential flatness",
@@ -1063,7 +1069,9 @@ I7062 = p.create_item(
     R1__has_label="trajectory",
     R2__has_description="solution to a differential equation",
     R3__is_subclass_of=I4235["mathematical object"],
-    R16__has_property=I5236["general trajectory property"],
+
+    # !! ck: this is imho unintended usage of R16 –> see also (and maby improve) R16.R18__has_usage_hint
+    #R16__has_property=I5236["general trajectory property"],
 )
 
 R5031 = p.create_relation(
@@ -1072,7 +1080,8 @@ R5031 = p.create_relation(
     # todo: arg, result
 )
 
-I7641["general system model"].set_relation(R5031["has trajectory"], I7062["trajectory"])
+# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result
+# I7641["general system model"].set_relation(R5031["has trajectory"], I7062["trajectory"])
 
 I9820 = p.create_item(
     R1__has_label="equilibrium point",
