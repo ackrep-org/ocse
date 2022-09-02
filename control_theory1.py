@@ -72,7 +72,14 @@ R4349 = p.create_relation(
 R9125 = p.create_relation(
     R1__has_label="has input dimension",
     R8__has_domain_of_argument_1=I7641["general system model"],
-    # R11__has_range_of_result= nonnegative integer
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
+)
+
+R8978 = p.create_relation(
+    R1__has_label="has output dimension",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
 
@@ -80,7 +87,7 @@ I1793 = p.create_item(
     R1__has_label="general model representation property",
     R2__has_description="general property of the representation of a model of a dynamical system \
         (not an intrinsic system property)",
-    R4__is_instance_of=p.I2["Metaclass"],
+    R4__is_instance_of=p.I11["mathematical property"],
 )
 
 I2928 = p.create_item(
@@ -259,16 +266,16 @@ I8182 = p.create_item(
     R17__is_subproperty_of=I8181["properness"],
 )
 
-I7206 = p.create_item(
-    R1__has_label="system-dynamical property",
-    R2__has_description="base class for all systemdynamical properties",
-    R3__is_subclass_of=p.I11["mathematical property"],
-)
+# I7206 = p.create_item(
+#     R1__has_label="system-dynamical property",
+#     R2__has_description="base class for all systemdynamical properties",
+#     R3__is_subclass_of=p.I11["mathematical property"],
+# )
 
 I7207 = p.create_item(
     R1__has_label="stability",
     R2__has_description="tendency to stay close to some distinguished trajectory (e.g. equilibrium)",
-    R4__is_instance_of=I7206["system-dynamical property"],
+    R4__is_instance_of=p.I11["mathematical property"],
 )
 
 # todo: this entity should be made more precise whether it is global or local
@@ -909,7 +916,146 @@ I1898 = p.create_item(
     R17__is_subproperty_of=[I4761["linearity"], I7733["time invariance"]]
 )
 
+I4478 = p.create_item(
+    R1__has_label="strict nonlinearity",
+    R2__has_description="states that the system model equations are not linear",
+    R4__is_instance_of=I1793["general model representation property"],
+    R17__is_subproperty_of=I2827["general nonlinearity"],
+    R43__is_opposite_of=I4761["linearity"],
+)
 
+I8978 = p.create_item(
+    R1__has_label="time continuity",
+    R2__has_description="states that the system is modeled continuously",
+    R4__is_instance_of=I1793["general model representation property"],
+)
+
+I5031 = p.create_item(
+    R1__has_label="time discreteness",
+    R2__has_description="states that the system is modeled discretely",
+    R4__is_instance_of=I1793["general model representation property"],
+    R43__is_opposite_of=I8978["time continuity"]
+)
+
+I5718 = p.create_item(
+    R1__has_label="autonomy",
+    R2__has_description="states that the model of a dynamical system is autonomous",
+    R4__is_instance_of=I5356["general system property"],
+    # TODO rule with R9125["has input dimension"] 0
+)
+
+I5236 = p.create_item(
+    R1__has_label="general trajectory property",
+    R2__has_description="general property of a trajectory",
+    R4__is_instance_of=p.I11["mathematical property"]
+)
+
+I7062 = p.create_item(
+    R1__has_label="trajectory",
+    R2__has_description="solution to a differential equation",
+    R3__is_subclass_of=I4235["mathematical object"],
+    R16__has_property=I5236["general trajectory property"],
+)
+
+R5031 = p.create_relation(
+    R1__has_label="has trajectory",
+    R2__has_description="object or class has a trajectory",
+    # todo: arg, result
+)
+
+I7641["general system model"].set_relation(R5031["has trajectory"], I7062["trajectory"])
+
+I9820 = p.create_item(
+    R1__has_label="equilibrium point",
+    R2__has_description="constant solution to a diffenrential equation",
+    R3__is_subclass_of=I7062["trajectory"],
+)
+
+I1664 = p.create_item(
+    R1__has_label="limit cycle",
+    R2__has_description="closed trajectory which other trajectories spiral into or out of",
+    R3__is_subclass_of=I7062["trajectory"],
+)
+
+# ljapunov stability
+# TODO local vs global
+
+I5082 = p.create_item(
+    R1__has_label="local attractiveness",
+    R2__has_description="states that all trajectories that start close enough to the trajectory in consideration will \
+        converge to it",
+    R4__is_instance_of=I5236["general trajectory property"],
+)
+
+I8059 = p.create_item(
+    R1__has_label="global attractiveness",
+    R2__has_description="states that all trajectories will converge to the trajectory in consideration",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=I5082["local attractiveness"]
+)
+
+I2931 = p.create_item(
+    R1__has_label="local ljapunov stability",
+    R2__has_description="states that all trajectories that start close enough to the equilibrium will not leave a \
+        certain neighborhood",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=I7207["stability"],
+)
+
+I8744 = p.create_item(
+    R1__has_label="global ljapunov stability",
+    R2__has_description="states that all trajectories will not leave a certain neighborhood around the equilibrium",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=I2931["local ljapunov stability"],
+)
+
+I4900 = p.create_item(
+    R1__has_label="local asymtotical stability",
+    R2__has_description="states that all trajectories that start close enough to the equilibrium remain close enough \
+        and will converge to it",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=[I2931["local ljapunov stability"], I5082["local attractiveness"]],
+)
+
+I5677 = p.create_item(
+    R1__has_label="global asymtotical stability",
+    R2__has_description="states that all trajectories remain close enough to the equilibrium and will converge to it",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=[
+        I8744["global ljapunov stability"], I8059["global attractiveness"], I4900["local asymtotical stability"]
+    ],
+)
+
+I9642 = p.create_item(
+    R1__has_label="local exponential stability",
+    R2__has_description="states that an equilibrium is locally asymptotically stable and all trajectories converge at \
+        least exponentially fast",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=I4900["local asymtotical stability"],
+)
+
+I5100 = p.create_item(
+    R1__has_label="global exponential stability",
+    R2__has_description="states that an equilibrium is globally asymptotically stable and all trajectories converge at \
+        least exponentially fast",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R17__is_subproperty_of=[I5677["global asymtotical stability"], I9642["local exponential stability"]],
+)
+
+I8303 = p.create_item(
+    R1__has_label="stric ljapunov instability",
+    R2__has_description="states that some trajectories that start close enough to the equilibrium will still leave a \
+        certain neighborhood",
+    R4__is_instance_of=I5236["general trajectory property"],
+    R43__is_opposite_of=I2931["local ljapunov stability"],
+)
+
+# TODO knot, saddle, focus
+# I9304 = p.create_item(
+#     R1__has_label="knot",
+#     R2__has_description="",
+#     R4__is_instance_of=I5236["general trajectory property"],
+# )
 
 """
 template:
@@ -922,19 +1068,119 @@ template:
 
 key reservoir J
 
+      R8059
+      R8744
+      R5677
+      R5100
+      R8303
+      R9304
+I6467      R6467
+I4610      R4610
+I3241      R3241
+I1779      R1779
+I4131      R4131
+I4498      R4498
+I7667      R7667
+I1052      R1052
+I6203      R6203
+I1696      R1696
+I3898      R3898
+I5910      R5910
+I6850      R6850
+I2865      R2865
+I8063      R8063
+I2562      R2562
+I9964      R9964
+I3114      R3114
+I2557      R2557
+I3863      R3863
+I4704      R4704
+I8844      R8844
+I5239      R5239
+I1892      R1892
+I6830      R6830
+I7095      R7095
+I3659      R3659
+I6134      R6134
+I7599      R7599
+I4975      R4975
+I2950      R2950
+I8316      R8316
+I1070      R1070
+I2112      R2112
+I9746      R9746
+I6963      R6963
+I7818      R7818
+I2279      R2279
+I9769      R9769
+I6458      R6458
+I5919      R5919
+I4635      R4635
+I1161      R1161
+I2699      R2699
+I4931      R4931
+I9223      R9223
+I1195      R1195
+I1616      R1616
+I6012      R6012
+I3240      R3240
+I7169      R7169
+I1608      R1608
+I8133      R8133
+I3033      R3033
+I8302      R8302
+I1979      R1979
+I5006      R5006
+I3237      R3237
+I7490      R7490
+I6259      R6259
+I1474      R1474
+I5177      R5177
+I1594      R1594
+I5807      R5807
+I3668      R3668
+I9739      R9739
+I6324      R6324
+I5359      R5359
+I1935      R1935
+I7178      R7178
+I2933      R2933
+I5483      R5483
+I3369      R3369
+I4663      R4663
+I8733      R8733
+I5106      R5106
+I5600      R5600
+I8026      R8026
+I5536      R5536
+I4703      R4703
+I6660      R6660
+I9594      R9594
+I2975      R2975
+I6204      R6204
+I9015      R9015
+I8509      R8509
+I5288      R5288
+I4766      R4766
+I4147      R4147
+I6210      R6210
+I1775      R1775
+I7006      R7006
+I4432      R4432
+I8142      R8142
 
-I4478
-I8978
-I5031
-I5718
-I7062
-I9820
-I1664
-I5236
-I9642
-I4900
-I5082
-I2931
+
+
+
+R5718
+R7062
+R9820
+R1664
+R5236
+R9642
+R4900
+R5082
+R2931
 """
 
 """
