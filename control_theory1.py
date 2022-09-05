@@ -106,10 +106,18 @@ I7641["general system model"].set_relation(R2928["has model representation"], I2
 
 I6886 = p.create_item(
     R1__has_label="general ode state space representation",
-    R2__has_description="explicit first order ODE system description of a dynamical system",
+    R2__has_description="explicit ODE system description of a dynamical system",
     R3__is_subclass_of=I2928["general model representation"],
     # TODO: this has to use create_equation (to be implemented)
     R6__has_defining_equation=p.create_expression(r"$\dot x = f(x, u)$"),
+)
+
+I6850 = p.create_item(
+    R1__has_label="state space model representation",
+    R2__has_description="explicit state space model of a dynamical system",
+    R3__is_subclass_of=I6886["general ode state space representation"],
+    # TODO: this has to use create_equation (to be implemented)
+    R6__has_defining_equation=p.create_expression(r"$\dot x = Ax + Bu$"),
 )
 
 I5356 = p.create_item(
@@ -286,6 +294,107 @@ I7208 = p.create_item(
         "satisfied if the system responds to every bounded input signal with a bounded output signal"
     ),
     R17__is_subproperty_of=I7207["stability"],
+)
+
+I4975 = p.create_item(
+    R1__has_label="general algebraic equation",
+    R2__has_description="explicit algebraic equation",
+    R3__is_subclass_of=I4236["mathematical expression"],
+    # TODO: this has to use create_equation (to be implemented)
+    R6__has_defining_equation=p.create_expression(r"$0 = f(x)$"),
+)
+
+I2865 = p.create_item(
+    R1__has_label="differential algebraic system of equation",
+    R2__has_description="system of differential algebraic equations representing a dynamical system",
+    R4__is_instance_of=I2928["general model representation"],
+    # TODO make connection to ode and algebraic equation
+)
+
+I2562 = p.create_item(
+    R1__has_label="general property of pde",
+    R2__has_description="general property of partial differential equations",
+    R4__is_instance_of=p.I11["mathematical property"],
+)
+
+I8063 = p.create_item(
+    R1__has_label="partial differential equation",
+    R2__has_description="explicit partial differential equation",
+    R4__is_instance_of=I2928["general model representation"],
+    R16__has_property=I2562["general property of pde"],
+)
+
+I9964 = p.create_item(
+    R1__has_label="strict nonlinearity",
+    R2__has_description="states that the pde",
+    R17__is_subproperty_of=I2562["general property of pde"],
+)
+
+I2557 = p.create_item(
+    R1__has_label="quasilinearity",
+    R2__has_description="states that in a pde the highest order derivatives appear linearly, with their coeffitients \
+        being functions of the independant variables and their (lower order) derivatives",
+    R17__is_subproperty_of=I2562["general property of pde"],
+)
+
+I3114 = p.create_item(
+    R1__has_label="semilinearity",
+    R2__has_description="states that in a pde the highest order derivatives appear linearly, with their coeffitients \
+        being functions of only the independant variables",
+    R17__is_subproperty_of=I2557["quasilinearity"],
+)
+
+I3863 = p.create_item(
+    R1__has_label="linearity",
+    R2__has_description="states that in a pde the unknown function and all its derivatives appear linearly, with their coeffitients \
+        being functions of only the independant variables",
+    R17__is_subproperty_of=I3114["semilinearity"],
+)
+
+# TODO restrict this to second order pde
+I4704 = p.create_item(
+    R1__has_label="hyperbolic",
+    R2__has_description="",
+    R17__is_subproperty_of=I3863["linearity"],
+)
+
+I8844 = p.create_item(
+    R1__has_label="parabolic",
+    R2__has_description="",
+    R17__is_subproperty_of=I3863["linearity"],
+)
+
+I5239 = p.create_item(
+    R1__has_label="elliptic",
+    R2__has_description="",
+    R17__is_subproperty_of=I3863["linearity"],
+)
+
+I1892 = p.create_item(
+    R1__has_label="boundary condition",
+    R2__has_description="boundary condition of a pde",
+    R4__is_instance_of=p.I12["mathematical object"],
+)
+
+# TODO: make a connection to system order >= 2
+I6830 = p.create_item(
+    R1__has_label="dirichlet boundary condition",
+    R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I7095 = p.create_item(
+    R1__has_label="robin boundary condition",
+    R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
+        at the boundary of the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I3659 = p.create_item(
+    R1__has_label="neumann boundary condition",
+    R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
+        the domain",
+    R4__is_instance_of=I1892["boundary condition"],
 )
 
 
@@ -888,7 +997,7 @@ I2827 = p.create_item(
 )
 
 I6091 = p.create_item(
-    R1__has_label="input affine",
+    R1__has_label="control affine",
     R2__has_description="states that in the system model equations the input only appears linearly",
     R4__is_instance_of=I1793["general model representation property"],
     R6__has_defining_equation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
@@ -899,7 +1008,7 @@ I5247 = p.create_item(
     R1__has_label="polynomial",
     R2__has_description="states that the system model equations are polynomial w.r.t. the state components",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I6091["input affine"]
+    R17__is_subproperty_of=I6091["control affine"]
 )
 
 I4761 = p.create_item(
@@ -978,7 +1087,6 @@ I1664 = p.create_item(
 )
 
 # ljapunov stability
-# TODO local vs global
 
 I5082 = p.create_item(
     R1__has_label="local attractiveness",
@@ -1050,12 +1158,96 @@ I8303 = p.create_item(
     R43__is_opposite_of=I2931["local ljapunov stability"],
 )
 
-# TODO knot, saddle, focus
-# I9304 = p.create_item(
-#     R1__has_label="knot",
-#     R2__has_description="",
-#     R4__is_instance_of=I5236["general trajectory property"],
-# )
+# TODO make a connection to system order
+I9304 = p.create_item(
+    R1__has_label="knot",
+    R2__has_description="states that the phase portrait forms a knot near the equilibrium point",
+    R4__is_instance_of=I5236["general trajectory property"],
+)
+
+I6467 = p.create_item(
+    R1__has_label="saddle",
+    R2__has_description="states that the phase portrait forms a saddle near the equilibrium point",
+    R4__is_instance_of=I5236["general trajectory property"],
+    # TODO: Implement rule that saddle is always unstable
+)
+
+I4610 = p.create_item(
+    R1__has_label="focus",
+    R2__has_description="states that the phase portrait forms a focus near the equilibrium point",
+    R4__is_instance_of=I5236["general trajectory property"],
+)
+
+I3241 = p.create_item(
+    R1__has_label="chaotic behavior",
+    R2__has_description="states that small deviations in the initial conditions result in qualitative changes in the \
+        trajectory",
+    R4__is_instance_of=I5236["general trajectory property"],
+)
+
+I1779 = p.create_item(
+    R1__has_label="driftlessness",
+    R2__has_description="states that the dirft term of an input affine system is always 0",
+    R4__is_instance_of=I1793["general model representation property"],
+    R17__is_subproperty_of=I6091["control affine"]
+)
+
+I4131 = p.create_item(
+    R1__has_label="domain",
+    R2__has_description="area of research",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
+
+I4498 = p.create_item(
+    R1__has_label="artifical domain",
+    R2__has_description="domain containing research on the topic of artificial intelligence",
+    R4__is_instance_of=I4131["domain"],
+) 
+
+I7667 = p.create_item(
+    R1__has_label="thermal domain",
+    R2__has_description="domain containing research on the topic of thermodynamics",
+    R4__is_instance_of=I4131["domain"],
+) 
+
+I1052 = p.create_item(
+    R1__has_label="electrical domain",
+    R2__has_description="domain containing research on the topic of electrical systems",
+    R4__is_instance_of=I4131["domain"],
+) 
+
+I6203 = p.create_item(
+    R1__has_label="chemical domain",
+    R2__has_description="domain containing research on the topic of chemical systems",
+    R4__is_instance_of=I4131["domain"],
+) 
+
+I1696 = p.create_item(
+    R1__has_label="physical domain",
+    R2__has_description="domain containing research on the topic of physical systems (e.g. mechanical systems)",
+    R4__is_instance_of=I4131["domain"],
+) 
+
+I3898 = p.create_item(
+    R1__has_label="system order",
+    R2__has_description="number of state variables",
+    R4__is_instance_of=I1793["general model representation property"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
+I6134 = p.create_item(
+    R1__has_label="highest time derivative",
+    R2__has_description="the highest time derivative occuring in the model equations",
+    R4__is_instance_of=I1793["general model representation property"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
+I7599 = p.create_item(
+    R1__has_label="bifurcation",
+    R2__has_description="states that a small change in the bifurcation parameter causes a qualitative change in the \
+        systems trajectory",
+    R4__is_instance_of=I1793["general model representation property"],
+)
 
 """
 template:
@@ -1068,42 +1260,31 @@ template:
 
 key reservoir J
 
-      R8059
+      
       R8744
       R5677
       R5100
       R8303
       R9304
-I6467      R6467
-I4610      R4610
-I3241      R3241
-I1779      R1779
-I4131      R4131
-I4498      R4498
-I7667      R7667
-I1052      R1052
-I6203      R6203
-I1696      R1696
-I3898      R3898
-I5910      R5910
-I6850      R6850
-I2865      R2865
-I8063      R8063
-I2562      R2562
-I9964      R9964
-I3114      R3114
-I2557      R2557
-I3863      R3863
-I4704      R4704
-I8844      R8844
-I5239      R5239
-I1892      R1892
-I6830      R6830
-I7095      R7095
-I3659      R3659
-I6134      R6134
-I7599      R7599
-I4975      R4975
+      R6467
+      R4610
+      R3241
+      R1779
+      R4131
+      R4498
+      R7667
+      R1052
+      R6203
+      R1696
+      R3898
+      R5910
+      R6850
+      R2865
+      R8063
+      R2562
+      R6134
+      R7599
+      R4975
 I2950      R2950
 I8316      R8316
 I1070      R1070
