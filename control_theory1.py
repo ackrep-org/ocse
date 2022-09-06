@@ -10,6 +10,7 @@ import pyerk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
+
 __MOD_ID__ = "M2085"
 # __DEPENDENCIES__ = c.register()
 
@@ -25,7 +26,7 @@ I5948 = p.create_item(
 I7641 = p.create_item(
     R1__has_label="general system model",
     R2__has_description="model of a dynamical system",
-    R4__is_instance_of=p.I2["Metaclass"], 
+    R4__is_instance_of=p.I2["Metaclass"],
 )
 
 R7641 = p.create_relation(
@@ -42,7 +43,9 @@ I4466 = p.create_item(
     R5__is_part_of=[p.I4["Mathematics"], p.I5["Engineering"]],
 )
 
-R1001 = p.create_relation(R1__has_label="studies", R2__has_description="object or class which an academic field studies")
+R1001 = p.create_relation(
+    R1__has_label="studies", R2__has_description="object or class which an academic field studies"
+)
 
 I4466["Systems Theory"].set_relation(R1001["studies"], I5948["dynamical system"])
 
@@ -728,7 +731,7 @@ I5167 = p.create_item(
     R2__has_description="type for a state space of a dynamical system (I6886)",
     R3__is_subclass_of=I4235["mathematical object"],
     # R33__has_corresponding_wikidata_entity= TODO,
-    R41__has_required_instance_relation=R3326["has dimension"]
+    R41__has_required_instance_relation=R3326["has dimension"],
 )
 
 
@@ -745,7 +748,7 @@ I1168 = p.create_item(
     R2__has_description="type for a point in a given state space",
     R3__is_subclass_of=I4235["mathematical object"],
     # R33__has_corresponding_wikidata_entity= TODO,
-    R41__has_required_instance_relation=R5405["has associated state space"]
+    R41__has_required_instance_relation=R5405["has associated state space"],
 )
 # TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
 
@@ -792,7 +795,6 @@ I2753 = p.create_item(
     R9__has_domain_of_argument_2=p.I35["real number"],
     R10__has_domain_of_argument_3=I9273["explicit first order ODE system"],
     R11__has_range_of_result=I1168["point in state space"],
-
     # TODO: display and evaluate this notation
     # (\cdot_i) means: the i-th argument
     R13__has_canonical_symbol=r"$\varphi_{(\cdot_2)}^{(\cdot_3)}(\cdot_1)$",
@@ -922,7 +924,7 @@ I7733 = p.create_item(
     R1__has_label="time invariance",
     R2__has_description="states that the model of a dynamical system (i.e. its parameters) does not change over time",
     R4__is_instance_of=I5356["general system property"],
-    R17__is_subproperty_of=I4101["general time variance"]
+    R17__is_subproperty_of=I4101["general time variance"],
 )
 
 I9030 = p.create_item(
@@ -980,28 +982,28 @@ I6091 = p.create_item(
     R2__has_description="states that in the system model equations the input only appears linearly",
     R4__is_instance_of=I1793["general model representation property"],
     R6__has_defining_equation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
-    R17__is_subproperty_of=I2827["general nonlinearity"]
+    R17__is_subproperty_of=I2827["general nonlinearity"],
 )
 
 I5247 = p.create_item(
     R1__has_label="polynomial",
     R2__has_description="states that the system model equations are polynomial w.r.t. the state components",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I6091["control affine"]
+    R17__is_subproperty_of=I6091["control affine"],
 )
 
 I4761 = p.create_item(
     R1__has_label="linearity",
     R2__has_description="states that the system model equations are linear",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I5247["polynomial"],    
+    R17__is_subproperty_of=I5247["polynomial"],
 )
 
 I1898 = p.create_item(
     R1__has_label="lti",
     R2__has_description="states that the system model is linear and time-invariant",
     R4__is_instance_of=I5356["general system property"],
-    R17__is_subproperty_of=[I4761["linearity"], I7733["time invariance"]]
+    R17__is_subproperty_of=[I4761["linearity"], I7733["time invariance"]],
 )
 
 I4478 = p.create_item(
@@ -1022,7 +1024,7 @@ I5031 = p.create_item(
     R1__has_label="time discreteness",
     R2__has_description="states that the system is modeled discretely",
     R4__is_instance_of=I1793["general model representation property"],
-    R43__is_opposite_of=I8978["time continuity"]
+    R43__is_opposite_of=I8978["time continuity"],
 )
 
 I5718 = p.create_item(
@@ -1035,7 +1037,7 @@ I5718 = p.create_item(
 I5236 = p.create_item(
     R1__has_label="general trajectory property",
     R2__has_description="general property of a trajectory",
-    R4__is_instance_of=p.I11["mathematical property"]
+    R4__is_instance_of=p.I11["mathematical property"],
 )
 
 I7062 = p.create_item(
@@ -1099,7 +1101,7 @@ I8059 = p.create_item(
     R1__has_label="global attractiveness",
     R2__has_description="states that all trajectories will converge to the trajectory in consideration",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=I5082["local attractiveness"]
+    R17__is_subproperty_of=I5082["local attractiveness"],
 )
 
 I2931 = p.create_item(
@@ -1130,7 +1132,9 @@ I5677 = p.create_item(
     R2__has_description="states that all trajectories remain close enough to the equilibrium and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
     R17__is_subproperty_of=[
-        I8744["global ljapunov stability"], I8059["global attractiveness"], I4900["local asymtotical stability"]
+        I8744["global ljapunov stability"],
+        I8059["global attractiveness"],
+        I4900["local asymtotical stability"],
     ],
 )
 
@@ -1191,7 +1195,7 @@ I1779 = p.create_item(
     R1__has_label="driftlessness",
     R2__has_description="states that the dirft term of an input affine system is always 0",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I6091["control affine"]
+    R17__is_subproperty_of=I6091["control affine"],
 )
 
 I4131 = p.create_item(
@@ -1204,31 +1208,31 @@ I4498 = p.create_item(
     R1__has_label="artifical domain",
     R2__has_description="domain containing research on the topic of artificial intelligence",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I7667 = p.create_item(
     R1__has_label="thermal domain",
     R2__has_description="domain containing research on the topic of thermodynamics",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I1052 = p.create_item(
     R1__has_label="electrical domain",
     R2__has_description="domain containing research on the topic of electrical systems",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I6203 = p.create_item(
     R1__has_label="chemical domain",
     R2__has_description="domain containing research on the topic of chemical systems",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I1696 = p.create_item(
     R1__has_label="physical domain",
     R2__has_description="domain containing research on the topic of physical systems (e.g. mechanical systems)",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I4704 = p.create_item(
     R1__has_label="hyperbolic",
@@ -1282,7 +1286,7 @@ R8744 = p.create_relation(
     R1__has_label="has parameter name",
     R2__has_description="specifies to what parameter a statement applies",
     R11__has_range_of_result=str,
-) 
+)
 
 R5677 = p.create_relation(
     R1__has_label="has parameter value",
@@ -1312,11 +1316,11 @@ template:
 
 key reservoir J
 
-      
-      
-      
-      
-      
+
+
+
+
+
       R9304
       R6467
       R4610
