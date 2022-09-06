@@ -33,7 +33,7 @@ R7641 = p.create_relation(
     R1__has_label="has approximation",
     R2__has_description="object or class which is an approximation of a dynamical system",
     R8__has_domain_of_argument_1=I5948["dynamical system"],
-    R11_has_rane_of_result=I7641["general system model"],
+    R11__has_range_of_result=I7641["general system model"],
 )
 
 I4466 = p.create_item(
@@ -458,7 +458,7 @@ I3007 = p.create_item(
 )
 
 with I3007.scope("context") as cm:
-    cm.new_var(sys=uq_instance_of(I5948["dynamical system"]))
+    cm.new_var(sys=uq_instance_of(I7641["general system model"]))
 
     cm.new_var(tf_rep=p.instance_of(I2640["transfer function representation"]))
     cm.new_var(denom=p.instance_of(I4239["monovariate polynomial"]))
@@ -1075,7 +1075,7 @@ I1664 = p.create_item(
 R3898 = p.create_relation(
     R1__has_label="has system order",
     R2__has_description="number of state variables",
-    R8__has_domain_of_argument_1=I7641["general system model"],
+    R8__has_domain_of_argument_1=I1793["general model representation property"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
@@ -1166,14 +1166,14 @@ I9304 = p.create_item(
     R1__has_label="knot",
     R2__has_description="states that the phase portrait forms a knot near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
-    R3898__has_system_order=2,
+    # rule system order=2,
 )
 
 I6467 = p.create_item(
     R1__has_label="saddle",
     R2__has_description="states that the phase portrait forms a saddle near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
-    R3898__has_system_order=2,
+    # rule system order=2,
     # TODO: Implement rule that saddle is always unstable
 )
 
@@ -1181,7 +1181,7 @@ I4610 = p.create_item(
     R1__has_label="spiral",
     R2__has_description="states that the phase portrait forms a spiral near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
-    R3898__has_system_order=2,
+    # rule system order=2,
 )
 
 I3241 = p.create_item(
@@ -1238,21 +1238,21 @@ I4704 = p.create_item(
     R1__has_label="hyperbolic",
     R2__has_description="b²-ac>0",
     R17__is_subproperty_of=I3863["linearity"],
-    R3898__has_system_order=2,
+    # rule system order=2,
 )
 
 I8844 = p.create_item(
     R1__has_label="parabolic",
     R2__has_description="b²-ac=0",
     R17__is_subproperty_of=I3863["linearity"],
-    R3898__has_system_order=2,
+    # rule system order=2,
 )
 
 I5239 = p.create_item(
     R1__has_label="elliptic",
     R2__has_description="b²-ac<0",
     R17__is_subproperty_of=I3863["linearity"],
-    R3898__has_system_order=2,
+    # rule system order=2,
 )
 
 I1892 = p.create_item(
@@ -1261,7 +1261,7 @@ I1892 = p.create_item(
     R4__is_instance_of=p.I12["mathematical object"],
 )
 
-# TODO: make a connection to system order >= 2
+# TODO: make a connection to system order >= 2 , consistency checking rule
 I6830 = p.create_item(
     R1__has_label="dirichlet boundary condition",
     R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
@@ -1309,7 +1309,8 @@ R2950 = p.create_relation(
     R1__has_label="has corresponding ackrep key",
     R2__has_description="...",
     R8__has_domain_of_argument_1=I7641["general system model"],
-    R11__has_range_of_result=str
+    R11__has_range_of_result=str,
+    R22__is_functional=True,
 )
 
 # concrete model instances
@@ -1318,17 +1319,20 @@ I2950 = p.create_item(
     R1__has_label="lorenz attractor",
     R2__has_description="model of the lorenz attractor",
     R4__is_instance_of=I7641["general system model"],
-    R2950__has_corresponding_ackrep_entity="UXMFA",
+    R2950__has_corresponding_ackrep_key="UXMFA",
     R9125__has_input_dimension=0,
-    R16__has_property=I5718["autonomy"], # TODO: redundant?
-    R16__has_property=I7733["time invariance"],
-    R16__has_property=I5247["polynomial"],
-    # Todo domain?
-    R3898__has_system_order=3,
+    R16__has_property=[
+        I5718["autonomy"], # TODO: redundant?
+        I7733["time invariance"],
+        I5247["polynomial"],
+        I9964["strict nonlinearity"],
+        I8978["time continuity"],
+    ]
     # R2928__has_model_representation= instance of I6886["general ode state space representation"],
-    R16__has_property=I9964["strict nonlinearity"],
-    R16__has_property=I8978["time continuity"],
+    # R3898__has_system_order=3,
+    # Todo domain?
     # chaotic behavior
+    # bifurcation
 )
 
 """
