@@ -1211,31 +1211,31 @@ I4498 = p.create_item(
     R1__has_label="artifical domain",
     R2__has_description="domain containing research on the topic of artificial intelligence",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I7667 = p.create_item(
     R1__has_label="thermal domain",
     R2__has_description="domain containing research on the topic of thermodynamics",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I1052 = p.create_item(
     R1__has_label="electrical domain",
     R2__has_description="domain containing research on the topic of electrical systems",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I6203 = p.create_item(
     R1__has_label="chemical domain",
     R2__has_description="domain containing research on the topic of chemical systems",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I1696 = p.create_item(
     R1__has_label="physical domain",
     R2__has_description="domain containing research on the topic of physical systems (e.g. mechanical systems)",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I3898 = p.create_item(
     R1__has_label="system order",
