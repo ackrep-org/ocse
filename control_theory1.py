@@ -1075,7 +1075,7 @@ I1664 = p.create_item(
 R3898 = p.create_relation(
     R1__has_label="has system order",
     R2__has_description="number of state variables",
-    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R8__has_domain_of_argument_1=I7641["general system model"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
@@ -1083,7 +1083,7 @@ R3898 = p.create_relation(
 R6134 = p.create_relation(
     R1__has_label="has highest time derivative",
     R2__has_description="the highest time derivative occuring in the model equations",
-    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R8__has_domain_of_argument_1=I7641["general system model"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
@@ -1178,8 +1178,8 @@ I6467 = p.create_item(
 )
 
 I4610 = p.create_item(
-    R1__has_label="focus",
-    R2__has_description="states that the phase portrait forms a focus near the equilibrium point",
+    R1__has_label="spiral",
+    R2__has_description="states that the phase portrait forms a spiral near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
     R3898__has_system_order=2,
 )
@@ -1305,6 +1305,32 @@ R7599 = p.create_relation(
     # qualifiers above
 )
 
+R2950 = p.create_relation(
+    R1__has_label="has corresponding ackrep key",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=str
+)
+
+# concrete model instances
+
+I2950 = p.create_item(
+    R1__has_label="lorenz attractor",
+    R2__has_description="model of the lorenz attractor",
+    R4__is_instance_of=I7641["general system model"],
+    R2950__has_corresponding_ackrep_entity="UXMFA",
+    R9125__has_input_dimension=0,
+    R16__has_property=I5718["autonomy"], # TODO: redundant?
+    R16__has_property=I7733["time invariance"],
+    R16__has_property=I5247["polynomial"],
+    # Todo domain?
+    R3898__has_system_order=3,
+    # R2928__has_model_representation= instance of I6886["general ode state space representation"],
+    R16__has_property=I9964["strict nonlinearity"],
+    R16__has_property=I8978["time continuity"],
+    # chaotic behavior
+)
+
 """
 template:
 = p.create_item(
@@ -1317,30 +1343,6 @@ template:
 key reservoir J
 
 
-
-
-
-
-      R9304
-      R6467
-      R4610
-      R3241
-      R1779
-      R4131
-      R4498
-      R7667
-      R1052
-      R6203
-      R1696
-      R3898
-      R5910
-      R6850
-      R2865
-      R8063
-      R2562
-      R6134
-
-I2950      R2950
 I8316      R8316
 I1070      R1070
 I2112      R2112
