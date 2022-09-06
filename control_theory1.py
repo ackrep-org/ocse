@@ -99,7 +99,9 @@ I2928 = p.create_item(
 
 R2928 = p.create_relation(
     R1__has_label="has model representation",
-    R2__has_description="system model has a mathematical representation"
+    R2__has_description="system model has a mathematical representation",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I2928["general model representation"],
 )
 
 I7641["general system model"].set_relation(R2928["has model representation"], I2928["general model representation"])
@@ -286,6 +288,14 @@ I7207 = p.create_item(
     R4__is_instance_of=p.I11["mathematical property"],
 )
 
+I7599 = p.create_item(
+    R1__has_label="instability",
+    R2__has_description="tendency to not stay close to some distinguished trajectory (e.g. equilibrium)",
+    # TODO: description not ideal
+    R4__is_instance_of=p.I11["mathematical property"],
+    R43__is_opposite_of=I7207["stability"],
+)
+
 # todo: this entity should be made more precise whether it is global or local
 I7208 = p.create_item(
     R1__has_label="BIBO stability",
@@ -307,7 +317,8 @@ I4975 = p.create_item(
 I2865 = p.create_item(
     R1__has_label="differential algebraic system of equation",
     R2__has_description="system of differential algebraic equations representing a dynamical system",
-    R4__is_instance_of=I2928["general model representation"],
+    R3__is_subclass_of=I2928["general model representation"],
+    R6__has_defining_equation=p.create_expression(r"$0 = f(\dot{x}, x, t)$"),
     # TODO make connection to ode and algebraic equation
 )
 
@@ -320,7 +331,7 @@ I2562 = p.create_item(
 I8063 = p.create_item(
     R1__has_label="partial differential equation",
     R2__has_description="explicit partial differential equation",
-    R4__is_instance_of=I2928["general model representation"],
+    R3__is_subclass_of=I2928["general model representation"],
     R16__has_property=I2562["general property of pde"],
 )
 
@@ -350,53 +361,6 @@ I3863 = p.create_item(
         being functions of only the independant variables",
     R17__is_subproperty_of=I3114["semilinearity"],
 )
-
-# TODO restrict this to second order pde
-I4704 = p.create_item(
-    R1__has_label="hyperbolic",
-    R2__has_description="",
-    R17__is_subproperty_of=I3863["linearity"],
-)
-
-I8844 = p.create_item(
-    R1__has_label="parabolic",
-    R2__has_description="",
-    R17__is_subproperty_of=I3863["linearity"],
-)
-
-I5239 = p.create_item(
-    R1__has_label="elliptic",
-    R2__has_description="",
-    R17__is_subproperty_of=I3863["linearity"],
-)
-
-I1892 = p.create_item(
-    R1__has_label="boundary condition",
-    R2__has_description="boundary condition of a pde",
-    R4__is_instance_of=p.I12["mathematical object"],
-)
-
-# TODO: make a connection to system order >= 2
-I6830 = p.create_item(
-    R1__has_label="dirichlet boundary condition",
-    R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
-)
-
-I7095 = p.create_item(
-    R1__has_label="robin boundary condition",
-    R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
-        at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
-)
-
-I3659 = p.create_item(
-    R1__has_label="neumann boundary condition",
-    R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
-        the domain",
-    R4__is_instance_of=I1892["boundary condition"],
-)
-
 
 R1145 = p.create_relation(
     R1__has_label="is universally quantified",
@@ -1069,7 +1033,8 @@ I7062 = p.create_item(
 R5031 = p.create_relation(
     R1__has_label="has trajectory",
     R2__has_description="object or class has a trajectory",
-    # todo: arg, result
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I7062["trajectory"],
 )
 
 I7641["general system model"].set_relation(R5031["has trajectory"], I7062["trajectory"])
@@ -1084,6 +1049,22 @@ I1664 = p.create_item(
     R1__has_label="limit cycle",
     R2__has_description="closed trajectory which other trajectories spiral into or out of",
     R3__is_subclass_of=I7062["trajectory"],
+)
+
+R3898 = p.create_relation(
+    R1__has_label="has system order",
+    R2__has_description="number of state variables",
+    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
+)
+
+R6134 = p.create_relation(
+    R1__has_label="has highest time derivative",
+    R2__has_description="the highest time derivative occuring in the model equations",
+    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
 )
 
 # ljapunov stability
@@ -1158,17 +1139,18 @@ I8303 = p.create_item(
     R43__is_opposite_of=I2931["local ljapunov stability"],
 )
 
-# TODO make a connection to system order
 I9304 = p.create_item(
     R1__has_label="knot",
     R2__has_description="states that the phase portrait forms a knot near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
+    R3898__has_system_order=2,
 )
 
 I6467 = p.create_item(
     R1__has_label="saddle",
     R2__has_description="states that the phase portrait forms a saddle near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
+    R3898__has_system_order=2,
     # TODO: Implement rule that saddle is always unstable
 )
 
@@ -1176,6 +1158,7 @@ I4610 = p.create_item(
     R1__has_label="focus",
     R2__has_description="states that the phase portrait forms a focus near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
+    R3898__has_system_order=2,
 )
 
 I3241 = p.create_item(
@@ -1228,25 +1211,75 @@ I1696 = p.create_item(
     R4__is_instance_of=I4131["domain"],
 ) 
 
-I3898 = p.create_item(
-    R1__has_label="system order",
-    R2__has_description="number of state variables",
-    R4__is_instance_of=I1793["general model representation property"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
+I4704 = p.create_item(
+    R1__has_label="hyperbolic",
+    R2__has_description="b²-ac>0",
+    R17__is_subproperty_of=I3863["linearity"],
+    R3898__has_system_order=2,
 )
 
-I6134 = p.create_item(
-    R1__has_label="highest time derivative",
-    R2__has_description="the highest time derivative occuring in the model equations",
-    R4__is_instance_of=I1793["general model representation property"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
+I8844 = p.create_item(
+    R1__has_label="parabolic",
+    R2__has_description="b²-ac=0",
+    R17__is_subproperty_of=I3863["linearity"],
+    R3898__has_system_order=2,
 )
 
-I7599 = p.create_item(
-    R1__has_label="bifurcation",
+I5239 = p.create_item(
+    R1__has_label="elliptic",
+    R2__has_description="b²-ac<0",
+    R17__is_subproperty_of=I3863["linearity"],
+    R3898__has_system_order=2,
+)
+
+I1892 = p.create_item(
+    R1__has_label="boundary condition",
+    R2__has_description="boundary condition of a pde",
+    R4__is_instance_of=p.I12["mathematical object"],
+)
+
+# TODO: make a connection to system order >= 2
+I6830 = p.create_item(
+    R1__has_label="dirichlet boundary condition",
+    R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I7095 = p.create_item(
+    R1__has_label="robin boundary condition",
+    R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
+        at the boundary of the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I3659 = p.create_item(
+    R1__has_label="neumann boundary condition",
+    R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
+        the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+R8744 = p.create_relation(
+    R1__has_label="has parameter name",
+    R2__has_description="specifies to what parameter a statement applies",
+    R11__has_range_of_result=str,
+) 
+
+R5677 = p.create_relation(
+    R1__has_label="has parameter value",
+    R2__has_description="specifies for what parameter value a statement applies",
+    R11__has_range_of_result=p.I35["real number"],
+)
+
+parameter_name = p.QualifierFactory(R8744["has parameter name"])
+parameter_value = p.QualifierFactory(R5677["has parameter value"])
+
+R7599 = p.create_relation(
+    R1__has_label="has bifurcation",
     R2__has_description="states that a small change in the bifurcation parameter causes a qualitative change in the \
         systems trajectory",
-    R4__is_instance_of=I1793["general model representation property"],
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    # qualifiers above
 )
 
 """
@@ -1261,8 +1294,8 @@ template:
 key reservoir J
 
       
-      R8744
-      R5677
+      
+      
       R5100
       R8303
       R9304
@@ -1283,8 +1316,7 @@ key reservoir J
       R8063
       R2562
       R6134
-      R7599
-      R4975
+
 I2950      R2950
 I8316      R8316
 I1070      R1070
