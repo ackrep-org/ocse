@@ -25,7 +25,7 @@ I5948 = p.create_item(
 I7641 = p.create_item(
     R1__has_label="general system model",
     R2__has_description="model of a dynamical system",
-    R4__is_instance_of=p.I2["Metaclass"], 
+    R4__is_instance_of=p.I2["Metaclass"],
 )
 
 R7641 = p.create_relation(
@@ -95,7 +95,7 @@ I2928 = p.create_item(
     R1__has_label="general model representation",
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
     R4__is_instance_of=p.I2["Metaclass"],
-    
+
     # !! ck: this is imho unintended usage of R16 –> see also (and maby improve) R16.R18__has_usage_hint
     # R16__has_property=I1793["general model representation property"]
 )
@@ -482,7 +482,7 @@ I3007 = p.create_item(
 )
 
 with I3007.scope("context") as cm:
-    cm.new_var(sys=uq_instance_of(I5948["dynamical system"]))
+    cm.new_var(sys=uq_instance_of(I7641["general system model"]))
 
     cm.new_var(tf_rep=p.instance_of(I2640["transfer function representation"]))
     cm.new_var(denom=p.instance_of(I4239["monovariate polynomial"]))
@@ -1021,7 +1021,7 @@ I4761 = p.create_item(
     R1__has_label="linearity",
     R2__has_description="states that the system model equations are linear",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I5247["polynomial"],    
+    R17__is_subproperty_of=I5247["polynomial"],
 )
 
 I1898 = p.create_item(
