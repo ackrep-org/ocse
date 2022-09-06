@@ -29,11 +29,11 @@ I7641 = p.create_item(
 )
 
 R7641 = p.create_relation(
-    R1__has_label="is approximation of",
-    R2__has_description="object or class which is an approximation of a dynamical system"
+    R1__has_label="has approximation",
+    R2__has_description="object or class which is an approximation of a dynamical system",
+    R8__has_domain_of_argument_1=I5948["dynamical system"],
+    R11_has_rane_of_result=I7641["general system model"],
 )
-
-I7641["general system model"].set_relation(R7641["is approximation of"], I5948["dynamical system"])
 
 I4466 = p.create_item(
     R1__has_label="Systems Theory",
@@ -94,7 +94,6 @@ I2928 = p.create_item(
     R1__has_label="general model representation",
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
     R4__is_instance_of=p.I2["Metaclass"],
-    R16__has_property=I1793["general model representation property"]
 )
 
 R2928 = p.create_relation(
@@ -104,7 +103,12 @@ R2928 = p.create_relation(
     R11__has_range_of_result=I2928["general model representation"],
 )
 
-I7641["general system model"].set_relation(R2928["has model representation"], I2928["general model representation"])
+R5100 = p.create_relation(
+    R1__has_label="has model representation property",
+    R2__has_description="model representation has mathematical property",
+    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R11__has_range_of_result=I1793["general model representation property"],
+)
 
 I6886 = p.create_item(
     R1__has_label="general ode state space representation",
@@ -128,7 +132,12 @@ I5356 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],
 )
 
-I7641["general system model"].set_relation(p.R16["has property"], I5356["general system property"])
+R8303 = p.create_relation(
+    R1__has_label="has general system property",
+    R2__has_description="model has mathematical property",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I5356["general system property"],
+)
 
 I5357 = p.create_item(
     R1__has_label="differential flatness",
@@ -332,7 +341,13 @@ I8063 = p.create_item(
     R1__has_label="partial differential equation",
     R2__has_description="explicit partial differential equation",
     R3__is_subclass_of=I2928["general model representation"],
-    R16__has_property=I2562["general property of pde"],
+)
+
+R5718 = p.create_relation(
+    R1__has_label="has general pde property",
+    R2__has_description="pde has mathematical property",
+    R8__has_domain_of_argument_1=I8063["partial differential equation"],
+    R11__has_range_of_result=I2562["general property of pde"],
 )
 
 I9964 = p.create_item(
@@ -1027,7 +1042,13 @@ I7062 = p.create_item(
     R1__has_label="trajectory",
     R2__has_description="solution to a differential equation",
     R3__is_subclass_of=I4235["mathematical object"],
-    R16__has_property=I5236["general trajectory property"],
+)
+
+R7062 = p.create_relation(
+    R1__has_label="has general trajectory property",
+    R2__has_description="trajectory has mathematical property",
+    R8__has_domain_of_argument_1=I7062["trajectory"],
+    R11__has_range_of_result=I5236["general trajectory property"],
 )
 
 R5031 = p.create_relation(
@@ -1036,8 +1057,6 @@ R5031 = p.create_relation(
     R8__has_domain_of_argument_1=I7641["general system model"],
     R11__has_range_of_result=I7062["trajectory"],
 )
-
-I7641["general system model"].set_relation(R5031["has trajectory"], I7062["trajectory"])
 
 I9820 = p.create_item(
     R1__has_label="equilibrium point",
@@ -1296,8 +1315,8 @@ key reservoir J
       
       
       
-      R5100
-      R8303
+      
+      
       R9304
       R6467
       R4610
@@ -1385,8 +1404,8 @@ I8142      R8142
 
 
 
-R5718
-R7062
+
+
 R9820
 R1664
 R5236
