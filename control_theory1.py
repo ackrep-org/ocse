@@ -118,7 +118,7 @@ I6886 = p.create_item(
     R2__has_description="explicit ODE system description of a dynamical system",
     R3__is_subclass_of=I2928["general model representation"],
     # TODO: this has to use create_equation (to be implemented)
-    R6__has_defining_equation=p.create_expression(r"$\dot x = f(x, u)$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = f(x, u)$"),
 )
 
 I6850 = p.create_item(
@@ -126,7 +126,7 @@ I6850 = p.create_item(
     R2__has_description="explicit state space model of a dynamical system",
     R3__is_subclass_of=I6886["general ode state space representation"],
     # TODO: this has to use create_equation (to be implemented)
-    R6__has_defining_equation=p.create_expression(r"$\dot x = Ax + Bu$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = Ax + Bu$"),
 )
 
 I5356 = p.create_item(
@@ -323,14 +323,14 @@ I4975 = p.create_item(
     R2__has_description="explicit algebraic equation",
     R3__is_subclass_of=I4236["mathematical expression"],
     # TODO: this has to use create_equation (to be implemented)
-    R6__has_defining_equation=p.create_expression(r"$0 = f(x)$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$0 = f(x)$"),
 )
 
 I2865 = p.create_item(
     R1__has_label="differential algebraic system of equation",
     R2__has_description="system of differential algebraic equations representing a dynamical system",
     R3__is_subclass_of=I2928["general model representation"],
-    R6__has_defining_equation=p.create_expression(r"$0 = f(\dot{x}, x, t)$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$0 = f(\dot{x}, x, t)$"),
     # TODO make connection to ode and algebraic equation
 )
 
@@ -981,7 +981,7 @@ I6091 = p.create_item(
     R1__has_label="control affine",
     R2__has_description="states that in the system model equations the input only appears linearly",
     R4__is_instance_of=I1793["general model representation property"],
-    R6__has_defining_equation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
     R17__is_subproperty_of=I2827["general nonlinearity"],
 )
 
@@ -1206,7 +1206,7 @@ I4131 = p.create_item(
 
 I4498 = p.create_item(
     R1__has_label="artifical domain",
-    R2__has_description="domain containing research on the topic of artificial intelligence",
+    R2__has_description="domain containing research on the topic of artificial systems",
     R4__is_instance_of=I4131["domain"],
 )
 
@@ -1287,7 +1287,7 @@ I8316 = p.create_item(
     R2__has_description="states that a small change in the bifurcation parameter causes a qualitative change in the \
         systems trajectory",
     R3__is_subclass_of=I5356["general system property"],
-    R6__has_defining_equation=p.I23["equation"],
+    R6__has_defining_mathematical_relation=p.I23["equation"],
 )
 
 R2950 = p.create_relation(
