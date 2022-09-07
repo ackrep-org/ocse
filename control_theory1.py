@@ -1282,27 +1282,12 @@ I3659 = p.create_item(
     R4__is_instance_of=I1892["boundary condition"],
 )
 
-R8744 = p.create_relation(
-    R1__has_label="has parameter name",
-    R2__has_description="specifies to what parameter a statement applies",
-    R11__has_range_of_result=str,
-)
-
-R5677 = p.create_relation(
-    R1__has_label="has parameter value",
-    R2__has_description="specifies for what parameter value a statement applies",
-    R11__has_range_of_result=p.I35["real number"],
-)
-
-parameter_name = p.QualifierFactory(R8744["has parameter name"])
-parameter_value = p.QualifierFactory(R5677["has parameter value"])
-
-R7599 = p.create_relation(
-    R1__has_label="has bifurcation",
+I8316 = p.create_item(
+    R1__has_label="bifurcation",
     R2__has_description="states that a small change in the bifurcation parameter causes a qualitative change in the \
         systems trajectory",
-    R8__has_domain_of_argument_1=I7641["general system model"],
-    # qualifiers above
+    R3__is_subclass_of=I5356["general system property"],
+    R6__has_defining_equation=p.I23["equation"],
 )
 
 R2950 = p.create_relation(
@@ -1347,7 +1332,7 @@ template:
 key reservoir J
 
 
-I8316      R8316
+      R8316
 I1070      R1070
 I2112      R2112
 I9746      R9746
