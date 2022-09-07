@@ -1234,9 +1234,24 @@ I1696 = p.create_item(
     R4__is_instance_of=I4131["domain"],
 )
 
+# general equation of linear second order pde with 2 independant variables
+I2112 = p.instance_of(I4236["mathematical expression"])
+I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
+I9746 = p.instance_of(I4236["mathematical expression"])
+I9746.set_relation(p.R24["has LaTeX string"], r"$0$")
+I1070 = p.new_equation(lhs=I2112, rhs=I9746)
+
+I6963 = p.instance_of(I4236["mathematical expression"])
+I6963.set_relation(p.R24["has LaTeX string"], r"$B^2-AC$")
+
+I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=I9746)
+I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="=", rhs=I9746)
+I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=I9746)
+
 I4704 = p.create_item(
     R1__has_label="hyperbolic",
     R2__has_description="b²-ac>0",
+    R6__has_defining_mathematical_relation=I6458,
     R17__is_subproperty_of=I3863["linearity"],
     # rule system order=2,
 )
@@ -1244,6 +1259,7 @@ I4704 = p.create_item(
 I8844 = p.create_item(
     R1__has_label="parabolic",
     R2__has_description="b²-ac=0",
+    R6__has_defining_mathematical_relation=I9769,
     R17__is_subproperty_of=I3863["linearity"],
     # rule system order=2,
 )
@@ -1251,6 +1267,7 @@ I8844 = p.create_item(
 I5239 = p.create_item(
     R1__has_label="elliptic",
     R2__has_description="b²-ac<0",
+    R6__has_defining_mathematical_relation=I2279,
     R17__is_subproperty_of=I3863["linearity"],
     # rule system order=2,
 )
@@ -1333,14 +1350,11 @@ key reservoir J
 
 
       R8316
-I1070      R1070
-I2112      R2112
-I9746      R9746
-I6963      R6963
-I7818      R7818
-I2279      R2279
-I9769      R9769
-I6458      R6458
+      R1070
+      R2112
+      R9746
+      R2279
+     R6458
 I5919      R5919
 I4635      R4635
 I1161      R1161
