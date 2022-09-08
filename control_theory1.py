@@ -1,11 +1,3 @@
-"""
-This file is the attempt to represten knowledge directly as code.
-
-Motivation: this allows to explore formal knowledge representation without having to develop a domain specific
-language first.
-
-"""
-
 import pyerk as p
 
 # noinspection PyUnresolvedReferences
