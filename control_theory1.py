@@ -2,11 +2,11 @@ import pyerk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
-__MOD_ID__ = "M2085"
-# __DEPENDENCIES__ = c.register()
+__URI__ = "erk:/ocse/0.2"
 
-
-p.register_mod(__MOD_ID__)
+keymanager = p.KeyManager()
+p.register_mod(__URI__, keymanager)
+p.start_mod(__URI__)
 
 I5948 = p.create_item(
     R1__has_label="dynamical system",
@@ -1376,3 +1376,5 @@ I6338
 I2613
 I2983
 """
+
+p.end_mod()
