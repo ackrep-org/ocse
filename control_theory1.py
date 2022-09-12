@@ -1316,6 +1316,36 @@ R2950 = p.create_relation(
     R22__is_functional=True,
 )
 
+I2699 = p.create_item(
+    R1__has_label="general ackrep entity",
+    R2__has_description="general ackrep entity",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
+
+I5919 = p.create_item(
+    R1__has_label="problem specification",
+    R2__has_description="type of ackrep entity",
+    R3__is_subclass_of=I2699["general ackrep entity"],
+)
+
+I4635 = p.create_item(
+    R1__has_label="problem solution",
+    R2__has_description="type of ackrep entity",
+    R3__is_subclass_of=I2699["general ackrep entity"],
+)
+
+I1161 = p.create_item(
+    R1__has_label="old tag",
+    R2__has_description="",
+    R3__is_subclass_of=p.I1["general item"],
+)
+
+R1070 = p.create_relation(
+    R1__has_label="has old tag",
+    R2__has_description="state that an ackrep entity has an old tag",
+    R8__has_domain_of_argument_1=I2699["general ackrep entity"],
+    R11__has_range_of_result=I1161["old tag"],
+)
 
 """
 template:
@@ -1330,14 +1360,14 @@ key reservoir J
 
 
 
-      R1070
+
       R2112
       R9746
       R2279
      R6458
-I5919      R5919
-I4635      R4635
-I1161      R1161
+      R5919
+      R4635
+      R1161
 I2699      R2699
 I4931      R4931
 I9223      R9223
