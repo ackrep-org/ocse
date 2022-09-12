@@ -2,6 +2,7 @@ import pyerk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
+
 __URI__ = "erk:/ocse/0.2"
 
 keymanager = p.KeyManager()
@@ -21,12 +22,12 @@ I7641 = p.create_item(
 )
 
 R7641 = p.create_relation(
-    R1__has_label="is approximation of",
-    R2__has_description="object or class which is an approximation of a dynamical system"
+    R1__has_label="has approximation",
+    R2__has_description="object or class which is an approximation of a dynamical system",
+    R8__has_domain_of_argument_1=I5948["dynamical system"],
+    R11__has_range_of_result=I7641["general system model"],
 )
 
-# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result
-# I7641["general system model"].set_relation(R7641["is approximation of"], I5948["dynamical system"])
 
 I4466 = p.create_item(
     R1__has_label="Systems Theory",
@@ -35,7 +36,9 @@ I4466 = p.create_item(
     R5__is_part_of=[p.I4["Mathematics"], p.I5["Engineering"]],
 )
 
-R1001 = p.create_relation(R1__has_label="studies", R2__has_description="object or class which an academic field studies")
+R1001 = p.create_relation(
+    R1__has_label="studies", R2__has_description="object or class which an academic field studies"
+)
 
 I4466["Systems Theory"].set_relation(R1001["studies"], I5948["dynamical system"])
 
@@ -88,24 +91,28 @@ I2928 = p.create_item(
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
     R4__is_instance_of=p.I2["Metaclass"],
 
-    # !! ck: this is imho unintended usage of R16 –> see also (and maby improve) R16.R18__has_usage_hint
-    # R16__has_property=I1793["general model representation property"]
 )
 
 R2928 = p.create_relation(
     R1__has_label="has model representation",
-    R2__has_description="system model has a mathematical representation"
+    R2__has_description="system model has a mathematical representation",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I2928["general model representation"],
 )
 
-# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result
-# I7641["general system model"].set_relation(R2928["has model representation"], I2928["general model representation"])
+R5100 = p.create_relation(
+    R1__has_label="has model representation property",
+    R2__has_description="model representation has mathematical property",
+    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R11__has_range_of_result=I1793["general model representation property"],
+)
 
 I6886 = p.create_item(
     R1__has_label="general ode state space representation",
     R2__has_description="explicit ODE system description of a dynamical system",
     R3__is_subclass_of=I2928["general model representation"],
     # TODO: this has to use create_equation (to be implemented)
-    R6__has_defining_equation=p.create_expression(r"$\dot x = f(x, u)$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = f(x, u)$"),
 )
 
 I6850 = p.create_item(
@@ -113,7 +120,7 @@ I6850 = p.create_item(
     R2__has_description="explicit state space model of a dynamical system",
     R3__is_subclass_of=I6886["general ode state space representation"],
     # TODO: this has to use create_equation (to be implemented)
-    R6__has_defining_equation=p.create_expression(r"$\dot x = Ax + Bu$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = Ax + Bu$"),
 )
 
 I5356 = p.create_item(
@@ -122,9 +129,12 @@ I5356 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],
 )
 
-# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result (maybe)
-# Challenge: R16__has_property is so generic that it probably deserves many domain-range-pairs
-# I7641["general system model"].set_relation(p.R16["has property"], I5356["general system property"])
+R8303 = p.create_relation(
+    R1__has_label="has general system property",
+    R2__has_description="model has mathematical property",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I5356["general system property"],
+)
 
 I5357 = p.create_item(
     R1__has_label="differential flatness",
@@ -284,6 +294,14 @@ I7207 = p.create_item(
     R4__is_instance_of=p.I11["mathematical property"],
 )
 
+I7599 = p.create_item(
+    R1__has_label="instability",
+    R2__has_description="tendency to not stay close to some distinguished trajectory (e.g. equilibrium)",
+    # TODO: description not ideal
+    R4__is_instance_of=p.I11["mathematical property"],
+    R43__is_opposite_of=I7207["stability"],
+)
+
 # todo: this entity should be made more precise whether it is global or local
 I7208 = p.create_item(
     R1__has_label="BIBO stability",
@@ -299,13 +317,14 @@ I4975 = p.create_item(
     R2__has_description="explicit algebraic equation",
     R3__is_subclass_of=I4236["mathematical expression"],
     # TODO: this has to use create_equation (to be implemented)
-    R6__has_defining_equation=p.create_expression(r"$0 = f(x)$"),
+    R6__has_defining_mathematical_relation=p.create_expression(r"$0 = f(x)$"),
 )
 
 I2865 = p.create_item(
     R1__has_label="differential algebraic system of equation",
     R2__has_description="system of differential algebraic equations representing a dynamical system",
-    R4__is_instance_of=I2928["general model representation"],
+    R3__is_subclass_of=I2928["general model representation"],
+    R6__has_defining_mathematical_relation=p.create_expression(r"$0 = f(\dot{x}, x, t)$"),
     # TODO make connection to ode and algebraic equation
 )
 
@@ -318,8 +337,14 @@ I2562 = p.create_item(
 I8063 = p.create_item(
     R1__has_label="partial differential equation",
     R2__has_description="explicit partial differential equation",
-    R4__is_instance_of=I2928["general model representation"],
-    R16__has_property=I2562["general property of pde"],
+    R3__is_subclass_of=I2928["general model representation"],
+)
+
+R5718 = p.create_relation(
+    R1__has_label="has general pde property",
+    R2__has_description="pde has mathematical property",
+    R8__has_domain_of_argument_1=I8063["partial differential equation"],
+    R11__has_range_of_result=I2562["general property of pde"],
 )
 
 I9964 = p.create_item(
@@ -348,53 +373,6 @@ I3863 = p.create_item(
         being functions of only the independant variables",
     R17__is_subproperty_of=I3114["semilinearity"],
 )
-
-# TODO restrict this to second order pde
-I4704 = p.create_item(
-    R1__has_label="hyperbolic",
-    R2__has_description="",
-    R17__is_subproperty_of=I3863["linearity"],
-)
-
-I8844 = p.create_item(
-    R1__has_label="parabolic",
-    R2__has_description="",
-    R17__is_subproperty_of=I3863["linearity"],
-)
-
-I5239 = p.create_item(
-    R1__has_label="elliptic",
-    R2__has_description="",
-    R17__is_subproperty_of=I3863["linearity"],
-)
-
-I1892 = p.create_item(
-    R1__has_label="boundary condition",
-    R2__has_description="boundary condition of a pde",
-    R4__is_instance_of=p.I12["mathematical object"],
-)
-
-# TODO: make a connection to system order >= 2
-I6830 = p.create_item(
-    R1__has_label="dirichlet boundary condition",
-    R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
-)
-
-I7095 = p.create_item(
-    R1__has_label="robin boundary condition",
-    R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
-        at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
-)
-
-I3659 = p.create_item(
-    R1__has_label="neumann boundary condition",
-    R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
-        the domain",
-    R4__is_instance_of=I1892["boundary condition"],
-)
-
 
 R1145 = p.create_relation(
     R1__has_label="is universally quantified",
@@ -747,7 +725,7 @@ I5167 = p.create_item(
     R2__has_description="type for a state space of a dynamical system (I6886)",
     R3__is_subclass_of=I4235["mathematical object"],
     # R33__has_corresponding_wikidata_entity= TODO,
-    R41__has_required_instance_relation=R3326["has dimension"]
+    R41__has_required_instance_relation=R3326["has dimension"],
 )
 
 
@@ -764,7 +742,7 @@ I1168 = p.create_item(
     R2__has_description="type for a point in a given state space",
     R3__is_subclass_of=I4235["mathematical object"],
     # R33__has_corresponding_wikidata_entity= TODO,
-    R41__has_required_instance_relation=R5405["has associated state space"]
+    R41__has_required_instance_relation=R5405["has associated state space"],
 )
 # TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
 
@@ -811,7 +789,6 @@ I2753 = p.create_item(
     R9__has_domain_of_argument_2=p.I35["real number"],
     R10__has_domain_of_argument_3=I9273["explicit first order ODE system"],
     R11__has_range_of_result=I1168["point in state space"],
-
     # TODO: display and evaluate this notation
     # (\cdot_i) means: the i-th argument
     R13__has_canonical_symbol=r"$\varphi_{(\cdot_2)}^{(\cdot_3)}(\cdot_1)$",
@@ -941,7 +918,7 @@ I7733 = p.create_item(
     R1__has_label="time invariance",
     R2__has_description="states that the model of a dynamical system (i.e. its parameters) does not change over time",
     R4__is_instance_of=I5356["general system property"],
-    R17__is_subproperty_of=I4101["general time variance"]
+    R17__is_subproperty_of=I4101["general time variance"],
 )
 
 I9030 = p.create_item(
@@ -998,15 +975,15 @@ I6091 = p.create_item(
     R1__has_label="control affine",
     R2__has_description="states that in the system model equations the input only appears linearly",
     R4__is_instance_of=I1793["general model representation property"],
-    R6__has_defining_equation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
-    R17__is_subproperty_of=I2827["general nonlinearity"]
+    R6__has_defining_mathematical_relation=p.create_expression(r"$\dot{x}=f(x)+g(x)u$"),
+    R17__is_subproperty_of=I2827["general nonlinearity"],
 )
 
 I5247 = p.create_item(
     R1__has_label="polynomial",
     R2__has_description="states that the system model equations are polynomial w.r.t. the state components",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I6091["control affine"]
+    R17__is_subproperty_of=I6091["control affine"],
 )
 
 I4761 = p.create_item(
@@ -1020,7 +997,7 @@ I1898 = p.create_item(
     R1__has_label="lti",
     R2__has_description="states that the system model is linear and time-invariant",
     R4__is_instance_of=I5356["general system property"],
-    R17__is_subproperty_of=[I4761["linearity"], I7733["time invariance"]]
+    R17__is_subproperty_of=[I4761["linearity"], I7733["time invariance"]],
 )
 
 I4478 = p.create_item(
@@ -1041,7 +1018,7 @@ I5031 = p.create_item(
     R1__has_label="time discreteness",
     R2__has_description="states that the system is modeled discretely",
     R4__is_instance_of=I1793["general model representation property"],
-    R43__is_opposite_of=I8978["time continuity"]
+    R43__is_opposite_of=I8978["time continuity"],
 )
 
 I5718 = p.create_item(
@@ -1054,26 +1031,28 @@ I5718 = p.create_item(
 I5236 = p.create_item(
     R1__has_label="general trajectory property",
     R2__has_description="general property of a trajectory",
-    R4__is_instance_of=p.I11["mathematical property"]
+    R4__is_instance_of=p.I11["mathematical property"],
 )
 
 I7062 = p.create_item(
     R1__has_label="trajectory",
     R2__has_description="solution to a differential equation",
     R3__is_subclass_of=I4235["mathematical object"],
+)
 
-    # !! ck: this is imho unintended usage of R16 –> see also (and maby improve) R16.R18__has_usage_hint
-    #R16__has_property=I5236["general trajectory property"],
+R7062 = p.create_relation(
+    R1__has_label="has general trajectory property",
+    R2__has_description="trajectory has mathematical property",
+    R8__has_domain_of_argument_1=I7062["trajectory"],
+    R11__has_range_of_result=I5236["general trajectory property"],
 )
 
 R5031 = p.create_relation(
     R1__has_label="has trajectory",
     R2__has_description="object or class has a trajectory",
-    # todo: arg, result
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I7062["trajectory"],
 )
-
-# !! TODO: this should be modeled by R8__has_domain_of_argument1 and R11__has_range_of_result
-# I7641["general system model"].set_relation(R5031["has trajectory"], I7062["trajectory"])
 
 I9820 = p.create_item(
     R1__has_label="equilibrium point",
@@ -1085,6 +1064,22 @@ I1664 = p.create_item(
     R1__has_label="limit cycle",
     R2__has_description="closed trajectory which other trajectories spiral into or out of",
     R3__is_subclass_of=I7062["trajectory"],
+)
+
+R3898 = p.create_relation(
+    R1__has_label="has system order",
+    R2__has_description="number of state variables",
+    R8__has_domain_of_argument_1=I1793["general model representation property"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
+)
+
+R6134 = p.create_relation(
+    R1__has_label="has highest time derivative",
+    R2__has_description="the highest time derivative occuring in the model equations",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
 )
 
 # ljapunov stability
@@ -1100,7 +1095,7 @@ I8059 = p.create_item(
     R1__has_label="global attractiveness",
     R2__has_description="states that all trajectories will converge to the trajectory in consideration",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=I5082["local attractiveness"]
+    R17__is_subproperty_of=I5082["local attractiveness"],
 )
 
 I2931 = p.create_item(
@@ -1131,7 +1126,9 @@ I5677 = p.create_item(
     R2__has_description="states that all trajectories remain close enough to the equilibrium and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
     R17__is_subproperty_of=[
-        I8744["global ljapunov stability"], I8059["global attractiveness"], I4900["local asymtotical stability"]
+        I8744["global ljapunov stability"],
+        I8059["global attractiveness"],
+        I4900["local asymtotical stability"],
     ],
 )
 
@@ -1159,24 +1156,26 @@ I8303 = p.create_item(
     R43__is_opposite_of=I2931["local ljapunov stability"],
 )
 
-# TODO make a connection to system order
 I9304 = p.create_item(
     R1__has_label="knot",
     R2__has_description="states that the phase portrait forms a knot near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
+    # rule system order=2,
 )
 
 I6467 = p.create_item(
     R1__has_label="saddle",
     R2__has_description="states that the phase portrait forms a saddle near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
+    # rule system order=2,
     # TODO: Implement rule that saddle is always unstable
 )
 
 I4610 = p.create_item(
-    R1__has_label="focus",
-    R2__has_description="states that the phase portrait forms a focus near the equilibrium point",
+    R1__has_label="spiral",
+    R2__has_description="states that the phase portrait forms a spiral near the equilibrium point",
     R4__is_instance_of=I5236["general trajectory property"],
+    # rule system order=2,
 )
 
 I3241 = p.create_item(
@@ -1190,7 +1189,7 @@ I1779 = p.create_item(
     R1__has_label="driftlessness",
     R2__has_description="states that the dirft term of an input affine system is always 0",
     R4__is_instance_of=I1793["general model representation property"],
-    R17__is_subproperty_of=I6091["control affine"]
+    R17__is_subproperty_of=I6091["control affine"],
 )
 
 I4131 = p.create_item(
@@ -1201,7 +1200,7 @@ I4131 = p.create_item(
 
 I4498 = p.create_item(
     R1__has_label="artifical domain",
-    R2__has_description="domain containing research on the topic of artificial intelligence",
+    R2__has_description="domain containing research on the topic of artificial systems",
     R4__is_instance_of=I4131["domain"],
 )
 
@@ -1229,25 +1228,107 @@ I1696 = p.create_item(
     R4__is_instance_of=I4131["domain"],
 )
 
-I3898 = p.create_item(
-    R1__has_label="system order",
-    R2__has_description="number of state variables",
-    R4__is_instance_of=I1793["general model representation property"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
+# general equation of linear second order pde with 2 independant variables
+I2112 = p.instance_of(I4236["mathematical expression"])
+I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
+I9746 = p.instance_of(I4236["mathematical expression"])
+I9746.set_relation(p.R24["has LaTeX string"], r"$0$")
+I1070 = p.new_equation(lhs=I2112, rhs=I9746)
+
+I6963 = p.instance_of(I4236["mathematical expression"])
+I6963.set_relation(p.R24["has LaTeX string"], r"$B^2-AC$")
+
+I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=I9746)
+I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="=", rhs=I9746)
+I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=I9746)
+
+I4704 = p.create_item(
+    R1__has_label="hyperbolic",
+    R2__has_description="b²-ac>0",
+    R6__has_defining_mathematical_relation=I6458,
+    R17__is_subproperty_of=I3863["linearity"],
+    # rule system order=2,
 )
 
-I6134 = p.create_item(
-    R1__has_label="highest time derivative",
-    R2__has_description="the highest time derivative occuring in the model equations",
-    R4__is_instance_of=I1793["general model representation property"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
+I8844 = p.create_item(
+    R1__has_label="parabolic",
+    R2__has_description="b²-ac=0",
+    R6__has_defining_mathematical_relation=I9769,
+    R17__is_subproperty_of=I3863["linearity"],
+    # rule system order=2,
 )
 
-I7599 = p.create_item(
+I5239 = p.create_item(
+    R1__has_label="elliptic",
+    R2__has_description="b²-ac<0",
+    R6__has_defining_mathematical_relation=I2279,
+    R17__is_subproperty_of=I3863["linearity"],
+    # rule system order=2,
+)
+
+I1892 = p.create_item(
+    R1__has_label="boundary condition",
+    R2__has_description="boundary condition of a pde",
+    R4__is_instance_of=p.I12["mathematical object"],
+)
+
+# TODO: make a connection to system order >= 2 , consistency checking rule
+I6830 = p.create_item(
+    R1__has_label="dirichlet boundary condition",
+    R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I7095 = p.create_item(
+    R1__has_label="robin boundary condition",
+    R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
+        at the boundary of the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I3659 = p.create_item(
+    R1__has_label="neumann boundary condition",
+    R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
+        the domain",
+    R4__is_instance_of=I1892["boundary condition"],
+)
+
+I8316 = p.create_item(
     R1__has_label="bifurcation",
     R2__has_description="states that a small change in the bifurcation parameter causes a qualitative change in the \
         systems trajectory",
-    R4__is_instance_of=I1793["general model representation property"],
+    R3__is_subclass_of=I5356["general system property"],
+    R6__has_defining_mathematical_relation=p.I23["equation"],
+)
+
+R2950 = p.create_relation(
+    R1__has_label="has corresponding ackrep key",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=str,
+    R22__is_functional=True,
+)
+
+# concrete model instances
+
+I2950 = p.create_item(
+    R1__has_label="lorenz attractor",
+    R2__has_description="model of the lorenz attractor",
+    R4__is_instance_of=I7641["general system model"],
+    R2950__has_corresponding_ackrep_key="UXMFA",
+    R9125__has_input_dimension=0,
+    R16__has_property=[
+        I5718["autonomy"], # TODO: redundant?
+        I7733["time invariance"],
+        I5247["polynomial"],
+        I9964["strict nonlinearity"],
+        I8978["time continuity"],
+    ]
+    # R2928__has_model_representation= instance of I6886["general ode state space representation"],
+    # R3898__has_system_order=3,
+    # Todo domain?
+    # chaotic behavior
+    # bifurcation
 )
 
 """
@@ -1261,41 +1342,13 @@ template:
 
 key reservoir J
 
-      
-      R8744
-      R5677
-      R5100
-      R8303
-      R9304
-      R6467
-      R4610
-      R3241
-      R1779
-      R4131
-      R4498
-      R7667
-      R1052
-      R6203
-      R1696
-      R3898
-      R5910
-      R6850
-      R2865
-      R8063
-      R2562
-      R6134
-      R7599
-      R4975
-I2950      R2950
-I8316      R8316
-I1070      R1070
-I2112      R2112
-I9746      R9746
-I6963      R6963
-I7818      R7818
-I2279      R2279
-I9769      R9769
-I6458      R6458
+
+      R8316
+      R1070
+      R2112
+      R9746
+      R2279
+     R6458
 I5919      R5919
 I4635      R4635
 I1161      R1161
@@ -1354,8 +1407,8 @@ I8142      R8142
 
 
 
-R5718
-R7062
+
+
 R9820
 R1664
 R5236
