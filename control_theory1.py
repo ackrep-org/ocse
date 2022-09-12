@@ -1,21 +1,13 @@
-"""
-This file is the attempt to represten knowledge directly as code.
-
-Motivation: this allows to explore formal knowledge representation without having to develop a domain specific
-language first.
-
-"""
-
 import pyerk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
 
-__MOD_ID__ = "M2085"
-# __DEPENDENCIES__ = c.register()
+__URI__ = "erk:/ocse/0.2"
 
-
-p.register_mod(__MOD_ID__)
+keymanager = p.KeyManager()
+p.register_mod(__URI__, keymanager)
+p.start_mod(__URI__)
 
 I5948 = p.create_item(
     R1__has_label="dynamical system",
@@ -35,6 +27,7 @@ R7641 = p.create_relation(
     R8__has_domain_of_argument_1=I5948["dynamical system"],
     R11__has_range_of_result=I7641["general system model"],
 )
+
 
 I4466 = p.create_item(
     R1__has_label="Systems Theory",
@@ -97,6 +90,7 @@ I2928 = p.create_item(
     R1__has_label="general model representation",
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
     R4__is_instance_of=p.I2["Metaclass"],
+
 )
 
 R2928 = p.create_relation(
@@ -1435,3 +1429,5 @@ I6338
 I2613
 I2983
 """
+
+p.end_mod()
