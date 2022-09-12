@@ -1069,7 +1069,7 @@ I1664 = p.create_item(
 R3898 = p.create_relation(
     R1__has_label="has system order",
     R2__has_description="number of state variables",
-    R8__has_domain_of_argument_1=I1793["general model representation property"],
+    R8__has_domain_of_argument_1=I2928["general model representation"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
@@ -1198,6 +1198,13 @@ I4131 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],
 )
 
+R8316 = p.create_relation(
+    R1__has_label="belongs to domain",
+    R2__has_description="states that the model of a dynamical system belongs to a specific domain",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I4131["domain"],
+)
+
 I4498 = p.create_item(
     R1__has_label="artifical domain",
     R2__has_description="domain containing research on the topic of artificial systems",
@@ -1309,27 +1316,6 @@ R2950 = p.create_relation(
     R22__is_functional=True,
 )
 
-# concrete model instances
-
-I2950 = p.create_item(
-    R1__has_label="lorenz attractor",
-    R2__has_description="model of the lorenz attractor",
-    R4__is_instance_of=I7641["general system model"],
-    R2950__has_corresponding_ackrep_key="UXMFA",
-    R9125__has_input_dimension=0,
-    R16__has_property=[
-        I5718["autonomy"], # TODO: redundant?
-        I7733["time invariance"],
-        I5247["polynomial"],
-        I9964["strict nonlinearity"],
-        I8978["time continuity"],
-    ]
-    # R2928__has_model_representation= instance of I6886["general ode state space representation"],
-    # R3898__has_system_order=3,
-    # Todo domain?
-    # chaotic behavior
-    # bifurcation
-)
 
 """
 template:
@@ -1343,7 +1329,7 @@ template:
 key reservoir J
 
 
-      R8316
+
       R1070
       R2112
       R9746
