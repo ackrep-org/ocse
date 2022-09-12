@@ -1,20 +1,12 @@
-"""
-This file is the attempt to represten knowledge directly as code.
-
-Motivation: this allows to explore formal knowledge representation without having to develop a domain specific
-language first.
-
-"""
-
 import pyerk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
-__MOD_ID__ = "M2085"
-# __DEPENDENCIES__ = c.register()
+__URI__ = "erk:/ocse/0.2"
 
-
-p.register_mod(__MOD_ID__)
+keymanager = p.KeyManager()
+p.register_mod(__URI__, keymanager)
+p.start_mod(__URI__)
 
 I5948 = p.create_item(
     R1__has_label="dynamical system",
@@ -1211,31 +1203,31 @@ I4498 = p.create_item(
     R1__has_label="artifical domain",
     R2__has_description="domain containing research on the topic of artificial intelligence",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I7667 = p.create_item(
     R1__has_label="thermal domain",
     R2__has_description="domain containing research on the topic of thermodynamics",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I1052 = p.create_item(
     R1__has_label="electrical domain",
     R2__has_description="domain containing research on the topic of electrical systems",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I6203 = p.create_item(
     R1__has_label="chemical domain",
     R2__has_description="domain containing research on the topic of chemical systems",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I1696 = p.create_item(
     R1__has_label="physical domain",
     R2__has_description="domain containing research on the topic of physical systems (e.g. mechanical systems)",
     R4__is_instance_of=I4131["domain"],
-) 
+)
 
 I3898 = p.create_item(
     R1__has_label="system order",
@@ -1384,3 +1376,5 @@ I6338
 I2613
 I2983
 """
+
+p.end_mod()
