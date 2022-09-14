@@ -115,12 +115,20 @@ I6886 = p.create_item(
     R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = f(x, u)$"),
 )
 
+R2112 = p.create_relation(
+    R1__has_label="has state dimension",
+    R2__has_description="number of components of the state vector",
+    R8__has_domain_of_argument_1=I6886["general ode state space representation"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
 I6850 = p.create_item(
     R1__has_label="state space model representation",
     R2__has_description="explicit state space model of a dynamical system",
     R3__is_subclass_of=I6886["general ode state space representation"],
     # TODO: this has to use create_equation (to be implemented)
     R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = Ax + Bu$"),
+    # TODO: Rule, system order = 1
 )
 
 I5356 = p.create_item(
@@ -1068,7 +1076,7 @@ I1664 = p.create_item(
 
 R3898 = p.create_relation(
     R1__has_label="has system order",
-    R2__has_description="number of state variables",
+    R2__has_description="highest time derivative present in the system equations",
     R8__has_domain_of_argument_1=I2928["general model representation"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
@@ -1279,25 +1287,32 @@ I1892 = p.create_item(
     R4__is_instance_of=p.I12["mathematical object"],
 )
 
+R9746 = p.create_relation(
+    R1__has_label="has boundary condition",
+    R2__has_description="state that the pde has a specific boundary condition",
+    R8__has_domain_of_argument_1=I8063["partial differential equation"],
+    R11__has_range_of_result=I1892["boundary condition"],
+)
+
 # TODO: make a connection to system order >= 2 , consistency checking rule
 I6830 = p.create_item(
     R1__has_label="dirichlet boundary condition",
     R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
+    R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I7095 = p.create_item(
     R1__has_label="robin boundary condition",
     R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
         at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
+    R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I3659 = p.create_item(
     R1__has_label="neumann boundary condition",
     R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
         the domain",
-    R4__is_instance_of=I1892["boundary condition"],
+    R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I8316 = p.create_item(
@@ -1361,8 +1376,8 @@ key reservoir J
 
 
 
-      R2112
-      R9746
+
+
       R2279
      R6458
       R5919
