@@ -1157,7 +1157,7 @@ I5100 = p.create_item(
 )
 
 I8303 = p.create_item(
-    R1__has_label="stric ljapunov instability",
+    R1__has_label="strict ljapunov instability",
     R2__has_description="states that some trajectories that start close enough to the equilibrium will still leave a \
         certain neighborhood",
     R4__is_instance_of=I5236["general trajectory property"],
