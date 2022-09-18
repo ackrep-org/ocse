@@ -857,7 +857,7 @@ I6229 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I6229.scope("context") as cm:
+with I6229["definition of Lie derivative of scalar field"].scope("context") as cm:
     n = cm.new_var(n=uq_instance_of(p.I39["positive integer"]))
     M = cm.new_var(M=uq_instance_of(I5167["state space"]))
     h = cm.new_var(h=uq_instance_of(I9923["scalar field"]))
