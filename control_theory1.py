@@ -1,7 +1,11 @@
 import pyerk as p
 
+
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
+
+
+ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
 
 __URI__ = "erk:/ocse/0.2"
 
@@ -203,6 +207,7 @@ I4235 = p.create_item(
 p.R37["has definition"].set_relation(p.R8["has domain of argument 1"], I4235["mathematical object"])
 
 # todo: what is the difference between an object and an expression?
+# TODO: align this with p.I18
 I4236 = p.create_item(
     R1__has_label="mathematical expression",
     R2__has_description="common base class for mathematical expressions",
@@ -1252,16 +1257,15 @@ I4931 = p.create_item(
 # general equation of linear second order pde with 2 independant variables
 I2112 = p.instance_of(I4236["mathematical expression"])
 I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
-I9746 = p.instance_of(I4236["mathematical expression"])
-I9746.set_relation(p.R24["has LaTeX string"], r"$0$")
-I1070 = p.new_equation(lhs=I2112, rhs=I9746)
+
+I1070 = p.new_equation(lhs=I2112, rhs=ma.I5000["scalar zero"])
 
 I6963 = p.instance_of(I4236["mathematical expression"])
 I6963.set_relation(p.R24["has LaTeX string"], r"$B^2-AC$")
 
-I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=I9746)
-I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="=", rhs=I9746)
-I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=I9746)
+I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=ma.I5000["scalar zero"])
+I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="=", rhs=ma.I5000["scalar zero"])
+I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=ma.I5000["scalar zero"])
 
 I4704 = p.create_item(
     R1__has_label="hyperbolic",
