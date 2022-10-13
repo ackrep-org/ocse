@@ -1249,6 +1249,12 @@ I4931 = p.create_item(
     R4__is_instance_of=I4131["domain"],
 )
 
+I9223 = p.create_item(
+    R1__has_label="mechanical domain",
+    R2__has_description="domain containing research on the topic of mechanical systems",
+    R3__is_subclass_of=I1696["physical domain"],
+)
+
 # general equation of linear second order pde with 2 independant variables
 I2112 = p.instance_of(I4236["mathematical expression"])
 I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
@@ -1391,7 +1397,7 @@ key reservoir J
       R1161
       R2699
       R4931
-I9223      R9223
+      R9223
 I1195      R1195
 I1616      R1616
 I6012      R6012
