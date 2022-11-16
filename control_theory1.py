@@ -387,42 +387,6 @@ I3863 = p.create_item(
     R17__is_subproperty_of=I3114["semilinearity"],
 )
 
-R1145 = p.create_relation(
-    R1__has_label="is universally quantified",
-    R2__has_description=(
-        "specifies that the subject represents an universally quantified variable (usually denoted by '∀')"
-    ),
-    R8__has_domain_of_argument_1=I4235["mathematical object"],
-    R11__has_range_of_result=bool,
-    R18__has_usage_hint="used to specify the free variables in theorems and similar statements",
-)
-
-
-def uq_instance_of(type_entity: p.Item, r1: str = None, r2: str = None) -> p.Item:
-    """
-    Shortcut to create an instance and set the relation R1145["is universally quantified"] to True in one step
-    to allow compact notation.
-
-    :param type_entity:     the type of which an instance is created
-    :param r1:              the label (tried to extract from calling context)
-    :param r2:              optional description
-
-    :return:                new item
-    """
-
-    if r1 is None:
-        try:
-            r1 = p.core.get_key_str_by_inspection(upcount=1)
-        # TODO: make this except clause more specific
-        except:
-            # note this fallback naming can be avoided by explicitly passing r1=...  as kwarg
-            r1 = f"{type_entity.R1} – instance"
-
-    instance = p.instance_of(type_entity, r1, r2)
-    instance.set_relation(R1145["is universally quantified"], True)
-    return instance
-
-
 I5325 = p.create_item(
     R1__has_label="Hurwitz polynomial",
     R2__has_description="monovariate polynomial of quadratic matrices",
@@ -437,7 +401,7 @@ I4455 = p.create_item(
 )
 
 with I4455.scope("context") as cm:
-    cm.new_var(P=uq_instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(P=p.uq_instance_of(I4239["monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
     cm.new_rel(cm.P, R1757["has set of roots"], cm.set_of_roots)
 
@@ -465,7 +429,7 @@ I3007 = p.create_item(
 )
 
 with I3007.scope("context") as cm:
-    cm.new_var(sys=uq_instance_of(I7641["general system model"]))
+    cm.new_var(sys=p.uq_instance_of(I7641["general system model"]))
 
     cm.new_var(tf_rep=p.instance_of(I2640["transfer function representation"]))
     cm.new_var(denom=p.instance_of(I4239["monovariate polynomial"]))
@@ -536,8 +500,8 @@ I9907 = p.create_item(
 )
 
 with I9907.scope("context") as cm:
-    cm.new_var(M=uq_instance_of(I9904["matrix"]))
-    cm.new_var(nr=uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(M=p.uq_instance_of(I9904["matrix"]))
+    cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
 
     cm.new_var(nc=p.instance_of(p.I39["positive integer"]))
 
@@ -566,8 +530,8 @@ I3749 = p.create_item(
 # TODO: specify universal quantification for A and n
 
 with I3749["Cayley-Hamilton theorem"].scope("context") as cm:
-    cm.new_var(A=uq_instance_of(I9906["square matrix"]))
-    cm.new_var(n=uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(A=p.uq_instance_of(I9906["square matrix"]))
+    cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
     cm.new_var(P=p.instance_of(I4240["matrix polynomial"]))
     cm.new_var(Z=p.instance_of(I9905["zero matrix"]))
@@ -863,10 +827,10 @@ I6229 = p.create_item(
 )
 
 with I6229["definition of Lie derivative of scalar field"].scope("context") as cm:
-    n = cm.new_var(n=uq_instance_of(p.I39["positive integer"]))
-    M = cm.new_var(M=uq_instance_of(I5167["state space"]))
-    h = cm.new_var(h=uq_instance_of(I9923["scalar field"]))
-    f = cm.new_var(f=uq_instance_of(I9841["vector field"]))
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
+    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
+    f = cm.new_var(f=p.uq_instance_of(I9841["vector field"]))
 
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
     phi = cm.new_var(phi=p.instance_of(I2753["flow of a vector field"]))
