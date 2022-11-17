@@ -248,6 +248,67 @@ with I9223["definition of zero matrix"].scope("assertions") as cm:
 
 #            end defintion
 
+# ---------------------------------------------------------------------------------------------------------------------
+
+#            start defintion
+
+I1608 = p.create_item(
+    R1__has_label="identity matrix",  # TODO: also known as "unit matrix"
+    R2__has_description="square matrix with only ones at the main diagonal and every other element zero",
+    R3__is_subclass_of=I9906["square matrix"],
+)
+
+
+I7169 = p.create_item(
+    R1__has_label="definition of identity matrix",
+    R2__has_description="the defining statement of what an identity matrix is",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+I1608["identity matrix"].set_relation(p.R37["has definition"], I7169["definition of identity matrix"])
+
+
+with I7169["definition of identity matrix"].scope("setting") as cm:
+    cm.new_var(M=p.uq_instance_of(I9906["square matrix"]))
+
+    cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
+
+    cm.new_rel(cm.M, R5938["has row number"], cm.nr)
+
+
+with I7169["definition of identity matrix"].scope("premises") as cm:
+
+    # todo: the running indicses should be related to the context cm
+    # there should be a context stack
+    with IntegerRangeElement(start=1, stop=cm.nr) as i:
+        with IntegerRangeElement(start=1, stop=cm.nr) as j:
+
+            # create an auxiliary variable (not part part of the graph)
+            M_ij = I3240["matrix element"](cm.M, i, j)
+
+            # Condition in human-readible form:
+            # In case i != j, the matrix element M_ij must be 0
+            # In case i == j, the matrix element M_ij must be 1
+
+            # These are two implications (as logical statement, with their specific truth table)
+            # Both implications must be fulfilled for the premise of the definition to be fulfilled
+
+            with p.ImplicationStatement() as imp1:
+                imp1.antecedent_relation(lhs=i, rsgn="!=", rhs=j)
+                imp1.consequent_relation(lhs=M_ij, rhs=I5000["scalar zero"])
+
+            with p.ImplicationStatement() as imp2:
+                imp1.antecedent_relation(lhs=i, rsgn="==", rhs=j)
+                imp1.consequent_relation(lhs=M_ij, rhs=I5001["scalar one"])
+
+
+with I7169["definition of identity matrix"].scope("assertions") as cm:
+    cm.new_rel(cm.M, p.R30["is secondary instance of"], I1608["identity matrix"])
+
+#            end defintion
+
+# ---------------------------------------------------------------------------------------------------------------------
+
 p.end_mod()
 
 
