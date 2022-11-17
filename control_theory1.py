@@ -1,7 +1,15 @@
 import pyerk as p
 
+
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception
+
+
+ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
+
+
+# todo: rename .scope("context") to .scope("setting")
+
 
 __URI__ = "erk:/ocse/0.2"
 
@@ -115,12 +123,20 @@ I6886 = p.create_item(
     R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = f(x, u)$"),
 )
 
+R2112 = p.create_relation(
+    R1__has_label="has state dimension",
+    R2__has_description="number of components of the state vector",
+    R8__has_domain_of_argument_1=I6886["general ode state space representation"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
 I6850 = p.create_item(
     R1__has_label="state space model representation",
     R2__has_description="explicit state space model of a dynamical system",
     R3__is_subclass_of=I6886["general ode state space representation"],
     # TODO: this has to use create_equation (to be implemented)
     R6__has_defining_mathematical_relation=p.create_expression(r"$\dot x = Ax + Bu$"),
+    # TODO: Rule, system order = 1
 )
 
 I5356 = p.create_item(
@@ -186,19 +202,15 @@ I2640 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],
 )
 
-I4235 = p.create_item(
-    R1__has_label="mathematical object",
-    R2__has_description="...",
-    R4__is_instance_of=p.I2["Metaclass"],
-)
 
-p.R37["has definition"].set_relation(p.R8["has domain of argument 1"], I4235["mathematical object"])
+p.R37["has definition"].set_relation(p.R8["has domain of argument 1"], ma.I4235["mathematical object"])
 
 # todo: what is the difference between an object and an expression?
+# TODO: align this with p.I18
 I4236 = p.create_item(
     R1__has_label="mathematical expression",
     R2__has_description="common base class for mathematical expressions",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=ma.I4235["mathematical object"],
 )
 
 I4237 = p.create_item(
@@ -233,7 +245,7 @@ I2738 = p.create_item(
     R1__has_label="field of complex numnbers",
     R2__has_description="field of complex numnbers",
     # TODO: use p.I12 here
-    R4__is_instance_of=I4235["mathematical object"],
+    R4__is_instance_of=ma.I4235["mathematical object"],
     R13__has_canonical_symbol=r"$\mathbb{C}$",
     # todo: introduce algebraic structures and relation to set
 )
@@ -241,7 +253,7 @@ I2738 = p.create_item(
 I2739 = p.create_item(
     R1__has_label="open left half plane",
     R2__has_description="set of all complex numbers with negative real part",
-    R4__is_instance_of=I4235["mathematical object"],
+    R4__is_instance_of=ma.I4235["mathematical object"],
     R14__is_subset_of=I2738["field of complex numnbers"],
 )
 
@@ -257,7 +269,7 @@ R5334 = p.create_relation(
     R1__has_label="has representation",
     R2__has_description="relates an entity with an abstract mathematical representation",
     # R8__has_domain_of_argument_1= ...
-    R11__has_range_of_result=I4235["mathematical object"],
+    R11__has_range_of_result=ma.I4235["mathematical object"],
 )
 
 R1757 = p.create_relation(
@@ -374,42 +386,6 @@ I3863 = p.create_item(
     R17__is_subproperty_of=I3114["semilinearity"],
 )
 
-R1145 = p.create_relation(
-    R1__has_label="is universally quantified",
-    R2__has_description=(
-        "specifies that the subject represents an universally quantified variable (usually denoted by '∀')"
-    ),
-    R8__has_domain_of_argument_1=I4235["mathematical object"],
-    R11__has_range_of_result=bool,
-    R18__has_usage_hint="used to specify the free variables in theorems and similar statements",
-)
-
-
-def uq_instance_of(type_entity: p.Item, r1: str = None, r2: str = None) -> p.Item:
-    """
-    Shortcut to create an instance and set the relation R1145["is universally quantified"] to True in one step
-    to allow compact notation.
-
-    :param type_entity:     the type of which an instance is created
-    :param r1:              the label (tried to extract from calling context)
-    :param r2:              optional description
-
-    :return:                new item
-    """
-
-    if r1 is None:
-        try:
-            r1 = p.core.get_key_str_by_inspection(upcount=1)
-        # TODO: make this except clause more specific
-        except:
-            # note this fallback naming can be avoided by explicitly passing r1=...  as kwarg
-            r1 = f"{type_entity.R1} – instance"
-
-    instance = p.instance_of(type_entity, r1, r2)
-    instance.set_relation(R1145["is universally quantified"], True)
-    return instance
-
-
 I5325 = p.create_item(
     R1__has_label="Hurwitz polynomial",
     R2__has_description="monovariate polynomial of quadratic matrices",
@@ -424,7 +400,7 @@ I4455 = p.create_item(
 )
 
 with I4455.scope("context") as cm:
-    cm.new_var(P=uq_instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(P=p.uq_instance_of(I4239["monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
     cm.new_rel(cm.P, R1757["has set of roots"], cm.set_of_roots)
 
@@ -452,7 +428,7 @@ I3007 = p.create_item(
 )
 
 with I3007.scope("context") as cm:
-    cm.new_var(sys=uq_instance_of(I7641["general system model"]))
+    cm.new_var(sys=p.uq_instance_of(I7641["general system model"]))
 
     cm.new_var(tf_rep=p.instance_of(I2640["transfer function representation"]))
     cm.new_var(denom=p.instance_of(I4239["monovariate polynomial"]))
@@ -474,39 +450,14 @@ with I3007.scope("assertions") as cm:
 # preparation for next theorem
 
 
-# todo: this needs more generalization
-I9904 = p.create_item(
-    R1__has_label="matrix",
-    R2__has_description="matrix of (in general) complex numbers, i.e. matrix over the field of complex numbers",
-    R3__is_subclass_of=I4235["mathematical object"],
-)
+# manually import entities that were refactored to erk:/math/0.2
+I9904 = ma.I9904["matrix"]
+I9905 = ma.I9905["zero matrix"]
+I9223 = ma.I9223["definition of zero matrix"]
+I9906 = ma.I9906["square matrix"]
+R5938 = ma.R5938["has row number"]
+R5939 = ma.R5939["has column number"]
 
-I9905 = p.create_item(
-    R1__has_label="zero matrix",
-    R2__has_description="like its superclass but with all entries equal to zero",
-    R3__is_subclass_of=I9904["matrix"],
-)
-
-I9906 = p.create_item(
-    R1__has_label="square matrix",
-    R2__has_description="a matrix for which the number of rows and columns are equal",
-    R3__is_subclass_of=I9904["matrix"],
-    # TODO: formalize the condition inspired by OWL
-)
-
-R5938 = p.create_relation(
-    R1__has_label="has row number",
-    R2__has_description="specifies the number of rows of a matrix",
-    R8__has_domain_of_argument_1=I9904["matrix"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
-)
-
-R5939 = p.create_relation(
-    R1__has_label="has column number",
-    R2__has_description="specifies the number of columns of a matrix",
-    R8__has_domain_of_argument_1=I9904["matrix"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
-)
 
 R5940 = p.create_relation(
     R1__has_label="has characteristic polynomial",
@@ -523,8 +474,8 @@ I9907 = p.create_item(
 )
 
 with I9907.scope("context") as cm:
-    cm.new_var(M=uq_instance_of(I9904["matrix"]))
-    cm.new_var(nr=uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(M=p.uq_instance_of(I9904["matrix"]))
+    cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
 
     cm.new_var(nc=p.instance_of(p.I39["positive integer"]))
 
@@ -553,8 +504,8 @@ I3749 = p.create_item(
 # TODO: specify universal quantification for A and n
 
 with I3749["Cayley-Hamilton theorem"].scope("context") as cm:
-    cm.new_var(A=uq_instance_of(I9906["square matrix"]))
-    cm.new_var(n=uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(A=p.uq_instance_of(I9906["square matrix"]))
+    cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
     cm.new_var(P=p.instance_of(I4240["matrix polynomial"]))
     cm.new_var(Z=p.instance_of(I9905["zero matrix"]))
@@ -701,20 +652,11 @@ precomputed.
 
 # </statement>
 
-I4895 = p.create_item(
-    R1__has_label="mathematical operator",
-    R2__has_description="general (unspecified) mathematical operator",
-    R3__is_subclass_of=I4235["mathematical object"],
-)
-
-# make all instances of operators callable:
-I4895["mathematical operator"].add_method(p.create_evaluated_mapping, "_custom_call")
-
 
 R3326 = p.create_relation(
     R1__has_label="has dimension",
     R2__has_description="specifies the dimension of a (dimensional) mathematical object",
-    R8__has_domain_of_argument_1=I4235["mathematical object"],
+    R8__has_domain_of_argument_1=ma.I4235["mathematical object"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
@@ -723,7 +665,7 @@ R3326 = p.create_relation(
 I5167 = p.create_item(
     R1__has_label="state space",
     R2__has_description="type for a state space of a dynamical system (I6886)",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=ma.I4235["mathematical object"],
     # R33__has_corresponding_wikidata_entity= TODO,
     R41__has_required_instance_relation=R3326["has dimension"],
 )
@@ -732,7 +674,7 @@ I5167 = p.create_item(
 R5405 = p.create_relation(
     R1__has_label="has associated state space",
     R2__has_description="specifies the associated state space of the subject (e.g. a I9273__explicit...ode_system)",
-    R8__has_domain_of_argument_1=I4235["mathematical object"],
+    R8__has_domain_of_argument_1=ma.I4235["mathematical object"],
     R11__has_range_of_result=I5167["state space"],
     R22__is_functional=True,
 )
@@ -740,7 +682,7 @@ R5405 = p.create_relation(
 I1168 = p.create_item(
     R1__has_label="point in state space",
     R2__has_description="type for a point in a given state space",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=ma.I4235["mathematical object"],
     # R33__has_corresponding_wikidata_entity= TODO,
     R41__has_required_instance_relation=R5405["has associated state space"],
 )
@@ -750,20 +692,20 @@ I1168 = p.create_item(
 I9923 = p.create_item(
     R1__has_label="scalar field",
     R2__has_description="...",
-    R3__is_subclass_of=I4895["mathematical operator"],
+    R3__is_subclass_of=ma.I4895["mathematical operator"],
 )
 
 I9841 = p.create_item(
     R1__has_label="vector field",
     R2__has_description="...",
-    R3__is_subclass_of=I4895["mathematical operator"],
+    R3__is_subclass_of=ma.I4895["mathematical operator"],
 )
 
 
 I9273 = p.create_item(
     R1__has_label="explicit first order ODE system",
     R2__has_description="system of explicit first order ordinary differential equations",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=ma.I4235["mathematical object"],
     R41__has_required_instance_relation=R5405["has associated state space"]
     # TODO: make explicit the relation to I6886["general ode state space representation"]
 )
@@ -784,7 +726,7 @@ I9273["explicit first order ODE system"].set_relation(
 I2753 = p.create_item(
     R1__has_label="flow of a vector field",
     R2__has_description="operator yielding the solution of the associated I9273__explicit_first_order_ODE_system",
-    R3__is_subclass_of=I4895["mathematical operator"],
+    R3__is_subclass_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I1168["point in state space"],
     R9__has_domain_of_argument_2=p.I35["real number"],
     R10__has_domain_of_argument_3=I9273["explicit first order ODE system"],
@@ -798,14 +740,14 @@ I2753 = p.create_item(
 I4122 = p.create_item(
     R1__has_label="independent variable",
     R2__has_description="type for an independent variable",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=ma.I4235["mathematical object"],
 )
 
 
 I3513 = p.create_item(
     R1__has_label="derivative w.r.t. scalar parameter",
     R2__has_description="operator yielding the derivative of an expression w.r.t. a parameter",
-    R3__is_subclass_of=I4895["mathematical operator"],
+    R3__is_subclass_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I4236["mathematical expression"],
     R9__has_domain_of_argument_2=I4122["independent variable"],
     R11__has_range_of_result=I4236["mathematical expression"],
@@ -817,7 +759,7 @@ I2075 = p.create_item(
     R2__has_description=(
         "operator yielding an new expression where in expression arg1 the subexpression arg2 is replaced by arg3"
     ),
-    R4__is_instance_of=I4895["mathematical operator"],
+    R4__is_instance_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I4236["mathematical expression"],
     R9__has_domain_of_argument_2=I4236["mathematical expression"],
     R10__has_domain_of_argument_3=I4236["mathematical expression"],
@@ -833,7 +775,7 @@ I1347 = p.create_item(
         "h2 can be interpreted as the time derivative of h_1 along the solution of the ode associated with f; "
         "in other words: along the flow of f",
     ),
-    R4__is_instance_of=I4895["mathematical operator"],
+    R4__is_instance_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9923["scalar field"],
     R9__has_domain_of_argument_2=I9841["vector field"],
     R10__has_domain_of_argument_3=I1168["point in state space"],
@@ -849,11 +791,11 @@ I6229 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I6229.scope("context") as cm:
-    n = cm.new_var(n=uq_instance_of(p.I39["positive integer"]))
-    M = cm.new_var(M=uq_instance_of(I5167["state space"]))
-    h = cm.new_var(h=uq_instance_of(I9923["scalar field"]))
-    f = cm.new_var(f=uq_instance_of(I9841["vector field"]))
+with I6229["definition of Lie derivative of scalar field"].scope("context") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
+    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
+    f = cm.new_var(f=p.uq_instance_of(I9841["vector field"]))
 
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
     phi = cm.new_var(phi=p.instance_of(I2753["flow of a vector field"]))
@@ -890,7 +832,7 @@ I1347["Lie derivative of scalar field"].set_relation(
 I1371 = p.create_item(
     R1__has_label="iterated Lie derivative of scalar field",
     R2__has_description="iterated version of I1347__Lie_derivative_of_scalar_field",
-    R3__is_subclass_of=I4895["mathematical operator"],
+    R3__is_subclass_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9923["scalar field"],
     R9__has_domain_of_argument_2=I9841["vector field"],
     R10__has_domain_of_argument_3=p.I38["non-negative integer"],
@@ -1037,7 +979,7 @@ I5236 = p.create_item(
 I7062 = p.create_item(
     R1__has_label="trajectory",
     R2__has_description="solution to a differential equation",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=ma.I4235["mathematical object"],
 )
 
 R7062 = p.create_relation(
@@ -1068,8 +1010,8 @@ I1664 = p.create_item(
 
 R3898 = p.create_relation(
     R1__has_label="has system order",
-    R2__has_description="number of state variables",
-    R8__has_domain_of_argument_1=I1793["general model representation property"],
+    R2__has_description="highest time derivative present in the system equations",
+    R8__has_domain_of_argument_1=I2928["general model representation"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
 )
@@ -1149,7 +1091,7 @@ I5100 = p.create_item(
 )
 
 I8303 = p.create_item(
-    R1__has_label="stric ljapunov instability",
+    R1__has_label="strict ljapunov instability",
     R2__has_description="states that some trajectories that start close enough to the equilibrium will still leave a \
         certain neighborhood",
     R4__is_instance_of=I5236["general trajectory property"],
@@ -1198,6 +1140,13 @@ I4131 = p.create_item(
     R4__is_instance_of=p.I2["Metaclass"],
 )
 
+R8316 = p.create_relation(
+    R1__has_label="belongs to domain",
+    R2__has_description="states that the model of a dynamical system belongs to a specific domain",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I4131["domain"],
+)
+
 I4498 = p.create_item(
     R1__has_label="artifical domain",
     R2__has_description="domain containing research on the topic of artificial systems",
@@ -1228,19 +1177,24 @@ I1696 = p.create_item(
     R4__is_instance_of=I4131["domain"],
 )
 
+I4931 = p.create_item(
+    R1__has_label="biological domain",
+    R2__has_description="domain containing research on the topic of biological systems",
+    R4__is_instance_of=I4131["domain"],
+)
+
 # general equation of linear second order pde with 2 independant variables
 I2112 = p.instance_of(I4236["mathematical expression"])
 I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
-I9746 = p.instance_of(I4236["mathematical expression"])
-I9746.set_relation(p.R24["has LaTeX string"], r"$0$")
-I1070 = p.new_equation(lhs=I2112, rhs=I9746)
+
+I1070 = p.new_equation(lhs=I2112, rhs=ma.I5000["scalar zero"])
 
 I6963 = p.instance_of(I4236["mathematical expression"])
 I6963.set_relation(p.R24["has LaTeX string"], r"$B^2-AC$")
 
-I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=I9746)
-I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="=", rhs=I9746)
-I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=I9746)
+I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=ma.I5000["scalar zero"])
+I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="==", rhs=ma.I5000["scalar zero"])
+I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=ma.I5000["scalar zero"])
 
 I4704 = p.create_item(
     R1__has_label="hyperbolic",
@@ -1272,25 +1226,32 @@ I1892 = p.create_item(
     R4__is_instance_of=p.I12["mathematical object"],
 )
 
+R9746 = p.create_relation(
+    R1__has_label="has boundary condition",
+    R2__has_description="state that the pde has a specific boundary condition",
+    R8__has_domain_of_argument_1=I8063["partial differential equation"],
+    R11__has_range_of_result=I1892["boundary condition"],
+)
+
 # TODO: make a connection to system order >= 2 , consistency checking rule
 I6830 = p.create_item(
     R1__has_label="dirichlet boundary condition",
     R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
+    R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I7095 = p.create_item(
     R1__has_label="robin boundary condition",
     R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
         at the boundary of the domain",
-    R4__is_instance_of=I1892["boundary condition"],
+    R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I3659 = p.create_item(
     R1__has_label="neumann boundary condition",
     R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
         the domain",
-    R4__is_instance_of=I1892["boundary condition"],
+    R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I8316 = p.create_item(
@@ -1309,26 +1270,35 @@ R2950 = p.create_relation(
     R22__is_functional=True,
 )
 
-# concrete model instances
+I2699 = p.create_item(
+    R1__has_label="general ackrep entity",
+    R2__has_description="general ackrep entity",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
 
-I2950 = p.create_item(
-    R1__has_label="lorenz attractor",
-    R2__has_description="model of the lorenz attractor",
-    R4__is_instance_of=I7641["general system model"],
-    R2950__has_corresponding_ackrep_key="UXMFA",
-    R9125__has_input_dimension=0,
-    R16__has_property=[
-        I5718["autonomy"], # TODO: redundant?
-        I7733["time invariance"],
-        I5247["polynomial"],
-        I9964["strict nonlinearity"],
-        I8978["time continuity"],
-    ]
-    # R2928__has_model_representation= instance of I6886["general ode state space representation"],
-    # R3898__has_system_order=3,
-    # Todo domain?
-    # chaotic behavior
-    # bifurcation
+I5919 = p.create_item(
+    R1__has_label="problem specification",
+    R2__has_description="type of ackrep entity",
+    R3__is_subclass_of=I2699["general ackrep entity"],
+)
+
+I4635 = p.create_item(
+    R1__has_label="problem solution",
+    R2__has_description="type of ackrep entity",
+    R3__is_subclass_of=I2699["general ackrep entity"],
+)
+
+I1161 = p.create_item(
+    R1__has_label="old tag",
+    R2__has_description="",
+    R3__is_subclass_of=p.I1["general item"],
+)
+
+R1070 = p.create_relation(
+    R1__has_label="has old tag",
+    R2__has_description="state that an ackrep entity has an old tag",
+    R8__has_domain_of_argument_1=I2699["general ackrep entity"],
+    R11__has_range_of_result=I1161["old tag"],
 )
 
 """
@@ -1343,26 +1313,19 @@ template:
 key reservoir J
 
 
-      R8316
-      R1070
-      R2112
-      R9746
+
+
+
+
       R2279
      R6458
-I5919      R5919
-I4635      R4635
-I1161      R1161
-I2699      R2699
-I4931      R4931
-I9223      R9223
-I1195      R1195
-I1616      R1616
-I6012      R6012
-I3240      R3240
-I7169      R7169
-I1608      R1608
-I8133      R8133
-I3033      R3033
+      R5919
+      R4635
+      R1161
+      R2699
+      R4931
+
+      R1195
 I8302      R8302
 I1979      R1979
 I5006      R5006
