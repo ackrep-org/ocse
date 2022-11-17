@@ -10,6 +10,7 @@ ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
 
 # todo: rename .scope("context") to .scope("setting")
 
+
 __URI__ = "erk:/ocse/0.2"
 
 keymanager = p.KeyManager()
@@ -449,73 +450,13 @@ with I3007.scope("assertions") as cm:
 # preparation for next theorem
 
 
-# todo: this needs more generalization
+# manually import entities that were refactored to erk:/math/0.2
 I9904 = ma.I9904["matrix"]
-
-I9905 = p.create_item(
-    R1__has_label="zero matrix",
-    R2__has_description="like its superclass but with all entries equal to zero",
-    R3__is_subclass_of=I9904["matrix"],
-)
-
-I9906 = p.create_item(
-    R1__has_label="square matrix",
-    R2__has_description="a matrix for which the number of rows and columns are equal",
-    R3__is_subclass_of=I9904["matrix"],
-    # TODO: formalize the condition inspired by OWL
-)
-
-R5938 = p.create_relation(
-    R1__has_label="has row number",
-    R2__has_description="specifies the number of rows of a matrix",
-    R8__has_domain_of_argument_1=I9904["matrix"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
-)
-
-# todo: specifies that this item defines I9905
-R5939 = p.create_relation(
-    R1__has_label="has column number",
-    R2__has_description="specifies the number of columns of a matrix",
-    R8__has_domain_of_argument_1=I9904["matrix"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
-)
-
-
-I9223 = p.create_item(
-    R1__has_label="definition of zero matrix",
-    R2__has_description="the defining statement of what a zero matrix is",
-    R4__is_instance_of=p.I20["mathematical definition"],
-    )
-
-with I9223["definition of zero matrix"].scope("setting") as cm:
-    cm.new_var(M=p.uq_instance_of(I9904["matrix"]))
-
-    cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
-    cm.new_var(nc=p.instance_of(p.I39["positive integer"]))
-
-    cm.new_rel(cm.M, R5938["has row number"], cm.nr)
-    cm.new_rel(cm.M, R5939["has column number"], cm.nc)
-
-    # # sequences for the row/column indices (convention: indices start at 1)
-    # cm.new_var(idcs_r=ma.Range(start=1, stop=cm.nr))
-    # cm.new_var(idcs_c=ma.Range(start=1, stop=cm.nc))
-
-    # # the actual indices are elements of these sequences
-    # cm.new_var(i=ma.Range_Element(cm.idcs_r))
-    # cm.new_var(j=ma.Range_Element(cm.idcs_c))
-
-
-with I9223["definition of zero matrix"].scope("premises") as cm:
-    with ma.IntegerRangeElement(start=1, stop=cm.nr) as i:
-        with ma.IntegerRangeElement(start=1, stop=cm.nc) as j:
-
-            # create an auxiliary variable (not part part of the graph)
-            M_ij = ma.I3240["matrix element"](cm.M, i, j)
-            cm.new_equation(lhs=M_ij, rhs=ma.I5000["scalar zero"])
-
-
-with I9223["definition of zero matrix"].scope("assertions") as cm:
-    cm.new_rel(cm.M, p.R30["is secondary instance of"], I9905["zero matrix"])
+I9905 = ma.I9905["zero matrix"]
+I9223 = ma.I9223["definition of zero matrix"]
+I9906 = ma.I9906["square matrix"]
+R5938 = ma.R5938["has row number"]
+R5939 = ma.R5939["has column number"]
 
 
 R5940 = p.create_relation(
@@ -1252,7 +1193,7 @@ I6963 = p.instance_of(I4236["mathematical expression"])
 I6963.set_relation(p.R24["has LaTeX string"], r"$B^2-AC$")
 
 I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=ma.I5000["scalar zero"])
-I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="=", rhs=ma.I5000["scalar zero"])
+I9769 = p.new_mathematical_relation(lhs=I6963, rsgn="==", rhs=ma.I5000["scalar zero"])
 I6458 = p.new_mathematical_relation(lhs=I6963, rsgn=">", rhs=ma.I5000["scalar zero"])
 
 I4704 = p.create_item(

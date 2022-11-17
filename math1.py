@@ -19,6 +19,14 @@ I5000 = p.create_item(
 )
 
 
+I5001 = p.create_item(
+    R1__has_label="scalar one",
+    R2__has_description="entity representing the one-element in the set of complex numbers and its subsets",
+    R4__is_instance_of=p.I34["complex number"],
+    R24__has_LaTeX_string="$1$",
+)
+
+
 I4235 = p.create_item(
     R1__has_label="mathematical object",
     R2__has_description="...",
@@ -178,13 +186,73 @@ class IntegerRangeElement:
         pass
 
 
+I9905 = p.create_item(
+    R1__has_label="zero matrix",
+    R2__has_description="like its superclass but with all entries equal to zero",
+    R3__is_subclass_of=I9904["matrix"],
+)
+
+I9906 = p.create_item(
+    R1__has_label="square matrix",
+    R2__has_description="a matrix for which the number of rows and columns are equal",
+    R3__is_subclass_of=I9904["matrix"],
+    # TODO: formalize the condition inspired by OWL
+)
+
+R5938 = p.create_relation(
+    R1__has_label="has row number",
+    R2__has_description="specifies the number of rows of a matrix",
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
+# todo: specifies that this item defines I9905
+R5939 = p.create_relation(
+    R1__has_label="has column number",
+    R2__has_description="specifies the number of columns of a matrix",
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
+
+#            start defintion
+
+I9223 = p.create_item(
+    R1__has_label="definition of zero matrix",
+    R2__has_description="the defining statement of what a zero matrix is",
+    R4__is_instance_of=p.I20["mathematical definition"],
+    )
+
+
+with I9223["definition of zero matrix"].scope("setting") as cm:
+    cm.new_var(M=p.uq_instance_of(I9904["matrix"]))
+
+    cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(nc=p.instance_of(p.I39["positive integer"]))
+
+    cm.new_rel(cm.M, R5938["has row number"], cm.nr)
+    cm.new_rel(cm.M, R5939["has column number"], cm.nc)
+
+
+with I9223["definition of zero matrix"].scope("premises") as cm:
+    with IntegerRangeElement(start=1, stop=cm.nr) as i:
+        with IntegerRangeElement(start=1, stop=cm.nc) as j:
+
+            # create an auxiliary variable (not part part of the graph)
+            M_ij = I3240["matrix element"](cm.M, i, j)
+            cm.new_equation(lhs=M_ij, rhs=I5000["scalar zero"])
+
+
+with I9223["definition of zero matrix"].scope("assertions") as cm:
+    cm.new_rel(cm.M, p.R30["is secondary instance of"], I9905["zero matrix"])
+
+#            end defintion
+
 p.end_mod()
 
 
 """
 
-I3240      R3240
-I7169      R7169
 I1608      R1608
 I8133      R8133
 I3033      R3033
