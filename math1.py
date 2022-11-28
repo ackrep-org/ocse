@@ -318,6 +318,12 @@ R3033 = p.create_relation(
     R11__has_range_of_result=p.I42["mathematical type (metaclass)"],
 )
 
+I5006 = p.create_item(
+    R1__has_label="imaginary part",
+    R2__has_description="returns the imaginary part of a complex number",
+    R4__is_instance_of=I4895["mathematical operator"],
+)
+
 
 I2738 = p.create_item(
     R1__has_label="field of complex numbers",
@@ -340,15 +346,32 @@ I1979 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-# TODO: write the definition
+
+with I1979["definition of open left half plane"].scope("setting") as cm:
+    # Let HP be an arbitrary subset of complex numbers
+    cm.new_var(HP=p.instance_of(p.I13["mathematical set"]))
+    cm.new_rel(cm.HP, p.R14["is subset of"], I2738["field of complex numbers"])
+
+    cm.new_var(z=p.instance_of(p.I34["complex number"]))
+    # the premise should hold   for all   elements z of the subset HP
+    cm.new_rel(cm.z, p.R15["is element of"], cm.HP, qualifiers=p.univ_quant(True))
+
+    imag = I5006["imaginary part"]
+    cm.new_var(y=imag(cm.z))
+
+with I1979["definition of open left half plane"].scope("premises") as cm:
+    cm.new_math_relation(cm.y, "<", I5000["scalar zero"])
+
+with I1979["definition of open left half plane"].scope("assertions") as cm:
+    cm.new_rel(cm.HP, p.R47["is same as"], I2739["open left half plane"])
+
 
 p.end_mod()
 
 
 """
 
-I1979      R1979
-I5006      R5006
+I5006
 I3237      R3237
 I7490      R7490
 I6259      R6259
