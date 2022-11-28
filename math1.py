@@ -27,17 +27,10 @@ I5001 = p.create_item(
 )
 
 
-I4235 = p.create_item(
-    R1__has_label="mathematical object",
-    R2__has_description="...",
-    R4__is_instance_of=p.I2["Metaclass"],
-)
-
-
 I4895 = p.create_item(
     R1__has_label="mathematical operator",
     R2__has_description="general (unspecified) mathematical operator",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=p.I12["mathematical object"],
 )
 
 # make all instances of operators callable:
@@ -47,7 +40,7 @@ I4895["mathematical operator"].add_method(p.create_evaluated_mapping, "_custom_c
 I9904 = p.create_item(
     R1__has_label="matrix",
     R2__has_description="matrix of (in general) complex numbers, i.e. matrix over the field of complex numbers",
-    R3__is_subclass_of=I4235["mathematical object"],
+    R3__is_subclass_of=p.I12["mathematical object"],
 )
 
 
