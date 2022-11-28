@@ -302,13 +302,65 @@ with I7169["definition of identity matrix"].scope("assertions") as cm:
 
 # ---------------------------------------------------------------------------------------------------------------------
 
+I8133 = p.create_item(
+    R1__has_label=["field of numbers"@p.en, "Zahlenkörper"@p.de],
+    R2__has_description="general field of numbers; baseclass for the fields of real and complex numbers",
+    R3__is_subclass_of=p.I13["mathematical set"],
+)
+
+R3033 = p.create_relation(
+    R1__has_label="has type of elements",
+    R2__has_description=(
+        "specifies the item-type of the elements of a mathematical set; "
+        "should be a subclass of I12['mathematical object']"
+    ),
+    R8__has_domain_of_argument_1=p.I13["mathematical set"],
+    R11__has_range_of_result=p.I42["mathematical type (metaclass)"],
+)
+
+
+I2738 = p.create_item(
+    R1__has_label="field of complex numbers",
+    R2__has_description="field of complex numnbers",
+    R4__is_instance_of=I8133["field of numbers"],
+    R13__has_canonical_symbol=r"$\mathbb{C}$",
+    R3033__has_type_of_elements=p.I34["complex number"],
+)
+
+I2739 = p.create_item(
+    R1__has_label="open left half plane",
+    R2__has_description="set of all complex numbers with negative real part",
+    R4__is_instance_of=p.I13["mathematical set"],
+    R14__is_subset_of=I2738["field of complex numbers"],
+)
+
+I1979 = p.create_item(
+    R1__has_label="definition of open left half plane",
+    R2__has_description="the defining statement of what I2739['open left half plane'] is",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+# TODO: write the definition
+
 p.end_mod()
 
 
 """
 
-I1608      R1608
-I8133      R8133
-I3033      R3033
+I1979      R1979
+I5006      R5006
+I3237      R3237
+I7490      R7490
+I6259      R6259
+I1474      R1474
+I5177      R5177
+I1594      R1594
+I5807      R5807
+I3668      R3668
+I9739      R9739
+I6324      R6324
+I5359      R5359
+I1935      R1935
+
 
 """

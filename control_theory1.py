@@ -241,21 +241,9 @@ I5484 = p.create_item(
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
-I2738 = p.create_item(
-    R1__has_label="field of complex numnbers",
-    R2__has_description="field of complex numnbers",
-    # TODO: use p.I12 here
-    R4__is_instance_of=p.I12["mathematical object"],
-    R13__has_canonical_symbol=r"$\mathbb{C}$",
-    # todo: introduce algebraic structures and relation to set
-)
-
-I2739 = p.create_item(
-    R1__has_label="open left half plane",
-    R2__has_description="set of all complex numbers with negative real part",
-    R4__is_instance_of=p.I12["mathematical object"],
-    R14__is_subset_of=I2738["field of complex numnbers"],
-)
+# todo: replace occurrences
+I2738 = ma.I2738
+I2739 = ma.I2739
 
 R5323 = p.create_relation(
     R1__has_label="has denominator",
@@ -840,6 +828,26 @@ I1371 = p.create_item(
     # TODO: add defining equation
 )
 
+# <definition>
+I8302 = p.create_item(
+    R1__has_label="definition of iterated Lie derivative of scalar field",
+    R2__has_description=(
+        "the defining statement of "
+        "I1371['iterated Lie derivative of scalar field']"
+    ),
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I8302["definition of iterated Lie derivative of scalar field"].scope("context") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
+    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
+    f = cm.new_var(f=p.uq_instance_of(I9841["vector field"]))
+
+
+# TODO: complete definition
+
+# </definition>
 
 # < Model Properties>
 
@@ -1113,6 +1121,9 @@ I6467 = p.create_item(
     # TODO: Implement rule that saddle is always unstable
 )
 
+
+
+
 I4610 = p.create_item(
     R1__has_label="spiral",
     R2__has_description="states that the phase portrait forms a spiral near the equilibrium point",
@@ -1332,21 +1343,8 @@ key reservoir J
       R4931
 
       R1195
-I8302      R8302
-I1979      R1979
-I5006      R5006
-I3237      R3237
-I7490      R7490
-I6259      R6259
-I1474      R1474
-I5177      R5177
-I1594      R1594
-I5807      R5807
-I3668      R3668
-I9739      R9739
-I6324      R6324
-I5359      R5359
-I1935      R1935
+
+
 I7178      R7178
 I2933      R2933
 I5483      R5483
