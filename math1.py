@@ -4,7 +4,7 @@ import pyerk as p
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  #noqa
 
-__URI__ = "erk:/math/0.2"
+__URI__ = "erk:/ocse/0.2/math"
 
 keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)

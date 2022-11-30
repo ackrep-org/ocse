@@ -11,7 +11,7 @@ ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
 # todo: rename .scope("context") to .scope("setting")
 
 
-__URI__ = "erk:/ocse/0.2"
+__URI__ = "erk:/ocse/0.2/control_theory"
 
 keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
