@@ -112,13 +112,19 @@ I8124 = create_person("Carsten", "Knoll", "engineer and researcher")
 I8124.set_relation(p.R33["has corresponding wikidata entity"], "http://www.wikidata.org/entity/Q110983632")
 
 
+I2478 = p.create_item(
+    R1__has_label="TU Dresden",
+    R2__has_description="Dresden University of Technology",
+    R4__is_instance_of=I1342["academic institution"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q158158",
+)
+
 p.end_mod()
 
 
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I2478      R2478
 I6876      R6876
 I2276      R2276
 I2151      R2151
