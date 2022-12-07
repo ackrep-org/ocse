@@ -1,5 +1,7 @@
 # this file contains some configuration for the pyerk package
 
+main_module = "control_theory1.py"
+version = "0.2.1.0"
 
 [pyerkdjango]
 
