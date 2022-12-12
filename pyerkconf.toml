@@ -1,7 +1,0 @@
-# this file contains some configuration for the pyerk package
-
-
-[pyerkdjango]
-
-# this module will be loaded in the editor
-main_module = "control_theory1.py"

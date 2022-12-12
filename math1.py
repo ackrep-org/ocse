@@ -291,8 +291,8 @@ with I7169["definition of identity matrix"].scope("premises") as cm:
                 imp1.consequent_relation(lhs=M_ij, rsgn="==", rhs=I5000["scalar zero"])
 
             with p.ImplicationStatement() as imp2:
-                imp1.antecedent_relation(lhs=i, rsgn="==", rhs=j)
-                imp1.consequent_relation(lhs=M_ij, rsgn="==", rhs=I5001["scalar one"])
+                imp2.antecedent_relation(lhs=i, rsgn="==", rhs=j)
+                imp2.consequent_relation(lhs=M_ij, rsgn="==", rhs=I5001["scalar one"])
 
 
 with I7169["definition of identity matrix"].scope("assertions") as cm:
