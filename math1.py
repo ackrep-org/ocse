@@ -366,14 +366,48 @@ with I1979["definition of open left half plane"].scope("assertions") as cm:
     cm.new_rel(cm.HP, p.R47["is same as"], I2739["open left half plane"])
 
 
+I6259 = p.create_item(
+    R1__has_label="sequence",
+    R2__has_description="common (secondary) base class of sequence of mathematical objects",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+R7490 = p.create_relation(
+    R1__has_label="has sequence element",
+    R2__has_description=(
+        "specifies the item-type of the elements of a mathematical set; "
+        "should be a subclass of I12['mathematical object']"
+    ),
+    R8__has_domain_of_argument_1=I6259["sequence"],
+    R11__has_range_of_result=p.I12['mathematical object'],
+)
+
+I3237 = p.create_item(
+    R1__has_label="column stack",
+    R2__has_description="sequence of columns of equal length which are stacked horizontally",
+    R3__is_subclass_of=I9904["matrix"],
+    R30__is_secondary_instance_of=I6259["sequence"],
+    R18__has_usage_hint=(
+        """Examples:
+        cs1 = instance_of(I3237["column stack"])
+        A = instance_of(I9904["matrix"])
+        b = instance_of(I9904["matrix"])
+        cs1.set_relation(R7490["has sequence element"], [A, b])
+
+
+        cs2 = instance_of(I3237["column stack"])
+
+        """
+    )
+)
+
+
 p.end_mod()
 
 
 """
 
-I5006
-I3237      R3237
-I7490      R7490
 I6259      R6259
 I1474      R1474
 I5177      R5177
