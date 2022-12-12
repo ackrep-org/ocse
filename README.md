@@ -1,6 +1,6 @@
 # Ontology of Control Systems Engineering (OCSE)
 
-This repo contains formally represented knowledge of the domain of *Control Engineering*.
+This repo contains formally represented knowledge of the domain of *Control Engineering*, including relevant sections of mathematics.
 
 
 ## History and Background
