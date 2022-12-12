@@ -34,6 +34,13 @@ class Test_01_math(unittest.TestCase):
 
         cs1.set_mutliple_relations(ma.R7490["has sequence element"], (A, b))
 
-        # rels = cs1.get_relations("ma__I9904__matrix", return_obj=True)
         rels = cs1.get_relations("ma__R7490__has_sequence_element", return_obj=True)
         self.assertEqual(rels, [A, b])
+
+        # construct a situation like in the Kalman controlability matrix: Q = (b, A*b, A^2*b, ...)
+        cs2: p.Item = p.instance_of(ma.I3237["column stack"])
+
+        # arbitrary range
+        with ma.IntegerRangeElement(start=0, stop=9) as i:
+            prod = ma.I5177["matmul"](ma.I1474["matpow"](A, i), b)
+            cs2.set_relation("ma__R7490__has_sequence_element", prod)

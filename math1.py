@@ -403,14 +403,34 @@ I3237 = p.create_item(
 )
 
 
+I5177 = p.create_item(
+    R1__has_label="matmul",
+    R2__has_description=(
+        "matrix multplication operator"
+    ),
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R9__has_domain_of_argument_2=I9904["matrix"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+I1474 = p.create_item(
+    R1__has_label="matpow",
+    R2__has_description=(
+        "power function for matrices like A**0 = I, A**1 = A, A**2 = A*A"
+    ),
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R9__has_domain_of_argument_2=p.I38["non-negative integer"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+
 p.end_mod()
 
 
 """
 
-I6259      R6259
-I1474      R1474
-I5177      R5177
 I1594      R1594
 I5807      R5807
 I3668      R3668
