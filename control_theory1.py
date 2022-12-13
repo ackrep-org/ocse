@@ -2,7 +2,7 @@ import pyerk as p
 
 
 # noinspection PyUnresolvedReferences
-from ipydex import IPS, activate_ips_on_exception
+from ipydex import IPS, activate_ips_on_exception  # noqa
 
 
 ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
@@ -205,29 +205,10 @@ I2640 = p.create_item(
 
 p.R37["has definition"].set_relation(p.R8["has domain of argument 1"], p.I12["mathematical object"])
 
-# todo: what is the difference between an object and an expression?
-# TODO: align this with p.I18
-I4236 = p.create_item(
-    R1__has_label="mathematical expression",
-    R2__has_description="common base class for mathematical expressions",
-    R3__is_subclass_of=p.I12["mathematical object"],
-)
 
-I4237 = p.create_item(
-    R1__has_label="monovariate rational function",
-    R2__has_description="...",
-    R3__is_subclass_of=I4236["mathematical expression"],
-)
-
-I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_custom_call")
-
-I4239 = p.create_item(
-    R1__has_label="monovariate polynomial",
-    R2__has_description=(
-        "abstract monovariate polynomial (argument might be a complex-valued scalar, a matrix, an operator, etc.)"
-    ),
-    R3__is_subclass_of=I4237["monovariate rational function"],
-)
+I4236 = ma.I4236["mathematical expression"]
+I4237 = ma.I4237["monovariate rational function"]
+I4239 = ma.I4239["monovariate polynomial"]
 
 I4240 = p.create_item(
     R1__has_label="matrix polynomial",
@@ -235,11 +216,7 @@ I4240 = p.create_item(
     R3__is_subclass_of=I4239["monovariate polynomial"],
 )
 
-I5484 = p.create_item(
-    R1__has_label="finite set of complex numbers",
-    R2__has_description="...",
-    R3__is_subclass_of=p.I13["mathematical set"],
-)
+I5484 = ma.I5484["finite set of complex numbers"]
 
 # todo: replace occurrences
 I2738 = ma.I2738
@@ -260,12 +237,7 @@ R5334 = p.create_relation(
     R11__has_range_of_result=p.I12["mathematical object"],
 )
 
-R1757 = p.create_relation(
-    R1__has_label="has set of roots",
-    R2__has_description="set of roots for a monovariate function",
-    R8__has_domain_of_argument_1=I4236["mathematical expression"],  # todo: this is too broad
-    R11__has_range_of_result=I5484["finite set of complex numbers"],
-)
+R1757 = ma.R1757["has set of roots"]
 
 I8181 = p.create_item(
     R1__has_label="properness",

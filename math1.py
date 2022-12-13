@@ -4,6 +4,8 @@ import pyerk as p
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  #noqa
 
+ag = p.erkloader.load_mod_from_path("./agents1.py", prefix="ag")
+
 __URI__ = "erk:/ocse/0.2/math"
 
 keymanager = p.KeyManager()
@@ -324,6 +326,14 @@ I5006 = p.create_item(
     R4__is_instance_of=I4895["mathematical operator"],
 )
 
+I5807 = p.create_item(
+    R1__has_label="sign",
+    R2__has_description="returns the sign of a real number, i.e. on element of {-1, 0, 1}",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I35["real number"],
+    R11__has_range_of_result=p.I37["integer number"],
+)
+
 
 I2738 = p.create_item(
     R1__has_label="field of complex numbers",
@@ -425,13 +435,90 @@ I1474 = p.create_item(
     R11__has_range_of_result=I9904["matrix"],
 )
 
+# copied from control_theory1:
+
+
+I5484 = p.create_item(
+    R1__has_label="finite set of complex numbers",
+    R2__has_description="...",
+    R3__is_subclass_of=p.I13["mathematical set"],
+)
+
+
+# todo: what is the difference between an object and an expression?
+# TODO: align this with p.I18
+I4236 = p.create_item(
+    R1__has_label="mathematical expression",
+    R2__has_description="common base class for mathematical expressions",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+I4237 = p.create_item(
+    R1__has_label="monovariate rational function",
+    R2__has_description="...",
+    R3__is_subclass_of=I4236["mathematical expression"],
+)
+
+I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_custom_call")
+
+
+I4239 = p.create_item(
+    R1__has_label="monovariate polynomial",
+    R2__has_description=(
+        "abstract monovariate polynomial (argument might be a complex-valued scalar, a matrix, an operator, etc.)"
+    ),
+    R3__is_subclass_of=I4237["monovariate rational function"],
+)
+
+
+R1757 = p.create_relation(
+    R1__has_label="has set of roots",
+    R2__has_description="set of roots for a monovariate function",
+    R8__has_domain_of_argument_1=I4236["mathematical expression"],  # todo: this is too broad
+    R11__has_range_of_result=I5484["finite set of complex numbers"],
+)
+
+
+I1594 = p.create_item(
+    R1__has_label="Stodolas necessary condition for polynomial coefficients",
+    R2__has_description=(
+        "establishes the fact that if all roots of a polynomial are located in the open left half plane, "
+        "then all coefficients have the same sign."
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+
+    # TODO: test this feature (attribute name beginning with prefix) in pyerk.test_core
+    ag__R6876__is_named_after=ag.I2276["Aurel Stodola"],
+)
+
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("setting") as cm:
+
+    cm.new_var(p=p.instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
+    cm.new_var(seq_of_coeffs=p.I000["TODO: enumerated sequence of real numbers"])
+
+    cm.new_var(c1=p.instance_of(p.I35["real number"]))
+    cm.new_var(c2=p.instance_of(p.I35["real number"]))
+
+    cm.new_rel(cm.p, R1757["has set of roots"], cm.set_of_roots)
+    cm.new_rel(cm.p, p.R000["TODO: has sequence of coefficients"], cm.seq_of_coeffs)
+
+    cm.new_rel(cm.c1, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
+    cm.new_rel(cm.c2, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
+
+
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("premises") as cm:
+    cm.new_rel(cm.set_of_roots, p.R14["is subset of"], I2739["open left half plane"])
+
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("assertions") as cm:
+    cm.new_math_relation(lhs=I5807["sign"](cm.c1), rsgn="==", rhs=I5807["sign"](cm.c2))
+
 
 p.end_mod()
 
 
 """
 
-I1594      R1594
 I5807      R5807
 I3668      R3668
 I9739      R9739
