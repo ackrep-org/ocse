@@ -27,20 +27,35 @@ class Test_01_math(unittest.TestCase):
     def test_a00_ensure_version(self):
         self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.6.4"))
 
-    def test_a01_column_stack(self):
-        cs1: p.Item = p.instance_of(ma.I3237["column stack"])
+    def test_c01_column_stack(self):
+
+        # create some matrices which will be stacked later
         A = p.instance_of(ma.I9904["matrix"])
         b = p.instance_of(ma.I9904["matrix"])
 
-        cs1.set_mutliple_relations(ma.R7490["has sequence element"], (A, b))
+        # different ways to define column stacks:
+        colstack1: p.Item = p.instance_of(ma.I3237["column stack"])
 
-        rels = cs1.get_relations("ma__R7490__has_sequence_element", return_obj=True)
+        # add the elements of the columnstack element by element
+        colstack1.set_relation(ma.R7490["has sequence element"], A)
+        colstack1.set_relation(ma.R7490["has sequence element"], b)
+
+        # check
+        rels = colstack1.get_relations("ma__R7490__has_sequence_element", return_obj=True)
+        self.assertEqual(rels, [A, b])
+
+        # add the elements of the columnstack all at once
+        colstack2: p.Item = p.instance_of(ma.I3237["column stack"])
+        colstack2.set_mutliple_relations(ma.R7490["has sequence element"], (A, b))
+
+        # check
+        rels = colstack2.get_relations("ma__R7490__has_sequence_element", return_obj=True)
         self.assertEqual(rels, [A, b])
 
         # construct a situation like in the Kalman controlability matrix: Q = (b, A*b, A^2*b, ...)
-        cs2: p.Item = p.instance_of(ma.I3237["column stack"])
+        colstack3: p.Item = p.instance_of(ma.I3237["column stack"])
 
-        # arbitrary range
-        with ma.IntegerRangeElement(start=0, stop=9) as i:
+        # arbitrary range (here from 0 to 24)
+        with ma.IntegerRangeElement(start=0, stop=24) as i:
             prod = ma.I5177["matmul"](ma.I1474["matpow"](A, i), b)
-            cs2.set_relation("ma__R7490__has_sequence_element", prod)
+            colstack3.set_relation("ma__R7490__has_sequence_element", prod)

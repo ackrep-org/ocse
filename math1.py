@@ -393,23 +393,13 @@ R7490 = p.create_relation(
     R11__has_range_of_result=p.I12['mathematical object'],
 )
 
+
 I3237 = p.create_item(
     R1__has_label="column stack",
     R2__has_description="sequence of columns of equal length which are stacked horizontally",
     R3__is_subclass_of=I9904["matrix"],
     R30__is_secondary_instance_of=I6259["sequence"],
-    R18__has_usage_hint=(
-        """Examples:
-        cs1 = instance_of(I3237["column stack"])
-        A = instance_of(I9904["matrix"])
-        b = instance_of(I9904["matrix"])
-        cs1.set_relation(R7490["has sequence element"], [A, b])
-
-
-        cs2 = instance_of(I3237["column stack"])
-
-        """
-    )
+    R18__has_usage_hint="see unittest in `test_package.Test_01_math.test_c01_column_stack`",
 )
 
 
@@ -423,6 +413,7 @@ I5177 = p.create_item(
     R9__has_domain_of_argument_2=I9904["matrix"],
     R11__has_range_of_result=I9904["matrix"],
 )
+
 
 I1474 = p.create_item(
     R1__has_label="matpow",
