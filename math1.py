@@ -521,16 +521,105 @@ with I1594["Stodolas necessary condition for polynomial coefficients"].scope("as
     cm.new_math_relation(lhs=I5807["sign"](cm.c1), rsgn="==", rhs=I5807["sign"](cm.c2))
 
 
+I4240 = p.create_item(
+    R1__has_label="matrix polynomial",
+    R2__has_description="monovariate polynomial of quadratic matrices",
+    R3__is_subclass_of=I4239["monovariate polynomial"],
+)
+
+I1935 = p.create_item(
+    R1__has_label="polynomial matrix",
+    R2__has_description="matrix whose entries contain (scalar) polynomials",
+    R3__is_subclass_of=I9904["matrix"],
+    R50__is_different_from=I4240["matrix polynomial"],
+)
+
+I5030 = p.create_item(
+    R1__has_label="variable",
+    R2__has_description="symbol which can represent another mathematical object",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+# eigenvalues
+
+
+I6324 = p.create_item(
+    R1__has_label="canonical first order monic polynomial matrix",
+    R2__has_description="for a given square matrix A returns the polynomial matrix (s·I - A)",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R9__has_domain_of_argument_2=p.I34["complex number"],
+    R11__has_range_of_result=I1935["polynomial matrix"],
+)
+
+I5359 = p.create_item(
+    R1__has_label="determinant",
+    R2__has_description="returns the determinant of a matrix",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I5030["variable"],
+    R11__has_range_of_result=p.I000["scalar value"],
+)
+
+
+
 p.end_mod()
 
 
 """
 
 
-I9739      R9739
-I6324      R6324
-I5359      R5359
-I1935      R1935
+I5030      R5030
+I8736      R8736
+I7765      R7765
+I1566      R1566
+I3238      R3238
+I9160      R9160
+I1373      R1373
+I3589      R3589
+I9628      R9628
+I7559      R7559
+I1063      R1063
+I6709      R6709
+I3133      R3133
+I1770      R1770
+I5843      R5843
+I4963      R4963
+I9651      R9651
+I3798      R3798
+I3058      R3058
+I7280      R7280
+I1913      R1913
+I2917      R2917
+I8172      R8172
+I9148      R9148
+I2495      R2495
+I9738      R9738
+I6043      R6043
+I5916      R5916
+I6117      R6117
+I9192      R9192
+I3648      R3648
+I6209      R6209
+I8492      R8492
+I1284      R1284
+I4218      R4218
+I2328      R2328
+I9489      R9489
+I4864      R4864
+I5094      R5094
+I2378      R2378
+I1716      R1716
+I9827      R9827
+I7151      R7151
+I7481      R7481
+I4291      R4291
+I5441      R5441
+I1778      R1778
+I1536      R1536
+I9493      R9493
+I3263      R3263
+
 
 
 """

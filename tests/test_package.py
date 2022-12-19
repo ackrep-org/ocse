@@ -14,6 +14,8 @@ if os.environ.get("IPYDEX_AIOE") == "true":
 
 PACKAGE_ROOT_PATH = Path(__file__).parent.parent.absolute().as_posix()
 ma = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma")
+ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct")
+ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
 
 
 class Test_01_math(unittest.TestCase):
@@ -24,10 +26,10 @@ class Test_01_math(unittest.TestCase):
     def tearDown(self):
         p.end_mod()
 
-    def test_a00_ensure_version(self):
+    def test_a00__ensure_version(self):
         self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.6.4"))
 
-    def test_c01_column_stack(self):
+    def test_c01__column_stack(self):
 
         # create some matrices which will be stacked later
         A = p.instance_of(ma.I9904["matrix"])
@@ -59,3 +61,15 @@ class Test_01_math(unittest.TestCase):
         with ma.IntegerRangeElement(start=0, stop=24) as i:
             prod = ma.I5177["matmul"](ma.I1474["matpow"](A, i), b)
             colstack3.set_relation("ma__R7490__has_sequence_element", prod)
+            
+    def test_c02__eigenvalues(self):
+        A = p.instance_of(ma.I9906["square matrix"])
+        s = p.instance_of(ma.I5030["variable"])
+        
+        # construct sI - A
+        M = ma.I6324["canonical first order monic polynomial matrix"](A, s)
+        
+        d = ma.I5359["determinant"](M)
+        
+        # assert that d is a polynomial
+        

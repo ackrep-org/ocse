@@ -210,12 +210,6 @@ I4236 = ma.I4236["mathematical expression"]
 I4237 = ma.I4237["monovariate rational function"]
 I4239 = ma.I4239["monovariate polynomial"]
 
-I4240 = p.create_item(
-    R1__has_label="matrix polynomial",
-    R2__has_description="monovariate polynomial of quadratic matrices",
-    R3__is_subclass_of=I4239["monovariate polynomial"],
-)
-
 I5484 = ma.I5484["finite set of complex numbers"]
 
 # todo: replace occurrences
@@ -467,7 +461,7 @@ with I3749["Cayley-Hamilton theorem"].scope("context") as cm:
     cm.new_var(A=p.uq_instance_of(I9906["square matrix"]))
     cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
-    cm.new_var(P=p.instance_of(I4240["matrix polynomial"]))
+    cm.new_var(P=p.instance_of(ma.I4240["matrix polynomial"]))
     cm.new_var(Z=p.instance_of(I9905["zero matrix"]))
 
     cm.new_rel(cm.A, R5938["has row number"], cm.n)
