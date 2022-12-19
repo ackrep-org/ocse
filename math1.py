@@ -482,17 +482,33 @@ I1594 = p.create_item(
     ag__R6876__is_named_after=ag.I2276["Aurel Stodola"],
 )
 
+
+I9739 = p.create_item(
+    R1__has_label="finite scalar sequence",
+    R2__has_description="base class of a finite sequence of (in general) complex numbers; can be indexed",
+    R3__is_subclass_of=I6259["sequence"],
+)
+
+
+R3668 = p.create_relation(
+    R1__has_label="has sequence of coefficients",
+    R2__has_description="object is the enumerated sequence of coefficients of a monovariate polynomial",
+    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R11__has_range_of_result=I9739["finite scalar sequence"],
+)
+
+
 with I1594["Stodolas necessary condition for polynomial coefficients"].scope("setting") as cm:
 
     cm.new_var(p=p.instance_of(I4239["monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
-    cm.new_var(seq_of_coeffs=p.I000["TODO: enumerated sequence of real numbers"])
+    cm.new_var(seq_of_coeffs=p.instance_of(I9739["finite scalar sequence"]))
 
     cm.new_var(c1=p.instance_of(p.I35["real number"]))
     cm.new_var(c2=p.instance_of(p.I35["real number"]))
 
     cm.new_rel(cm.p, R1757["has set of roots"], cm.set_of_roots)
-    cm.new_rel(cm.p, p.R000["TODO: has sequence of coefficients"], cm.seq_of_coeffs)
+    cm.new_rel(cm.p, R3668["has sequence of coefficients"], cm.seq_of_coeffs)
 
     cm.new_rel(cm.c1, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
     cm.new_rel(cm.c2, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
@@ -510,8 +526,7 @@ p.end_mod()
 
 """
 
-I5807      R5807
-I3668      R3668
+
 I9739      R9739
 I6324      R6324
 I5359      R5359
