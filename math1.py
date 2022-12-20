@@ -540,6 +540,21 @@ I5030 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I7765 = p.create_item(
+    R1__has_label="scalar mathematical object",
+    R2__has_description="mathematical object which is or can be evaluated to a single (complex number)",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+R8736 = p.create_relation(
+    R1__has_label="depends polyonomially on",
+    R2__has_description="subject has a polynomial dependency object",
+    R8__has_domain_of_argument_1=p.I12["mathematical object"],
+    R11__has_range_of_result=I5030["variable"],
+    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency")
+)
+
 
 # eigenvalues
 
@@ -549,18 +564,56 @@ I6324 = p.create_item(
     R2__has_description="for a given square matrix A returns the polynomial matrix (s·I - A)",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9906["square matrix"],
-    R9__has_domain_of_argument_2=p.I34["complex number"],
+    R9__has_domain_of_argument_2=I5030["variable"],
     R11__has_range_of_result=I1935["polynomial matrix"],
 )
+
+
+def I6324_cc_pp(self, res, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     instance of I1935["polynomial matrix"] (determined by R11__has_range_of_result)
+    :param args:    arg tuple (<matrix>, <variable>) with which the mapping is called
+    """
+    
+    assert len(args) == 2
+    matrix, var = args
+    
+    # check that `var` is an instance of I5030["variable"]
+    assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
+    res.set_relation(R8736["depends polyonomially on"], var)
+    
+    return res
+
+I6324["canonical first order monic polynomial matrix"].add_method(I6324_cc_pp, "_custom_call_post_process")
 
 I5359 = p.create_item(
     R1__has_label="determinant",
     R2__has_description="returns the determinant of a matrix",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I5030["variable"],
-    R11__has_range_of_result=p.I000["scalar value"],
+    R11__has_range_of_result=I7765["scalar mathematical object"],
 )
 
+
+def I5359_cc_pp(self, res, *args, **kwargs):
+    """
+    :param self:    determinant operator item (to which this function will be attached)
+    :param res:     instance of I7765["scalar mathematical object"] (determined by R11__has_range_of_result)
+    :param args:    arg tuple (<matrix>) with which the mapping is called
+    """
+    
+    assert len(args) == 1
+    matrix, = args
+    
+    if poly_vars := matrix.R8736__depends_polyonomially_on:
+        for var in poly_vars:
+            assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
+            res.set_relation(R8736["depends polyonomially on"], var)
+            
+    return res
+
+I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
 
 
 p.end_mod()
@@ -569,9 +622,6 @@ p.end_mod()
 """
 
 
-I5030      R5030
-I8736      R8736
-I7765      R7765
 I1566      R1566
 I3238      R3238
 I9160      R9160

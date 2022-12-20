@@ -27,7 +27,7 @@ class Test_01_math(unittest.TestCase):
         p.end_mod()
 
     def test_a00__ensure_version(self):
-        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.6.4"))
+        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.6.5"))
 
     def test_c01__column_stack(self):
 
@@ -69,7 +69,11 @@ class Test_01_math(unittest.TestCase):
         # construct sI - A
         M = ma.I6324["canonical first order monic polynomial matrix"](A, s)
         
+        self.assertTrue(M.R4__is_instance_of, ma.I1935["polynomial matrix"])
+        self.assertTrue(M.ma__R8736__depends_polyonomially_on, s)
+        
         d = ma.I5359["determinant"](M)
+        self.assertTrue(d.ma__R8736__depends_polyonomially_on, s)
         
         # assert that d is a polynomial
         
