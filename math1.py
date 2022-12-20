@@ -199,6 +199,7 @@ R5938 = p.create_relation(
     R2__has_description="specifies the number of rows of a matrix",
     R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
 )
 
 # todo: specifies that this item defines I9905
@@ -207,6 +208,7 @@ R5939 = p.create_relation(
     R2__has_description="specifies the number of columns of a matrix",
     R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
 )
 
 
@@ -605,12 +607,12 @@ def I5359_cc_pp(self, res, *args, **kwargs):
     
     assert len(args) == 1
     matrix, = args
-    
+
     if poly_vars := matrix.R8736__depends_polyonomially_on:
         for var in poly_vars:
             assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
             res.set_relation(R8736["depends polyonomially on"], var)
-            
+
     return res
 
 I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
