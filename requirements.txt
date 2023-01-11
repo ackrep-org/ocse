@@ -1,1 +1,4 @@
-pyerk >=0.6.4
+pyerk >=0.8.0
+
+# dependencies which are important to run the unittests (but not for the package itself)
+packaging
