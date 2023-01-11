@@ -115,8 +115,8 @@ I6012 = p.create_item(
     R2__has_description="class whose instances represent an element from a specified range (I1195)",
     R3__is_subclass_of=p.I37["integer number"],
     R18__has_usage_hint=(
-        "Should always have an R3240__has_associated_range relation; ",
-        "should be created via the context manager IntegerRangeElement (see below)",
+        "Should always have an R3240__has_associated_range relation; "
+        "should be created via the context manager IntegerRangeElement (see below)"
     ),
 )
 

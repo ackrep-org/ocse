@@ -491,7 +491,7 @@ I4349 = p.create_item(
 I2277 = p.create_item(
     R1__has_label="statement",
     R2__has_description=(
-        "models an 'ordinary statement' e.g. of a publication which is not distinguished as a formal theorem",
+        "models an 'ordinary statement' e.g. of a publication which is not distinguished as a formal theorem"
     ),
     R3__is_subclass_of=p.I15["implication proposition"],
 )
