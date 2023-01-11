@@ -98,7 +98,6 @@ I2928 = p.create_item(
     R1__has_label="general model representation",
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
     R4__is_instance_of=p.I2["Metaclass"],
-
 )
 
 R2928 = p.create_relation(
@@ -729,10 +728,7 @@ I1371 = p.create_item(
 # <definition>
 I8302 = p.create_item(
     R1__has_label="definition of iterated Lie derivative of scalar field",
-    R2__has_description=(
-        "the defining statement of "
-        "I1371['iterated Lie derivative of scalar field']"
-    ),
+    R2__has_description=("the defining statement of " "I1371['iterated Lie derivative of scalar field']"),
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
@@ -1018,8 +1014,6 @@ I6467 = p.create_item(
     # rule system order=2,
     # TODO: Implement rule that saddle is always unstable
 )
-
-
 
 
 I4610 = p.create_item(

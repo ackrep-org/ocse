@@ -2,7 +2,7 @@ from typing import Union
 import pyerk as p
 
 # noinspection PyUnresolvedReferences
-from ipydex import IPS, activate_ips_on_exception  #noqa
+from ipydex import IPS, activate_ips_on_exception  # noqa
 
 ag = p.erkloader.load_mod_from_path("./agents1.py", prefix="ag")
 
@@ -60,7 +60,7 @@ I3240 = p.create_item(
     R13__has_canonical_symbol=r"$\mathrm{elt}$",
     R18__has_usage_hint=(
         "This operator is assumed be used as callable , e.g. `A_3_6 = I3240['matrix element'](A, 3, 6)`"
-    )
+    ),
 )
 
 I3240["matrix element"].add_method(p.create_evaluated_mapping, "_custom_call")
@@ -218,7 +218,7 @@ I9223 = p.create_item(
     R1__has_label="definition of zero matrix",
     R2__has_description="the defining statement of what a zero matrix is",
     R4__is_instance_of=p.I20["mathematical definition"],
-    )
+)
 
 
 with I9223["definition of zero matrix"].scope("setting") as cm:
@@ -307,7 +307,7 @@ with I7169["definition of identity matrix"].scope("assertions") as cm:
 # ---------------------------------------------------------------------------------------------------------------------
 
 I8133 = p.create_item(
-    R1__has_label=["field of numbers"@p.en, "Zahlenkörper"@p.de],
+    R1__has_label=["field of numbers" @ p.en, "Zahlenkörper" @ p.de],
     R2__has_description="general field of numbers; baseclass for the fields of real and complex numbers",
     R3__is_subclass_of=p.I13["mathematical set"],
 )
@@ -392,7 +392,7 @@ R7490 = p.create_relation(
         "should be a subclass of I12['mathematical object']"
     ),
     R8__has_domain_of_argument_1=I6259["sequence"],
-    R11__has_range_of_result=p.I12['mathematical object'],
+    R11__has_range_of_result=p.I12["mathematical object"],
 )
 
 
@@ -407,9 +407,7 @@ I3237 = p.create_item(
 
 I5177 = p.create_item(
     R1__has_label="matmul",
-    R2__has_description=(
-        "matrix multplication operator"
-    ),
+    R2__has_description=("matrix multplication operator"),
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9904["matrix"],
     R9__has_domain_of_argument_2=I9904["matrix"],
@@ -419,9 +417,7 @@ I5177 = p.create_item(
 
 I1474 = p.create_item(
     R1__has_label="matpow",
-    R2__has_description=(
-        "power function for matrices like A**0 = I, A**1 = A, A**2 = A*A"
-    ),
+    R2__has_description=("power function for matrices like A**0 = I, A**1 = A, A**2 = A*A"),
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9904["matrix"],
     R9__has_domain_of_argument_2=p.I38["non-negative integer"],
@@ -479,7 +475,6 @@ I1594 = p.create_item(
         "then all coefficients have the same sign."
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-
     # TODO: test this feature (attribute name beginning with prefix) in pyerk.test_core
     ag__R6876__is_named_after=ag.I2276["Aurel Stodola"],
 )
@@ -554,7 +549,7 @@ R8736 = p.create_relation(
     R2__has_description="subject has a polynomial dependency object",
     R8__has_domain_of_argument_1=p.I12["mathematical object"],
     R11__has_range_of_result=I5030["variable"],
-    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency")
+    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency"),
 )
 
 
@@ -577,15 +572,16 @@ def I6324_cc_pp(self, res, *args, **kwargs):
     :param res:     instance of I1935["polynomial matrix"] (determined by R11__has_range_of_result)
     :param args:    arg tuple (<matrix>, <variable>) with which the mapping is called
     """
-    
+
     assert len(args) == 2
     matrix, var = args
-    
+
     # check that `var` is an instance of I5030["variable"]
     assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
     res.set_relation(R8736["depends polyonomially on"], var)
-    
+
     return res
+
 
 I6324["canonical first order monic polynomial matrix"].add_method(I6324_cc_pp, "_custom_call_post_process")
 
@@ -604,9 +600,9 @@ def I5359_cc_pp(self, res, *args, **kwargs):
     :param res:     instance of I7765["scalar mathematical object"] (determined by R11__has_range_of_result)
     :param args:    arg tuple (<matrix>) with which the mapping is called
     """
-    
+
     assert len(args) == 1
-    matrix, = args
+    (matrix,) = args
 
     if poly_vars := matrix.R8736__depends_polyonomially_on:
         for var in poly_vars:
@@ -614,6 +610,7 @@ def I5359_cc_pp(self, res, *args, **kwargs):
             res.set_relation(R8736["depends polyonomially on"], var)
 
     return res
+
 
 I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
 

@@ -19,7 +19,6 @@ ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), pref
 
 
 class Test_01_math(unittest.TestCase):
-
     def setUp(self):
         p.start_mod(ma.__URI__)
 
@@ -61,19 +60,16 @@ class Test_01_math(unittest.TestCase):
         with ma.IntegerRangeElement(start=0, stop=24) as i:
             prod = ma.I5177["matmul"](ma.I1474["matpow"](A, i), b)
             colstack3.set_relation("ma__R7490__has_sequence_element", prod)
-            
+
     def test_c02__eigenvalues(self):
         A = p.instance_of(ma.I9906["square matrix"])
         s = p.instance_of(ma.I5030["variable"])
-        
+
         # construct sI - A
         M = ma.I6324["canonical first order monic polynomial matrix"](A, s)
-        
+
         self.assertTrue(M.R4__is_instance_of, ma.I1935["polynomial matrix"])
         self.assertTrue(M.ma__R8736__depends_polyonomially_on, s)
-        
+
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polyonomially_on, s)
-        
-        # assert that d is a polynomial
-        
