@@ -615,6 +615,32 @@ def I5359_cc_pp(self, res, *args, **kwargs):
 I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
 
 
+# the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
+# see also https://pyerk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
+# TODO: drop branch name in above link, once the docs are in main
+
+I1566 = p.create_item(
+    R1__has_label="theorem on the successor of integer numbers",
+    R2__has_description=(
+        "establishes the fact that for every integer x there exists another integer y which is bigger."
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+with I1566["theorem on the successor of integer numbers"].scope("setting") as cm:
+    cm.new_var(x=p.instance_of(p.I37["integer number"]))
+
+with I1566["theorem on the successor of integer numbers"].scope("premises") as cm:
+    # no further condition apart from the setting
+    pass
+
+with I1566["theorem on the successor of integer numbers"].scope("assertions") as cm:
+    # technical note: the qualifier is passed to `instance_of()`, not to `new_var`
+    cm.new_var(y=p.instance_of(p.I37["integer number"], qualifiers=[p.exis_quant(True)]))
+    cm.new_math_relation(cm.y, ">", cm.x)
+
+
+
 p.end_mod()
 
 

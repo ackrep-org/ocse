@@ -26,7 +26,7 @@ class Test_01_math(unittest.TestCase):
         p.end_mod()
 
     def test_a00__ensure_version(self):
-        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.6.5"))
+        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.8.0"))
 
     def test_c01__column_stack(self):
 
