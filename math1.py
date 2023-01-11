@@ -260,6 +260,7 @@ I7169 = p.create_item(
     R1__has_label="definition of identity matrix",
     R2__has_description="the defining statement of what an identity matrix is",
     R4__is_instance_of=p.I20["mathematical definition"],
+    R67__is_definition_of=I1608["identity matrix"],
 )
 
 I1608["identity matrix"].set_relation(p.R37["has definition"], I7169["definition of identity matrix"])
@@ -356,6 +357,7 @@ I1979 = p.create_item(
     R1__has_label="definition of open left half plane",
     R2__has_description="the defining statement of what I2739['open left half plane'] is",
     R4__is_instance_of=p.I20["mathematical definition"],
+    R67__is_definition_of=I2739["open left half plane"],
 )
 
 
@@ -552,9 +554,7 @@ R8736 = p.create_relation(
     R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency"),
 )
 
-
 # eigenvalues
-
 
 I6324 = p.create_item(
     R1__has_label="canonical first order monic polynomial matrix",
@@ -587,15 +587,20 @@ I6324["canonical first order monic polynomial matrix"].add_method(I6324_cc_pp, "
 
 I5359 = p.create_item(
     R1__has_label="determinant",
-    R2__has_description="returns the determinant of a matrix",
+    R2__has_description="returns the determinant of a square matrix",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I5030["variable"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
     R11__has_range_of_result=I7765["scalar mathematical object"],
 )
 
 
 def I5359_cc_pp(self, res, *args, **kwargs):
     """
+    Function which will be attached as custom-call-post-process-method to I5359["determinant"].
+
+    The I5359["determinant"] is an I4895__mathematical_operator. If it is called it creates an instance of
+    I32__evaluated_mapping. The the `_custom_call_post_process`-method (i.e. this function) of the operator is called.
+
     :param self:    determinant operator item (to which this function will be attached)
     :param res:     instance of I7765["scalar mathematical object"] (determined by R11__has_range_of_result)
     :param args:    arg tuple (<matrix>) with which the mapping is called
@@ -613,6 +618,38 @@ def I5359_cc_pp(self, res, *args, **kwargs):
 
 
 I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
+
+
+I9160 = p.create_item(
+    R1__has_label="set of eigenvalues of a matrix",
+    R2__has_description="returns the set of eigenvalues of a matrix",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R11__has_range_of_result=I5484["finite set of complex numbers"],
+)
+
+I1373 = p.create_item(
+    R1__has_label="definition of set of eigenvalues of a matrix",
+    R2__has_description="the defining statement of what a zero matrix is",
+    R4__is_instance_of=p.I20["mathematical definition"],
+    R67__is_definition_of=I9160["set of eigenvalues of a matrix"],
+)
+
+
+with I1373["definition of set of eigenvalues of a matrix"].scope("setting") as cm:
+    cm.new_var(A=p.instance_of(I9906["square matrix"]))
+    cm.new_var(s=p.instance_of(I5030["variable"]))
+    cm.new_var(r=p.instance_of(I5484["finite set of complex numbers"]))
+
+    # auxiliary variables
+    M = I6324["canonical first order monic polynomial matrix"](cm.A, cm.s)
+    d = I5359["determinant"](M)
+
+with I1373["definition of set of eigenvalues of a matrix"].scope("premise") as cm:
+    cm.new_rel(d, R1757["has set of roots"], cm.r)
+
+with I1373["definition of set of eigenvalues of a matrix"].scope("assertion") as cm:
+    cm.new_equation(I9160["set of eigenvalues of a matrix"](cm.A), cm.r)
 
 
 # the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
@@ -640,17 +677,11 @@ with I1566["theorem on the successor of integer numbers"].scope("assertions") as
     cm.new_math_relation(cm.y, ">", cm.x)
 
 
-
 p.end_mod()
 
 
 """
 
-
-I1566      R1566
-I3238      R3238
-I9160      R9160
-I1373      R1373
 I3589      R3589
 I9628      R9628
 I7559      R7559
