@@ -18,15 +18,17 @@ ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py
 ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
 
 
-class Test_01_math(unittest.TestCase):
+class Test_01_basics(unittest.TestCase):
+    def test_a00__ensure_version(self):
+        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.8.0"))
+
+
+class Test_02_math(unittest.TestCase):
     def setUp(self):
         p.start_mod(ma.__URI__)
 
     def tearDown(self):
         p.end_mod()
-
-    def test_a00__ensure_version(self):
-        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.8.0"))
 
     def test_c01__column_stack(self):
 
