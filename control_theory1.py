@@ -138,6 +138,18 @@ I6850 = p.create_item(
     # TODO: Rule, system order = 1
 )
 
+R7178 = p.create_relation(
+    R1__has_label="has number of degrees of freedom",
+    R2__has_description=(
+        "number of independent parameters that define its configuration in space; applicable to mechanical systems"
+    ),
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q2480745"
+    # TODO: add formal comment to clearify the conflicting usages of language:
+    # "degree of freedom" vs. "number of degrees of freedom"
+)
+
 I5356 = p.create_item(
     R1__has_label="general system property",
     R2__has_description="general property of a model of a dynamical system (not of its representation)",
@@ -1237,7 +1249,6 @@ key reservoir J
       R1195
 
 
-I7178      R7178
 I2933      R2933
 I5483      R5483
 I3369      R3369
