@@ -2,7 +2,9 @@ from typing import Union
 import pyerk as p
 
 # noinspection PyUnresolvedReferences
-from ipydex import IPS, activate_ips_on_exception  #noqa
+from ipydex import IPS, activate_ips_on_exception  # noqa
+
+ag = p.erkloader.load_mod_from_path("./agents1.py", prefix="ag")
 
 __URI__ = "erk:/ocse/0.2/math"
 
@@ -58,7 +60,7 @@ I3240 = p.create_item(
     R13__has_canonical_symbol=r"$\mathrm{elt}$",
     R18__has_usage_hint=(
         "This operator is assumed be used as callable , e.g. `A_3_6 = I3240['matrix element'](A, 3, 6)`"
-    )
+    ),
 )
 
 I3240["matrix element"].add_method(p.create_evaluated_mapping, "_custom_call")
@@ -197,6 +199,7 @@ R5938 = p.create_relation(
     R2__has_description="specifies the number of rows of a matrix",
     R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
 )
 
 # todo: specifies that this item defines I9905
@@ -205,6 +208,7 @@ R5939 = p.create_relation(
     R2__has_description="specifies the number of columns of a matrix",
     R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
 )
 
 
@@ -214,7 +218,7 @@ I9223 = p.create_item(
     R1__has_label="definition of zero matrix",
     R2__has_description="the defining statement of what a zero matrix is",
     R4__is_instance_of=p.I20["mathematical definition"],
-    )
+)
 
 
 with I9223["definition of zero matrix"].scope("setting") as cm:
@@ -303,7 +307,7 @@ with I7169["definition of identity matrix"].scope("assertions") as cm:
 # ---------------------------------------------------------------------------------------------------------------------
 
 I8133 = p.create_item(
-    R1__has_label=["field of numbers"@p.en, "Zahlenkörper"@p.de],
+    R1__has_label=["field of numbers" @ p.en, "Zahlenkörper" @ p.de],
     R2__has_description="general field of numbers; baseclass for the fields of real and complex numbers",
     R3__is_subclass_of=p.I13["mathematical set"],
 )
@@ -322,6 +326,14 @@ I5006 = p.create_item(
     R1__has_label="imaginary part",
     R2__has_description="returns the imaginary part of a complex number",
     R4__is_instance_of=I4895["mathematical operator"],
+)
+
+I5807 = p.create_item(
+    R1__has_label="sign",
+    R2__has_description="returns the sign of a real number, i.e. on element of {-1, 0, 1}",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I35["real number"],
+    R11__has_range_of_result=p.I37["integer number"],
 )
 
 
@@ -366,24 +378,323 @@ with I1979["definition of open left half plane"].scope("assertions") as cm:
     cm.new_rel(cm.HP, p.R47["is same as"], I2739["open left half plane"])
 
 
+I6259 = p.create_item(
+    R1__has_label="sequence",
+    R2__has_description="common (secondary) base class of sequence of mathematical objects",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+R7490 = p.create_relation(
+    R1__has_label="has sequence element",
+    R2__has_description=(
+        "specifies the item-type of the elements of a mathematical set; "
+        "should be a subclass of I12['mathematical object']"
+    ),
+    R8__has_domain_of_argument_1=I6259["sequence"],
+    R11__has_range_of_result=p.I12["mathematical object"],
+)
+
+
+I3237 = p.create_item(
+    R1__has_label="column stack",
+    R2__has_description="sequence of columns of equal length which are stacked horizontally",
+    R3__is_subclass_of=I9904["matrix"],
+    R30__is_secondary_instance_of=I6259["sequence"],
+    R18__has_usage_hint="see unittest in `test_package.Test_01_math.test_c01_column_stack`",
+)
+
+
+I5177 = p.create_item(
+    R1__has_label="matmul",
+    R2__has_description=("matrix multplication operator"),
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R9__has_domain_of_argument_2=I9904["matrix"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+
+I1474 = p.create_item(
+    R1__has_label="matpow",
+    R2__has_description=("power function for matrices like A**0 = I, A**1 = A, A**2 = A*A"),
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R9__has_domain_of_argument_2=p.I38["non-negative integer"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+# copied from control_theory1:
+
+
+I5484 = p.create_item(
+    R1__has_label="finite set of complex numbers",
+    R2__has_description="...",
+    R3__is_subclass_of=p.I13["mathematical set"],
+)
+
+
+# todo: what is the difference between an object and an expression?
+# TODO: align this with p.I18
+I4236 = p.create_item(
+    R1__has_label="mathematical expression",
+    R2__has_description="common base class for mathematical expressions",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+I4237 = p.create_item(
+    R1__has_label="monovariate rational function",
+    R2__has_description="...",
+    R3__is_subclass_of=I4236["mathematical expression"],
+)
+
+I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_custom_call")
+
+
+I4239 = p.create_item(
+    R1__has_label="monovariate polynomial",
+    R2__has_description=(
+        "abstract monovariate polynomial (argument might be a complex-valued scalar, a matrix, an operator, etc.)"
+    ),
+    R3__is_subclass_of=I4237["monovariate rational function"],
+)
+
+
+R1757 = p.create_relation(
+    R1__has_label="has set of roots",
+    R2__has_description="set of roots for a monovariate function",
+    R8__has_domain_of_argument_1=I4236["mathematical expression"],  # todo: this is too broad
+    R11__has_range_of_result=I5484["finite set of complex numbers"],
+)
+
+
+I1594 = p.create_item(
+    R1__has_label="Stodolas necessary condition for polynomial coefficients",
+    R2__has_description=(
+        "establishes the fact that if all roots of a polynomial are located in the open left half plane, "
+        "then all coefficients have the same sign."
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    # TODO: test this feature (attribute name beginning with prefix) in pyerk.test_core
+    ag__R6876__is_named_after=ag.I2276["Aurel Stodola"],
+)
+
+
+I9739 = p.create_item(
+    R1__has_label="finite scalar sequence",
+    R2__has_description="base class of a finite sequence of (in general) complex numbers; can be indexed",
+    R3__is_subclass_of=I6259["sequence"],
+)
+
+
+R3668 = p.create_relation(
+    R1__has_label="has sequence of coefficients",
+    R2__has_description="object is the enumerated sequence of coefficients of a monovariate polynomial",
+    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R11__has_range_of_result=I9739["finite scalar sequence"],
+)
+
+
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("setting") as cm:
+
+    cm.new_var(p=p.instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
+    cm.new_var(seq_of_coeffs=p.instance_of(I9739["finite scalar sequence"]))
+
+    cm.new_var(c1=p.instance_of(p.I35["real number"]))
+    cm.new_var(c2=p.instance_of(p.I35["real number"]))
+
+    cm.new_rel(cm.p, R1757["has set of roots"], cm.set_of_roots)
+    cm.new_rel(cm.p, R3668["has sequence of coefficients"], cm.seq_of_coeffs)
+
+    cm.new_rel(cm.c1, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
+    cm.new_rel(cm.c2, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
+
+
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("premises") as cm:
+    cm.new_rel(cm.set_of_roots, p.R14["is subset of"], I2739["open left half plane"])
+
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("assertions") as cm:
+    cm.new_math_relation(lhs=I5807["sign"](cm.c1), rsgn="==", rhs=I5807["sign"](cm.c2))
+
+
+I4240 = p.create_item(
+    R1__has_label="matrix polynomial",
+    R2__has_description="monovariate polynomial of quadratic matrices",
+    R3__is_subclass_of=I4239["monovariate polynomial"],
+)
+
+I1935 = p.create_item(
+    R1__has_label="polynomial matrix",
+    R2__has_description="matrix whose entries contain (scalar) polynomials",
+    R3__is_subclass_of=I9904["matrix"],
+    R50__is_different_from=I4240["matrix polynomial"],
+)
+
+I5030 = p.create_item(
+    R1__has_label="variable",
+    R2__has_description="symbol which can represent another mathematical object",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+I7765 = p.create_item(
+    R1__has_label="scalar mathematical object",
+    R2__has_description="mathematical object which is or can be evaluated to a single (complex number)",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+R8736 = p.create_relation(
+    R1__has_label="depends polyonomially on",
+    R2__has_description="subject has a polynomial dependency object",
+    R8__has_domain_of_argument_1=p.I12["mathematical object"],
+    R11__has_range_of_result=I5030["variable"],
+    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency"),
+)
+
+
+# eigenvalues
+
+
+I6324 = p.create_item(
+    R1__has_label="canonical first order monic polynomial matrix",
+    R2__has_description="for a given square matrix A returns the polynomial matrix (s·I - A)",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R9__has_domain_of_argument_2=I5030["variable"],
+    R11__has_range_of_result=I1935["polynomial matrix"],
+)
+
+
+def I6324_cc_pp(self, res, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     instance of I1935["polynomial matrix"] (determined by R11__has_range_of_result)
+    :param args:    arg tuple (<matrix>, <variable>) with which the mapping is called
+    """
+
+    assert len(args) == 2
+    matrix, var = args
+
+    # check that `var` is an instance of I5030["variable"]
+    assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
+    res.set_relation(R8736["depends polyonomially on"], var)
+
+    return res
+
+
+I6324["canonical first order monic polynomial matrix"].add_method(I6324_cc_pp, "_custom_call_post_process")
+
+I5359 = p.create_item(
+    R1__has_label="determinant",
+    R2__has_description="returns the determinant of a matrix",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I5030["variable"],
+    R11__has_range_of_result=I7765["scalar mathematical object"],
+)
+
+
+def I5359_cc_pp(self, res, *args, **kwargs):
+    """
+    :param self:    determinant operator item (to which this function will be attached)
+    :param res:     instance of I7765["scalar mathematical object"] (determined by R11__has_range_of_result)
+    :param args:    arg tuple (<matrix>) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    (matrix,) = args
+
+    if poly_vars := matrix.R8736__depends_polyonomially_on:
+        for var in poly_vars:
+            assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
+            res.set_relation(R8736["depends polyonomially on"], var)
+
+    return res
+
+
+I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
+
+
+# the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
+# see also https://pyerk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
+# TODO: drop branch name in above link, once the docs are in main
+
+I1566 = p.create_item(
+    R1__has_label="theorem on the successor of integer numbers",
+    R2__has_description=(
+        "establishes the fact that for every integer x there exists another integer y which is bigger."
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+with I1566["theorem on the successor of integer numbers"].scope("setting") as cm:
+    cm.new_var(x=p.instance_of(p.I37["integer number"]))
+
+with I1566["theorem on the successor of integer numbers"].scope("premises") as cm:
+    # no further condition apart from the setting
+    pass
+
+with I1566["theorem on the successor of integer numbers"].scope("assertions") as cm:
+    # technical note: the qualifier is passed to `instance_of()`, not to `new_var`
+    cm.new_var(y=p.instance_of(p.I37["integer number"], qualifiers=[p.exis_quant(True)]))
+    cm.new_math_relation(cm.y, ">", cm.x)
+
+
+
 p.end_mod()
 
 
 """
 
-I5006
-I3237      R3237
-I7490      R7490
-I6259      R6259
-I1474      R1474
-I5177      R5177
-I1594      R1594
-I5807      R5807
-I3668      R3668
-I9739      R9739
-I6324      R6324
-I5359      R5359
-I1935      R1935
+
+I1566      R1566
+I3238      R3238
+I9160      R9160
+I1373      R1373
+I3589      R3589
+I9628      R9628
+I7559      R7559
+I1063      R1063
+I6709      R6709
+I3133      R3133
+I1770      R1770
+I5843      R5843
+I4963      R4963
+I9651      R9651
+I3798      R3798
+I3058      R3058
+I7280      R7280
+I1913      R1913
+I2917      R2917
+I8172      R8172
+I9148      R9148
+I2495      R2495
+I9738      R9738
+I6043      R6043
+I5916      R5916
+I6117      R6117
+I9192      R9192
+I3648      R3648
+I6209      R6209
+I8492      R8492
+I1284      R1284
+I4218      R4218
+I2328      R2328
+I9489      R9489
+I4864      R4864
+I5094      R5094
+I2378      R2378
+I1716      R1716
+I9827      R9827
+I7151      R7151
+I7481      R7481
+I4291      R4291
+I5441      R5441
+I1778      R1778
+I1536      R1536
+I9493      R9493
+I3263      R3263
+
 
 
 """

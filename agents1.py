@@ -40,7 +40,7 @@ I7435 = p.create_item(
     R1__has_label="human",
     R2__has_description="human being",
     R4__is_instance_of=p.I2["Metaclass"],
-    R33__has_corresponding_wikidata_entity="Q5",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q5",
 )
 
 
@@ -70,27 +70,27 @@ I1342 = p.create_item(
     R1__has_label="academic institution",
     R2__has_description="educational institution dedicated to education and research",
     R4__is_instance_of=p.I2["Metaclass"],
-    R33__has_corresponding_wikidata_entity="Q4671277",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q4671277",
 )
 
 I9942 = p.create_item(
     R1__has_label="Stanford University",
     R2__has_description="private research university in California, USA",
     R4__is_instance_of=I1342["academic institution"],
-    R33__has_corresponding_wikidata_entity="Q41506",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q41506",
 )
 
 I7301 = p.create_item(
     R1__has_label="ETH Zürich",
     R2__has_description="Swiss Federal Institute of Technology in Zürich",
     R4__is_instance_of=I1342["academic institution"],
-    R33__has_corresponding_wikidata_entity="Q11942",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q11942",
 )
 
 R1833 = p.create_relation(
     R1__has_label="has employer",
     R2__has_description="specifies for which entity (organisation/person) the subject works",
-    R33__has_corresponding_wikidata_entity="P108",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/P108",
 )
 
 
@@ -119,14 +119,24 @@ I2478 = p.create_item(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q158158",
 )
 
+
+I2276 = create_person("Aurel", "Stodola", "Slovak scientist")
+I2276.set_relation("R33__has_corresponding_wikidata_entity", "https://www.wikidata.org/entity/Q666875")
+
+
+R6876 = p.create_relation(
+    R1__has_label="is named after",
+    R2__has_description="specifies that the subject is an eponym named after the object",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/P138",
+)
+
+
 p.end_mod()
 
 
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I6876      R6876
-I2276      R2276
 I2151      R2151
 I1257      R1257
 I8430      R8430
