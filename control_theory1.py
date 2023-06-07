@@ -329,7 +329,7 @@ I2865 = p.create_item(
 I2562 = p.create_item(
     R1__has_label="general property of pde",
     R2__has_description="general property of partial differential equations",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R3__is_subclass_of=I1793["general model representation property"],
 )
 
 I8063 = p.create_item(
