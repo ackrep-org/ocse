@@ -114,6 +114,13 @@ R5100 = p.create_relation(
     R11__has_range_of_result=I1793["general model representation property"],
 )
 
+R2279 = p.create_relation(
+    R1__has_label="does not have model representation property",
+    R2__has_description="model representation does not have mathematical property",
+    R8__has_domain_of_argument_1=I2928["general model representation"],
+    R11__has_range_of_result=I1793["general model representation property"],
+)
+
 I6886 = p.create_item(
     R1__has_label="general ode state space representation",
     R2__has_description="explicit ODE system description of a dynamical system",
@@ -163,6 +170,13 @@ R8303 = p.create_relation(
     R11__has_range_of_result=I5356["general system property"],
 )
 
+R7178 = p.create_relation(
+    R1__has_label="does not have general system property",
+    R2__has_description="model does not have mathematical property",
+    R8__has_domain_of_argument_1=I7641["general system model"],
+    R11__has_range_of_result=I5356["general system property"],
+)
+
 I5357 = p.create_item(
     R1__has_label="differential flatness",
     R4__is_instance_of=I5356["general system property"],
@@ -174,6 +188,13 @@ I5358 = p.create_item(
     R4__is_instance_of=I5356["general system property"],
     # TODO: it might be necessary to restrict this to ode-state-space-systems
     R2__has_description="exact input-to-state linearizability (via static state feedback)",
+)
+
+I7178 = p.create_item(
+    R1__has_label="local strong accessibility",
+    R4__is_instance_of=I5356["general system property"],
+    R2__has_description="local strong accessibility",
+    # TODO: put this in relation to controllability
 )
 
 """
@@ -1238,7 +1259,7 @@ key reservoir J
 
 
 
-      R2279
+
      R6458
       R5919
       R4635
@@ -1247,6 +1268,7 @@ key reservoir J
       R4931
 
       R1195
+
 
 
 I2933      R2933
