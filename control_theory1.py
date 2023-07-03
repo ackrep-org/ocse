@@ -1084,7 +1084,7 @@ R8316 = p.create_relation(
 )
 
 I4498 = p.create_item(
-    R1__has_label="artifical domain",
+    R1__has_label="artificial domain",
     R2__has_description="domain containing research on the topic of artificial systems",
     R4__is_instance_of=I4131["domain"],
 )
