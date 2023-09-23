@@ -677,13 +677,52 @@ with I1566["theorem on the successor of integer numbers"].scope("assertions") as
     cm.new_math_relation(cm.y, ">", cm.x)
 
 
-p.end_mod()
+I7559 = p.create_item(
+    R1__has_label="cardinality",
+    R2__has_description="returns the cardinality of a set or multiset",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I13["mathematical set"],  # TODO: introduce multiset
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
 
+
+I3589 = p.create_item(
+    R1__has_label="monovariate polynomial degree",
+    R2__has_description="returns degree of a monovariate polynomial",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+)
+
+I9628 = p.create_item(
+    R1__has_label="theorem on the number of roots of a polynomial",
+    R2__has_description=(
+        "establishes the fact that a polynomial of degree n has exactly n roots "
+        "(counting multiplicities)"
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+with I9628["theorem on the number of roots of a polynomial"].scope("setting") as cm:
+    P = cm.new_var(P=p.instance_of(I4239["monovariate polynomial"]))
+    r = cm.new_var(r=p.instance_of(I5484["finite set of complex numbers"]))
+
+with I9628["theorem on the number of roots of a polynomial"].scope("premises") as cm:
+    cm.new_rel(P, R1757["has set of roots"], r)
+    deg = I3589["monovariate polynomial degree"](P)
+    card = I7559["cardinality"](r)
+
+with I9628["theorem on the number of roots of a polynomial"].scope("assertions") as cm:
+    cm.new_math_relation(deg, "==", card)
+
+
+
+
+
+p.end_mod()
 
 """
 
-I3589      R3589
-I9628      R9628
 I7559      R7559
 I1063      R1063
 I6709      R6709
