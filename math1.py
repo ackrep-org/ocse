@@ -444,10 +444,16 @@ I4236 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I1063 = p.create_item(
+    R1__has_label="scalar function",
+    R2__has_description="function that has one (in general complex) number as result",
+    R3__is_subclass_of=I4236["mathematical expression"],
+)
+
 I4237 = p.create_item(
     R1__has_label="monovariate rational function",
     R2__has_description="...",
-    R3__is_subclass_of=I4236["mathematical expression"],
+    R3__is_subclass_of=I1063["scalar function"],
 )
 
 I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_custom_call")
@@ -723,8 +729,6 @@ p.end_mod()
 
 """
 
-I7559      R7559
-I1063      R1063
 I6709      R6709
 I3133      R3133
 I1770      R1770

@@ -130,6 +130,10 @@ R6876 = p.create_relation(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/P138",
 )
 
+I2151 = create_person("Aleksandr", "Lyapunov", "mathematician and physicist")
+I2151.set_relation(p.R33["has corresponding wikidata entity"], "https://www.wikidata.org/wiki/Q310788")
+
+
 
 p.end_mod()
 
@@ -137,7 +141,6 @@ p.end_mod()
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I2151      R2151
 I1257      R1257
 I8430      R8430
 I7906      R7906

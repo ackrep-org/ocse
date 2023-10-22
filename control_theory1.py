@@ -4,8 +4,8 @@ import pyerk as p
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
-
 ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
+ag = ma.ag
 
 
 # todo: rename .scope("context") to .scope("setting")
@@ -959,7 +959,7 @@ R6134 = p.create_relation(
     R22__is_functional=True,
 )
 
-# ljapunov stability
+# Lyapunov stability
 
 I5082 = p.create_item(
     R1__has_label="local attractiveness",
@@ -976,18 +976,20 @@ I8059 = p.create_item(
 )
 
 I2931 = p.create_item(
-    R1__has_label="local ljapunov stability",
+    R1__has_label="local Lyapunov stability",
     R2__has_description="states that all trajectories that start close enough to the equilibrium will not leave a \
         certain neighborhood",
     R4__is_instance_of=I5236["general trajectory property"],
     R17__is_subproperty_of=I7207["stability"],
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
 )
 
 I8744 = p.create_item(
-    R1__has_label="global ljapunov stability",
+    R1__has_label="global Lyapunov stability",
     R2__has_description="states that all trajectories will not leave a certain neighborhood around the equilibrium",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=I2931["local ljapunov stability"],
+    R17__is_subproperty_of=I2931["local Lyapunov stability"],
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
 )
 
 I4900 = p.create_item(
@@ -995,7 +997,7 @@ I4900 = p.create_item(
     R2__has_description="states that all trajectories that start close enough to the equilibrium remain close enough \
         and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=[I2931["local ljapunov stability"], I5082["local attractiveness"]],
+    R17__is_subproperty_of=[I2931["local Lyapunov stability"], I5082["local attractiveness"]],
 )
 
 I5677 = p.create_item(
@@ -1003,7 +1005,7 @@ I5677 = p.create_item(
     R2__has_description="states that all trajectories remain close enough to the equilibrium and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
     R17__is_subproperty_of=[
-        I8744["global ljapunov stability"],
+        I8744["global Lyapunov stability"],
         I8059["global attractiveness"],
         I4900["local asymtotical stability"],
     ],
@@ -1026,11 +1028,12 @@ I5100 = p.create_item(
 )
 
 I8303 = p.create_item(
-    R1__has_label="strict ljapunov instability",
+    R1__has_label="strict Lyapunov instability",
     R2__has_description="states that some trajectories that start close enough to the equilibrium will still leave a \
         certain neighborhood",
     R4__is_instance_of=I5236["general trajectory property"],
-    R43__is_opposite_of=I2931["local ljapunov stability"],
+    R43__is_opposite_of=I2931["local Lyapunov stability"],
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
 )
 
 I9304 = p.create_item(
@@ -1243,13 +1246,20 @@ R1070 = p.create_relation(
     R11__has_range_of_result=I1161["old tag"],
 )
 
+I2933 = p.create_item(
+    R1__has_label="Lyapunov Function",
+    R2__has_description="Class of scalar functions that may be used to prove the stability",
+    R3__is_subclass_of=ma.I1063["scalar function"],
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"]
+)
+
+
 """
 template:
 = p.create_item(
     R1__has_label="",
     R2__has_description="",
     R4__is_instance_of=I5356["general system property"],
-    R4__is_instance_of=I1793["general model representation property"],
 )
 
 key reservoir J
@@ -1270,8 +1280,6 @@ key reservoir J
       R1195
 
 
-
-I2933      R2933
 I5483      R5483
 I3369      R3369
 I4663      R4663
