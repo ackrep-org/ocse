@@ -22,7 +22,7 @@ p.start_mod(__URI__)
 R7781 = p.create_relation(
     R1__has_label="has family name",
     R2__has_description="part of the full name of a person",
-    R33__has_corresponding_wikidata_entity="http://www.wikidata.org/entity/734",
+    R33__has_corresponding_wikidata_entity="http://www.wikidata.org/entity/P734",
 )
 
 R7782 = p.create_relation(
@@ -44,14 +44,14 @@ I7435 = p.create_item(
 )
 
 
-def create_person(given_name: str, family_name: str, r2):
+def create_person(given_name: str, family_name: str, r2: str, r33=None):
     """
     This is a convenience function that simplifies the creation of items for humans
     """
     item_key = p.get_key_str_by_inspection()
 
     r1 = f"{given_name} {family_name}"
-    item = p.create_item(
+    item: p.Item  = p.create_item(
         item_key,
         R1__has_label=r1,
         R2__has_description=r2,
@@ -60,6 +60,8 @@ def create_person(given_name: str, family_name: str, r2):
         R7782__has_given_name=given_name,
     )
 
+    if r33:
+        item.set_relation(p.R33["has corresponding wikidata entity"], r33)
     return item
 
 
