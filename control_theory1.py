@@ -1254,6 +1254,26 @@ I2933 = p.create_item(
 )
 
 
+I5483 = p.create_item(
+    R1__has_label="Control Lyapunov Function",
+    R2__has_description="...",
+    R3__is_subclass_of=ma.I1063["scalar function"],
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
+)
+
+
+I3369 = p.create_item(
+    R1__has_label="Sontags Formula",
+    R2__has_description="...",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+    ag__R6876__is_named_after=ag.I8430["Eduardo Daniel Sontag"],
+    # associa
+)
+
+
+
+
+
 """
 template:
 = p.create_item(
@@ -1271,17 +1291,6 @@ key reservoir J
 
 
 
-      R5919
-      R4635
-      R1161
-      R2699
-      R4931
-
-      R1195
-
-
-I5483      R5483
-I3369      R3369
 I4663      R4663
 I8733      R8733
 I5106      R5106
