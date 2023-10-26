@@ -185,11 +185,11 @@ def create_source(title:str, authors, year: int, doi: str=None):
 
     if not isinstance(authors, (list, tuple)):
         authors = [authors]
-    
+
     for author in authors:
         assert isinstance(author, p.Item)
     assert len(authors) > 0
-    
+
     first_authors_name = authors[0].R7781__has_family_name[0]
     if len(authors) > 1:
         suffix = "_etal"
@@ -256,13 +256,21 @@ def get_source_segment(source_doc: p.Item, segment_specification: str):
     return item
 
 
+R8439 = p.create_relation(
+    R1__has_label="is based on source",
+    R2__has_description="specifies that the item (e.g. a theorem) is based on some source document",
+    R8__has_domain_of_argument_1=p.I46["knowledge artifact"],
+    R11__has_range_of_result=[I7800["source segment"], I6591["source document"]],
+)
+
+
 
 p.end_mod()
 
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I1848      
+I1848
 I7115      R7115
 I3474      R3474
 I1639      R1639

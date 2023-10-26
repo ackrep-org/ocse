@@ -1237,6 +1237,7 @@ I4663 = p.create_item(
     R1__has_label=" theorem for Lyapunov stability of state space system",
     R2__has_description="establishes a sufficient condition for the stability of a statespace system",
     R4__is_instance_of=p.I15["implication proposition"],
+    ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
 # TODO: add definition
@@ -1249,6 +1250,7 @@ I8733 = p.create_item(
     R1__has_label=" theorem for asymptotic Lyapunov stability of state space system",
     R2__has_description="establishes a sufficient condition for the asymptotic stability of a statespace system",
     R4__is_instance_of=p.I15["implication proposition"],
+    ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
 # TODO: add definition
