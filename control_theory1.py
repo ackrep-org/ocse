@@ -385,7 +385,7 @@ I4455 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I4455.scope("context") as cm:
+with I4455.scope("setting") as cm:
     cm.new_var(P=p.uq_instance_of(I4239["monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
     cm.new_rel(cm.P, R1757["has set of roots"], cm.set_of_roots)
@@ -413,7 +413,7 @@ I3007 = p.create_item(
     R4__is_instance_of=p.I15["implication proposition"],
 )
 
-with I3007.scope("context") as cm:
+with I3007.scope("setting") as cm:
     cm.new_var(sys=p.uq_instance_of(I7641["general system model"]))
 
     cm.new_var(tf_rep=p.instance_of(I2640["transfer function representation"]))
@@ -459,7 +459,7 @@ I9907 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I9907.scope("context") as cm:
+with I9907.scope("setting") as cm:
     cm.new_var(M=p.uq_instance_of(I9904["matrix"]))
     cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
 
@@ -489,7 +489,7 @@ I3749 = p.create_item(
 
 # TODO: specify universal quantification for A and n
 
-with I3749["Cayley-Hamilton theorem"].scope("context") as cm:
+with I3749["Cayley-Hamilton theorem"].scope("setting") as cm:
     cm.new_var(A=p.uq_instance_of(I9906["square matrix"]))
     cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
@@ -546,7 +546,7 @@ I4216 = p.create_item(
 )
 
 
-with I4216.scope("context") as cm:
+with I4216.scope("setting") as cm:
     cm.new_var(sys=p.instance_of(I5948["dynamical system"]))
     cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
     cm.new_var(mpc_problem=p.instance_of(I5948["dynamical system"]))
@@ -669,7 +669,7 @@ I6229 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I6229["definition of Lie derivative of scalar field"].scope("context") as cm:
+with I6229["definition of Lie derivative of scalar field"].scope("setting") as cm:
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
     h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
@@ -725,7 +725,7 @@ I8302 = p.create_item(
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I8302["definition of iterated Lie derivative of scalar field"].scope("context") as cm:
+with I8302["definition of iterated Lie derivative of scalar field"].scope("setting") as cm:
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
     h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
