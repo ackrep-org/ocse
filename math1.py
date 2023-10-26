@@ -730,17 +730,169 @@ I6709 = p.create_item(
 )
 
 
+# imported entities from control_theory1.py:
+
+R3326 = p.create_relation(
+    R1__has_label="has dimension",
+    R2__has_description="specifies the dimension of a (dimensional) mathematical object",
+    R8__has_domain_of_argument_1=p.I12["mathematical object"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
+)
+
+# TODO: improve taxonomy here
+I5166 = p.create_item(
+    R1__has_label="vector space",
+    R2__has_description="type for a vector space",
+    R3__is_subclass_of=p.I13["mathematical set"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q125977",
+    R41__has_required_instance_relation=R3326["has dimension"],
+)
+
+
+# TODO: consider "state manifold"
+I5167 = p.create_item(
+    R1__has_label="state space",
+    R2__has_description="type for a state space of a dynamical system (I6886)",
+    R3__is_subclass_of=I5166["vector space"],
+
+    # this should be defined via inheritance from vector space
+    # TODO: test that this is the case
+    # R41__has_required_instance_relation=R3326["has dimension"],
+)
+
+
+R5405 = p.create_relation(
+    R1__has_label="has associated state space",
+    R2__has_description="specifies the associated state space of the subject (e.g. a I9273__explicit...ode_system)",
+    R8__has_domain_of_argument_1=p.I12["mathematical object"],
+    R11__has_range_of_result=I5167["state space"],
+    R22__is_functional=True,
+)
+
+
+I1168 = p.create_item(
+    R1__has_label="point in state space",
+    R2__has_description="type for a point in a given state space",
+    R3__is_subclass_of=p.I12["mathematical object"],
+    R41__has_required_instance_relation=R5405["has associated state space"],
+)
+# TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
+
+I1169 = p.create_item(
+    R1__has_label="point in vector space",
+    R2__has_description="type for a point in a given vector space",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+R9651 = p.create_relation(
+    R1__has_label="has domain",
+    R2__has_description="specifies that the subject (a function or operator) is defined for all values of the object (a set)",
+    R8__has_domain_of_argument_1=I4895["mathematical operator"], 
+    R11__has_range_of_result=p.I13["mathematical set"],
+    R22__is_functional=True,
+)
+
+
+R3798 = p.create_relation(
+    R1__has_label="has origin",
+    R2__has_description="specifies that the subject (a vector space) has the object as origin",
+    R8__has_domain_of_argument_1=I5166["vector space"], 
+    R11__has_range_of_result=I1169["point in vector space"],
+    R22__is_functional=True,
+)
+
+
+I9923 = p.create_item(
+    R1__has_label="scalar field",
+    R2__has_description="...",
+    R3__is_subclass_of=I4895["mathematical operator"],
+)
+
+
+I9841 = p.create_item(
+    R1__has_label="vector field",
+    R2__has_description="...",
+    R3__is_subclass_of=I4895["mathematical operator"],
+)
+
+
+# The following is contributed by Xinghao Huang (during a semester project 2022/23)
+# supervision: Carsten Knoll
+# adaptation: assume only the origin is the point of interest
+
+
+I5843 = p.create_item(
+    R1__has_label="neighbourhood",
+    R2__has_description="a region of space around a point",
+    R3__is_subclass_of=p.I13["mathematical set"],
+)
+
+
+R4963 = p.create_relation(
+    R1__has_label="is neighbourhood of",
+    R2__has_description="specifies that the subject (a set) is a neighbourhood of the object (a point)",
+    R8__has_domain_of_argument_1=I5843["neighbourhood"],
+    R11__has_range_of_result=I1168["point in state space"],
+)
+
+I3133 = p.create_item(
+    R1__has_label="positive definiteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
+
+I3134 = p.create_item(
+    R1__has_label="definition of positive definiteness",
+    R2__has_description="the defining statement of positive definite",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+with I3134["definition of positive definiteness"].scope("setting") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
+    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
+    x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
+
+    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
+
+    u = cm.new_var(u=p.uq_instance_of(I5843["neighbourhood"]))
+    cm.new_rel(cm.M, R3326["has dimension"], cm.n)
+    
+    cm.new_rel(cm.M, R3798["has origin"], cm.x0)
+    cm.new_rel(cm.u, R4963["is neighbourhood of"], cm.x0)
+    cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
+
+    cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
+    cm.new_rel(cm.h, R9651["has domain"], cm.M)
+    cm.item.h_value = h(x) 
+
+with I3134["definition of positive definiteness"].scope("premises") as cm:
+    
+            with p.ImplicationStatement() as imp1:
+                imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
+                imp1.consequent_relation(lhs=cm.item.h_value, rsgn="==", rhs=I5000["scalar zero"])
+
+            with p.ImplicationStatement() as imp2:
+                imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
+                imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])    
+
+with I3134["definition of positive definiteness"].scope("assertions") as cm:
+    cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
+
+
+I3133["positive definiteness"].set_relation(
+    p.R37["has definition"], I3134["definition of positive definiteness"]
+)
+
+
 p.end_mod()
 
 """
 
-      R6709
-I3133      R3133
-I1770      R1770
-I5843      R5843
-I4963      R4963
-I9651      R9651
-I3798      R3798
+I9651      
+I3798      
 I3058      R3058
 I7280      R7280
 I1913      R1913

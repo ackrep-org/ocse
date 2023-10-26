@@ -570,54 +570,13 @@ precomputed.
 
 # </statement>
 
+R3326 = ma.R3326["has dimension"]
+I5167 = ma.I5167["state space"]
+R5405 = ma.R5405["has associated state space"]
 
-R3326 = p.create_relation(
-    R1__has_label="has dimension",
-    R2__has_description="specifies the dimension of a (dimensional) mathematical object",
-    R8__has_domain_of_argument_1=p.I12["mathematical object"],
-    R11__has_range_of_result=p.I38["non-negative integer"],
-    R22__is_functional=True,
-)
-
-# TODO: consider "state manifold"
-I5167 = p.create_item(
-    R1__has_label="state space",
-    R2__has_description="type for a state space of a dynamical system (I6886)",
-    R3__is_subclass_of=p.I12["mathematical object"],
-    # R33__has_corresponding_wikidata_entity= TODO,
-    R41__has_required_instance_relation=R3326["has dimension"],
-)
-
-
-R5405 = p.create_relation(
-    R1__has_label="has associated state space",
-    R2__has_description="specifies the associated state space of the subject (e.g. a I9273__explicit...ode_system)",
-    R8__has_domain_of_argument_1=p.I12["mathematical object"],
-    R11__has_range_of_result=I5167["state space"],
-    R22__is_functional=True,
-)
-
-I1168 = p.create_item(
-    R1__has_label="point in state space",
-    R2__has_description="type for a point in a given state space",
-    R3__is_subclass_of=p.I12["mathematical object"],
-    # R33__has_corresponding_wikidata_entity= TODO,
-    R41__has_required_instance_relation=R5405["has associated state space"],
-)
-# TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
-
-
-I9923 = p.create_item(
-    R1__has_label="scalar field",
-    R2__has_description="...",
-    R3__is_subclass_of=ma.I4895["mathematical operator"],
-)
-
-I9841 = p.create_item(
-    R1__has_label="vector field",
-    R2__has_description="...",
-    R3__is_subclass_of=ma.I4895["mathematical operator"],
-)
+I1168 = ma.I1168["point in state space"]
+I9923 = ma.I9923["scalar field"]
+I9841 = ma.I9841["vector field"]
 
 
 I9273 = p.create_item(
