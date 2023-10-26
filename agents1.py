@@ -139,6 +139,7 @@ I1257 = create_person("Joseph Pierre", "LaSalle", "mathematician", r33="https://
 I8430 = create_person("Eduardo Daniel", "Sontag", "mathematician", r33="https://www.wikidata.org/wiki/Q3709600")
 
 I7906 = create_person("Rudolf", "Lipschitz", "mathematician", r33="https://www.wikidata.org/wiki/Q77322")
+I4853 = create_person("Sophus", "Lie", "mathematician", r33="https://www.wikidata.org/wiki/Q30769")
 
 
 p.end_mod()
@@ -146,7 +147,6 @@ p.end_mod()
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I4853      R4853
 I6591      R6591
 I8433      R8433
 I7558      R7558

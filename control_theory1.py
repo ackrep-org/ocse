@@ -700,6 +700,7 @@ I1347 = p.create_item(
     R11__has_range_of_result=I9923["scalar field"],
     R13__has_canonical_symbol=r"$L$",
     # TODO: complete defining equation
+    ag__R6876__is_named_after=ag.I4853["Sophus Lie"],
 )
 
 # <definition>
