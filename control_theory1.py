@@ -1268,10 +1268,33 @@ I3369 = p.create_item(
     R2__has_description="...",
     R3__is_subclass_of=p.I18["mathematical expression"],
     ag__R6876__is_named_after=ag.I8430["Eduardo Daniel Sontag"],
-    # associa
+    R72__is_generally_related_to=I5483["Control Lyapunov Function"],
 )
 
 
+
+# <theorem>
+I4663 = p.create_item(
+    R1__has_label=" theorem for Lyapunov stability of state space system",
+    R2__has_description="establishes a sufficient condition for the stability of a statespace system",
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+# TODO: add definition
+
+# </theorem>
+
+
+# <theorem>
+I8733 = p.create_item(
+    R1__has_label=" theorem for asymptotic Lyapunov stability of state space system",
+    R2__has_description="establishes a sufficient condition for the asymptotic stability of a statespace system",
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+# TODO: add definition
+
+# </theorem>
 
 
 
@@ -1292,8 +1315,7 @@ key reservoir J
 
 
 
-I4663      R4663
-I8733      R8733
+      R8733
 I5106      R5106
 I5600      R5600
 I8026      R8026
