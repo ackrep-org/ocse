@@ -75,3 +75,7 @@ class Test_02_math(unittest.TestCase):
 
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polyonomially_on, s)
+
+    def test_c03__publications(self):
+        x = ag.I7558["2002_Khalil"]
+        self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])

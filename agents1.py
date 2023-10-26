@@ -142,15 +142,89 @@ I7906 = create_person("Rudolf", "Lipschitz", "mathematician", r33="https://www.w
 I4853 = create_person("Sophus", "Lie", "mathematician", r33="https://www.wikidata.org/wiki/Q30769")
 
 
+I6591 = p.create_item(
+    R1__has_label="published source",
+    R2__has_description="type for items that represent books, papers etc",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
+
+R8433 = p.create_relation(
+    R1__has_label="has authors",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["published source"],
+    R11__has_range_of_result=I7435["human"],
+)
+
+R8434 = p.create_relation(
+    R1__has_label="has title",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["published source"],
+    R11__has_range_of_result=p.I19["multilingual string literal"],
+)
+
+R8435 = p.create_relation(
+    R1__has_label="has year",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["published source"],
+    R11__has_range_of_result=p.I37["integer number"],
+)
+
+R8436 = p.create_relation(
+    R1__has_label="has DOI",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["published source"],
+    R11__has_range_of_result=str,
+)
+
+
+def create_source(title:str, authors, year: int, doi: str=None):
+    """
+    This is a convenience function that simplifies the creation of a published source (paper, book, ...)
+    """
+    item_key = p.get_key_str_by_inspection()
+
+    if not isinstance(authors, (list, tuple)):
+        authors = [authors]
+    
+    for author in authors:
+        assert isinstance(author, p.Item)
+    assert len(authors) > 0
+    
+    first_authors_name = authors[0].R7781__has_family_name[0]
+    if len(authors) > 1:
+        suffix = "_etal"
+    else:
+        suffix = ""
+
+    r1 = f"{year}_{first_authors_name}{suffix}"
+    r2 = f"publication '{title}' by {first_authors_name}{suffix.replace('_', ' ')}"
+    new_item: p.Item  = p.create_item(
+        item_key,
+        R1__has_label=r1,
+        R2__has_description=r2,
+        R4__is_instance_of=I6591["published source"],
+        R8433__has_authors=authors,
+        R8434__has_title=title,
+        R8435__has_year=year,
+    )
+
+    if doi:
+        new_item.set_relation(R8436["hasDOI"], doi)
+    return new_item
+
+
+I9700 = create_person("Hassan", "Khalil", "electrical engineneer", r33="https://www.wikidata.org/wiki/Q102278369")
+
+I7558 = create_source("Nonlinear Systems", I9700["Hassan Khalil"], 2002)
+
+
+
+
 p.end_mod()
 
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I6591      R6591
-I8433      R8433
-I7558      R7558
-I9700      R9700
 I7800      R7800
 I1848      R1848
 I7115      R7115
