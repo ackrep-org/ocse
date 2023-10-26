@@ -64,7 +64,6 @@ def create_person(given_name: str, family_name: str, r2: str, r33=None):
         item.set_relation(p.R33["has corresponding wikidata entity"], r33)
     return item
 
-
 I2746 = create_person("Rudolf", "Kalman", "electrical engineer and mathematician")
 
 
@@ -139,14 +138,14 @@ I1257 = create_person("Joseph Pierre", "LaSalle", "mathematician", r33="https://
 
 I8430 = create_person("Eduardo Daniel", "Sontag", "mathematician", r33="https://www.wikidata.org/wiki/Q3709600")
 
+I7906 = create_person("Rudolf", "Lipschitz", "mathematician", r33="https://www.wikidata.org/wiki/Q77322")
+
 
 p.end_mod()
-
 
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I7906      R7906
 I4853      R4853
 I6591      R6591
 I8433      R8433

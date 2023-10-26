@@ -721,15 +721,20 @@ with I9628["theorem on the number of roots of a polynomial"].scope("premises") a
 with I9628["theorem on the number of roots of a polynomial"].scope("assertions") as cm:
     cm.new_math_relation(deg, "==", card)
 
-
-
+I6709 = p.create_item(
+    R1__has_label="Lipschitz continuity",
+    R2__has_description="states that the slope of a function is bounded",
+    R4__is_instance_of=p.I11["mathematical property"],
+    ag__R6876__is_named_after=ag.I7906["Rudolf Lipschitz"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q652707"
+)
 
 
 p.end_mod()
 
 """
 
-I6709      R6709
+      R6709
 I3133      R3133
 I1770      R1770
 I5843      R5843
