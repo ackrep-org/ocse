@@ -849,6 +849,7 @@ I3134 = p.create_item(
     R2__has_description="the defining statement of positive definite",
     R4__is_instance_of=p.I20["mathematical definition"],
 )
+
 with I3134["definition of positive definiteness"].scope("setting") as cm:
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
@@ -884,6 +885,31 @@ with I3134["definition of positive definiteness"].scope("assertions") as cm:
 
 I3133["positive definiteness"].set_relation(
     p.R37["has definition"], I3134["definition of positive definiteness"]
+)
+
+# TODO: for the following properties it would be nice to state the definition "relatively" to the
+# definition of I3133["positive definiteness"]
+# for now: leave them as stubs
+
+I3135 = p.create_item(
+    R1__has_label="positive semidefiniteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
+
+I3136 = p.create_item(
+    R1__has_label="negative definiteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
+
+I3137 = p.create_item(
+    R1__has_label="negative semidefiniteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
 )
 
 
