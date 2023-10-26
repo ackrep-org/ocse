@@ -79,3 +79,9 @@ class Test_02_math(unittest.TestCase):
     def test_c03__publications(self):
         x = ag.I7558["2002_Khalil"]
         self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])
+
+        segment = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
+        self.assertEqual(segment.R8437__has_segment_specification, "Section 4.1")
+
+        segment2 = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
+        self.assertTrue(segment2 is segment)
