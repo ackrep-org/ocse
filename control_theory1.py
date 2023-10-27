@@ -678,6 +678,11 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
     phi = cm.new_var(phi=p.instance_of(I2753["flow of a vector field"]))
     x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
+
+    # TODO: check
+
+    cm.new_rel(cm.x, p.R15["is element of"], M)
+
     t = cm.new_var(t=p.instance_of(I4122["independent variable"]))
     deriv = cm.new_var(deriv=p.instance_of(I3513["derivative w.r.t. scalar parameter"]))
 
@@ -693,6 +698,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     # perform the derivative
     deriv_evaluated = deriv(h_evaluated, t)
 
+    # some auxiliary expressions are stored as attributes of the parent item of the cm
     cm.item.subs = I2075["substitution"](deriv_evaluated, t, 0)
     cm.item.L_evaluated = I1347["Lie derivative of scalar field"](h, f, x)
 
@@ -1234,13 +1240,46 @@ I3369 = p.create_item(
 
 # <theorem>
 I4663 = p.create_item(
-    R1__has_label=" theorem for Lyapunov stability of state space system",
+    R1__has_label="theorem for Lyapunov stability of state space system",
     R2__has_description="establishes a sufficient condition for the stability of a statespace system",
     R4__is_instance_of=p.I15["implication proposition"],
     ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
-# TODO: add definition
+with I4663["theorem for Lyapunov stability of state space system"].scope("setting") as cm:
+    # uq ... because the theorem holds for all n
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+
+    # TODO: decide about universal quantification here
+    D = cm.new_var(M=p.instance_of(I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+
+    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+    x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
+    cm.new_rel(x, p.R15["is element of"], D)
+
+    V = cm.new_var(V=p.instance_of(I9923["scalar field"]))
+    f = cm.new_var(f=p.instance_of(I9841["vector field"]))
+
+    cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"])
+
+    cm.item.LfV = I1347["Lie derivative of scalar field"](V, f, x)
+
+    # TODO:
+    # establish link between vector field and system
+
+
+    # sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
+    # t = cm.new_var(t=p.instance_of(I4122["independent variable"]))
+    # deriv = cm.new_var(deriv=p.instance_of(I3513["derivative w.r.t. scalar parameter"]))
+
+    # cm.new_rel(cm.h, R5405["has associated state space"], cm.M)
+    # cm.new_rel(cm.f, R5405["has associated state space"], cm.M)
+    # cm.new_rel(cm.ode_sys, R5405["has associated state space"], cm.M)
+    # cm.new_rel(cm.ode_sys, R4122["has associated vector field"], cm.f)
+
+# TODO: complete definition
 
 # </theorem>
 
