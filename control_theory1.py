@@ -588,8 +588,11 @@ I9273 = p.create_item(
 )
 
 R4122 = p.create_relation(
-    R1__has_label="has associated vector field",
-    R2__has_description="specifies the associated vector field of the subject (e.g. a I9273__explicit...ode_system)",
+    R1__has_label="has associated drift vector field",
+    R2__has_description=(
+        "specifies the associated drift vector field of the subject "
+        "(e.g. a I9273__explicit...ode_system)"
+    ),
     R8__has_domain_of_argument_1=I9273["explicit first order ODE system"],
     R11__has_range_of_result=I9841["vector field"],
     R22__is_functional=True,
@@ -597,7 +600,7 @@ R4122 = p.create_relation(
 
 # add this relation to the required relations
 I9273["explicit first order ODE system"].set_relation(
-    p.R41["has required instance relation"], R4122["has associated vector field"]
+    p.R41["has required instance relation"], R4122["has associated drift vector field"]
 )
 
 I2753 = p.create_item(
@@ -690,7 +693,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     cm.new_rel(cm.h, R5405["has associated state space"], cm.M)
     cm.new_rel(cm.f, R5405["has associated state space"], cm.M)
     cm.new_rel(cm.ode_sys, R5405["has associated state space"], cm.M)
-    cm.new_rel(cm.ode_sys, R4122["has associated vector field"], cm.f)
+    cm.new_rel(cm.ode_sys, R4122["has associated drift vector field"], cm.f)
 
     # evaluate the mappings
     h_evaluated = h(phi(x, t, ode_sys))
@@ -1241,7 +1244,10 @@ I3369 = p.create_item(
 # <theorem>
 I4663 = p.create_item(
     R1__has_label="theorem for Lyapunov stability of state space system",
-    R2__has_description="establishes a sufficient condition for the stability of a statespace system",
+    R2__has_description=(
+        "establishes a sufficient condition for the stability of an equilibrium point "
+        "of a statespace system"
+    ),
     R4__is_instance_of=p.I15["implication proposition"],
     ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
@@ -1254,6 +1260,9 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
     D = cm.new_var(M=p.instance_of(I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
+    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
+    cm.new_rel(ode_sys, R5405["has associated state space"], D)
+
     x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
     cm.new_rel(D, ma.R3798["has origin"], x0)
     x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
@@ -1262,32 +1271,29 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
     V = cm.new_var(V=p.instance_of(I9923["scalar field"]))
     f = cm.new_var(f=p.instance_of(I9841["vector field"]))
 
+    cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
+
     cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"])
 
     cm.item.LfV = I1347["Lie derivative of scalar field"](V, f, x)
 
-    # TODO:
-    # establish link between vector field and system
+with I4663["theorem for Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
 
-
-    # sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
-    # t = cm.new_var(t=p.instance_of(I4122["independent variable"]))
-    # deriv = cm.new_var(deriv=p.instance_of(I3513["derivative w.r.t. scalar parameter"]))
-
-    # cm.new_rel(cm.h, R5405["has associated state space"], cm.M)
-    # cm.new_rel(cm.f, R5405["has associated state space"], cm.M)
-    # cm.new_rel(cm.ode_sys, R5405["has associated state space"], cm.M)
-    # cm.new_rel(cm.ode_sys, R4122["has associated vector field"], cm.f)
-
-# TODO: complete definition
+with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
+    # TODO: double check the meaning of global here
+    cm.new_rel(cm.x0, p.R16["has property"], I8744["global Lyapunov stability"])
 
 # </theorem>
 
 
 # <theorem>
 I8733 = p.create_item(
-    R1__has_label=" theorem for asymptotic Lyapunov stability of state space system",
-    R2__has_description="establishes a sufficient condition for the asymptotic stability of a statespace system",
+    R1__has_label="theorem for asymptotic Lyapunov stability of state space system",
+    R2__has_description=(
+        "establishes a sufficient condition for the asymptotic stability of an equilibrium point "
+        "of a statespace system"
+    ),
     R4__is_instance_of=p.I15["implication proposition"],
     ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )

@@ -789,7 +789,7 @@ I1169 = p.create_item(
 R9651 = p.create_relation(
     R1__has_label="has domain",
     R2__has_description="specifies that the subject (a function or operator) is defined for all values of the object (a set)",
-    R8__has_domain_of_argument_1=I4895["mathematical operator"], 
+    R8__has_domain_of_argument_1=I4895["mathematical operator"],
     R11__has_range_of_result=p.I13["mathematical set"],
     R22__is_functional=True,
 )
@@ -798,7 +798,7 @@ R9651 = p.create_relation(
 R3798 = p.create_relation(
     R1__has_label="has origin",
     R2__has_description="specifies that the subject (a vector space) has the object as origin",
-    R8__has_domain_of_argument_1=I5166["vector space"], 
+    R8__has_domain_of_argument_1=I5166["vector space"],
     R11__has_range_of_result=I1169["point in vector space"],
     R22__is_functional=True,
 )
@@ -860,24 +860,24 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
 
     u = cm.new_var(u=p.uq_instance_of(I5843["neighbourhood"]))
     cm.new_rel(cm.M, R3326["has dimension"], cm.n)
-    
+
     cm.new_rel(cm.M, R3798["has origin"], cm.x0)
     cm.new_rel(cm.u, R4963["is neighbourhood of"], cm.x0)
     cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
 
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
     cm.new_rel(cm.h, R9651["has domain"], cm.M)
-    cm.item.h_value = h(x) 
+    cm.item.h_value = h(x)
 
 with I3134["definition of positive definiteness"].scope("premises") as cm:
-    
-            with p.ImplicationStatement() as imp1:
-                imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
-                imp1.consequent_relation(lhs=cm.item.h_value, rsgn="==", rhs=I5000["scalar zero"])
 
-            with p.ImplicationStatement() as imp2:
-                imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
-                imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])    
+    with p.ImplicationStatement() as imp1:
+        imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
+        imp1.consequent_relation(lhs=cm.item.h_value, rsgn="==", rhs=I5000["scalar zero"])
+
+    with p.ImplicationStatement() as imp2:
+        imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
+        imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])
 
 with I3134["definition of positive definiteness"].scope("assertions") as cm:
     cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
@@ -917,8 +917,8 @@ p.end_mod()
 
 """
 
-I9651      
-I3798      
+I9651
+I3798
 I3058      R3058
 I7280      R7280
 I1913      R1913
