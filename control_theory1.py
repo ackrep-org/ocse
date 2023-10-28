@@ -606,7 +606,9 @@ I9273["explicit first order ODE system"].set_relation(
 I2753 = p.create_item(
     R1__has_label="flow of a vector field",
     R2__has_description="operator yielding the solution of the associated I9273__explicit_first_order_ODE_system",
-    R3__is_subclass_of=ma.I4895["mathematical operator"],
+
+    # this is an instance and not a subclass because there is only one flow operator
+    R4__is_instance_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I1168["point in state space"],
     R9__has_domain_of_argument_2=p.I35["real number"],
     R10__has_domain_of_argument_3=I9273["explicit first order ODE system"],
@@ -627,7 +629,7 @@ I4122 = p.create_item(
 I3513 = p.create_item(
     R1__has_label="derivative w.r.t. scalar parameter",
     R2__has_description="operator yielding the derivative of an expression w.r.t. a parameter",
-    R3__is_subclass_of=ma.I4895["mathematical operator"],
+    R4__is_instance_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I4236["mathematical expression"],
     R9__has_domain_of_argument_2=I4122["independent variable"],
     R11__has_range_of_result=I4236["mathematical expression"],
@@ -679,7 +681,6 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     f = cm.new_var(f=p.uq_instance_of(I9841["vector field"]))
 
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
-    phi = cm.new_var(phi=p.instance_of(I2753["flow of a vector field"]))
     x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
 
     # TODO: check
@@ -687,7 +688,6 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     cm.new_rel(cm.x, p.R15["is element of"], M)
 
     t = cm.new_var(t=p.instance_of(I4122["independent variable"]))
-    deriv = cm.new_var(deriv=p.instance_of(I3513["derivative w.r.t. scalar parameter"]))
 
     cm.new_rel(cm.M, R3326["has dimension"], cm.n)
     cm.new_rel(cm.h, R5405["has associated state space"], cm.M)
@@ -696,10 +696,11 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     cm.new_rel(cm.ode_sys, R4122["has associated drift vector field"], cm.f)
 
     # evaluate the mappings
-    h_evaluated = h(phi(x, t, ode_sys))
+    phi = I2753["flow of a vector field"](x, t, ode_sys)
+    h_evaluated = h(phi)
 
     # perform the derivative
-    deriv_evaluated = deriv(h_evaluated, t)
+    deriv_evaluated = I3513["derivative w.r.t. scalar parameter"](h_evaluated, t)
 
     # some auxiliary expressions are stored as attributes of the parent item of the cm
     cm.item.subs = I2075["substitution"](deriv_evaluated, t, 0)
