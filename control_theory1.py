@@ -1274,8 +1274,7 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
 
     cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"])
-
-    cm.item.LfV = I1347["Lie derivative of scalar field"](V, f, x)
+    cm.new_var(LfV=I1347["Lie derivative of scalar field"](V, f, x))
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("premise") as cm:
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
@@ -1298,7 +1297,16 @@ I8733 = p.create_item(
     ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
-# TODO: add definition
+with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
+    cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
+
+with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
+
+with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
+    # TODO: double check the meaning of global here
+    # TODO: check wording on I5677__global_asymtotical_stability
+    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymtotical stability"])
 
 # </theorem>
 
