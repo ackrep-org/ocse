@@ -341,6 +341,8 @@ I5006 = p.create_item(
     R1__has_label="imaginary part",
     R2__has_description="returns the imaginary part of a complex number",
     R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I34["complex number"],
+    R11__has_range_of_result=p.I35["real number"],
 )
 
 I5807 = p.create_item(
@@ -663,6 +665,10 @@ with I1373["definition of set of eigenvalues of a matrix"].scope("setting") as c
 
     # auxiliary variables
     M = I6324["canonical first order monic polynomial matrix"](cm.A, cm.s)
+
+    # TODO: this should be inferred automatically
+    M.R30__is_secondary_instance_of = I9906["square matrix"]
+
     d = I5359["determinant"](M)
 
 with I1373["definition of set of eigenvalues of a matrix"].scope("premise") as cm:
@@ -881,6 +887,11 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
 
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
     cm.new_rel(cm.h, R9651["has domain"], cm.M)
+
+    # TODO: this should be inferred automatically (or via convenience function)
+    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
+    h.R11__has_range_of_result = p.I35["real number"]
+
     cm.item.h_value = h(x)
 
 with I3134["definition of positive definiteness"].scope("premises") as cm:
