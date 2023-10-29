@@ -162,18 +162,32 @@ class IntegerRangeElement:
         self.r1 = None
         self.r2 = None
 
+    @staticmethod
+    def is_positive(i: Union[int, p.Item]) -> bool:
+        if isinstance(i, int):
+            return i > 0
+        else:
+            return p.is_instance_of(i, p.I39["positive integer"])
+
     def __enter__(self):
         """
         implicitly called in the head of the with statemet
         :return:
         """
 
-        element = p.instance_of(I6012["integer range element"], self.r1, self.r2)
+        if self.is_positive(self.start) and self.is_positive(self.step):
+            class_item = p.I39["positive integer"]
+        else:
+            class_item = p.I37["integer number"]
+
+        element = p.instance_of(class_item, self.r1, self.r2)
+        element.R30__is_secondary_instance_of = I6012["integer range element"]
 
         element.R1616__has_start_value = self.start
         element.R1617__has_stop_value = self.stop
         element.R1618__has_step_value = self.step
 
+        element.finalize()
         return element
 
     def __exit__(self, exc_type, exc_val, exc_tb):

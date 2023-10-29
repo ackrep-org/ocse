@@ -11,6 +11,7 @@ from ipydex import IPS, activate_ips_on_exception  # noqa
 if os.environ.get("IPYDEX_AIOE") == "true":
     activate_ips_on_exception()
 
+# p.cc.enable_consitency_checking()
 
 PACKAGE_ROOT_PATH = Path(__file__).parent.parent.absolute().as_posix()
 ma = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma")
