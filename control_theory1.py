@@ -240,7 +240,7 @@ p.R37["has definition"].set_relation(p.R8["has domain of argument 1"], p.I12["ma
 
 I4236 = ma.I4236["mathematical expression"]
 I4237 = ma.I4237["monovariate rational function"]
-I4239 = ma.I4239["monovariate polynomial"]
+I4239 = ma.I4239["abstract monovariate polynomial"]
 
 I5484 = ma.I5484["finite set of complex numbers"]
 
@@ -252,7 +252,7 @@ R5323 = p.create_relation(
     R1__has_label="has denominator",
     R2__has_description="...",
     R8__has_domain_of_argument_1=I4237["monovariate rational function"],
-    R11__has_range_of_result=I4239["monovariate polynomial"],
+    R11__has_range_of_result=I4239["abstract monovariate polynomial"],
 )
 
 
@@ -375,7 +375,7 @@ I3863 = p.create_item(
 I5325 = p.create_item(
     R1__has_label="Hurwitz polynomial",
     R2__has_description="monovariate polynomial of quadratic matrices",
-    R3__is_subclass_of=I4239["monovariate polynomial"],
+    R3__is_subclass_of=I4239["abstract monovariate polynomial"],
 )
 
 # <definition>
@@ -386,7 +386,7 @@ I4455 = p.create_item(
 )
 
 with I4455.scope("setting") as cm:
-    cm.new_var(P=p.uq_instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(P=p.uq_instance_of(I4239["abstract monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
     cm.new_rel(cm.P, R1757["has set of roots"], cm.set_of_roots)
 
@@ -417,7 +417,7 @@ with I3007.scope("setting") as cm:
     cm.new_var(sys=p.uq_instance_of(I7641["general system model"]))
 
     cm.new_var(tf_rep=p.instance_of(I2640["transfer function representation"]))
-    cm.new_var(denom=p.instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(denom=p.instance_of(I4239["abstract monovariate polynomial"]))
     cm.new_var(set_of_poles=p.instance_of(I5484["finite set of complex numbers"]))
 
     cm.new_rel(cm.sys, R5334["has representation"], cm.tf_rep)
@@ -449,7 +449,7 @@ R5940 = p.create_relation(
     R1__has_label="has characteristic polynomial",
     R2__has_description="specifies the characteristic polynomial of a square matrix A, i.e. det(s·I-A)",
     R8__has_domain_of_argument_1=I9906["square matrix"],
-    R11__has_range_of_result=I4239["monovariate polynomial"],
+    R11__has_range_of_result=I4239["abstract monovariate polynomial"],
 )
 
 # <definition>

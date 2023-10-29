@@ -476,7 +476,7 @@ I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_
 
 
 I4239 = p.create_item(
-    R1__has_label="monovariate polynomial",
+    R1__has_label="abstract monovariate polynomial",
     R2__has_description=(
         "abstract monovariate polynomial (argument might be a complex-valued scalar, a matrix, an operator, etc.)"
     ),
@@ -514,14 +514,14 @@ I9739 = p.create_item(
 R3668 = p.create_relation(
     R1__has_label="has sequence of coefficients",
     R2__has_description="object is the enumerated sequence of coefficients of a monovariate polynomial",
-    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R8__has_domain_of_argument_1=I4239["abstract monovariate polynomial"],
     R11__has_range_of_result=I9739["finite scalar sequence"],
 )
 
 
 with I1594["Stodolas necessary condition for polynomial coefficients"].scope("setting") as cm:
 
-    cm.new_var(p=p.instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(p=p.instance_of(I4239["abstract monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
     cm.new_var(seq_of_coeffs=p.instance_of(I9739["finite scalar sequence"]))
 
@@ -545,7 +545,7 @@ with I1594["Stodolas necessary condition for polynomial coefficients"].scope("as
 I4240 = p.create_item(
     R1__has_label="matrix polynomial",
     R2__has_description="monovariate polynomial of quadratic matrices",
-    R3__is_subclass_of=I4239["monovariate polynomial"],
+    R3__is_subclass_of=I4239["abstract monovariate polynomial"],
 )
 
 I1935 = p.create_item(
@@ -716,7 +716,7 @@ I3589 = p.create_item(
     R1__has_label="monovariate polynomial degree",
     R2__has_description="returns degree of a monovariate polynomial",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R8__has_domain_of_argument_1=I4239["abstract monovariate polynomial"],
     R11__has_range_of_result=p.I38["non-negative integer"],
 )
 
@@ -730,7 +730,7 @@ I9628 = p.create_item(
 )
 
 with I9628["theorem on the number of roots of a polynomial"].scope("setting") as cm:
-    P = cm.new_var(P=p.instance_of(I4239["monovariate polynomial"]))
+    P = cm.new_var(P=p.instance_of(I4239["abstract monovariate polynomial"]))
     r = cm.new_var(r=p.instance_of(I5484["finite set of complex numbers"]))
 
 with I9628["theorem on the number of roots of a polynomial"].scope("premises") as cm:
