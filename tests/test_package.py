@@ -81,7 +81,7 @@ class Test_02_math(unittest.TestCase):
         self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])
 
         segment = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
-        self.assertEqual(segment.R8437__has_segment_specification, "Section 4.1")
+        self.assertEqual(segment.ag__R8437__has_segment_specification, ["Section 4.1"])
 
         segment2 = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
         self.assertTrue(segment2 is segment)
