@@ -5,3 +5,5 @@ _backup/
 
 # autocompletion support file
 .ac_candidates.txt
+
+.vscode
