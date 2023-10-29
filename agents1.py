@@ -237,6 +237,7 @@ R8437 = p.create_relation(
 
 SOURCE_SEGMENT_CACHE = {}
 
+@p.wrap_function_with_search_uri_context
 def get_source_segment(source_doc: p.Item, segment_specification: str):
     """
     :param segment_specification:   str, e.g. "Chapter 3" or "Section 2.5.2" or "Page 84"
@@ -255,7 +256,6 @@ def get_source_segment(source_doc: p.Item, segment_specification: str):
         item.R8437__has_segment_specification = segment_specification
     return item
 
-get_source_segment = p.wrap_function_with_search_uri_context(get_source_segment, __URI__)
 
 R8439 = p.create_relation(
     R1__has_label="is based on source",
