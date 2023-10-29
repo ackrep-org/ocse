@@ -255,6 +255,7 @@ def get_source_segment(source_doc: p.Item, segment_specification: str):
         item.R8437__has_segment_specification = segment_specification
     return item
 
+get_source_segment = p.wrap_function_with_search_uri_context(get_source_segment, __URI__)
 
 R8439 = p.create_relation(
     R1__has_label="is based on source",
