@@ -11,11 +11,13 @@ from ipydex import IPS, activate_ips_on_exception  # noqa
 if os.environ.get("IPYDEX_AIOE") == "true":
     activate_ips_on_exception()
 
+if not os.environ.get("PYERK_DISABLE_CONSISTENCY_CHECKING", "").lower() == "true":
+    p.cc.enable_consitency_checking()
 
 PACKAGE_ROOT_PATH = Path(__file__).parent.parent.absolute().as_posix()
-ma = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma")
-ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct")
 ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
+ma = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma", reuse_loaded=True)
+ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct", reuse_loaded=True)
 
 
 class Test_01_basics(unittest.TestCase):
@@ -70,8 +72,21 @@ class Test_02_math(unittest.TestCase):
         # construct sI - A
         M = ma.I6324["canonical first order monic polynomial matrix"](A, s)
 
+        # TODO: __automate_typing__
+        M.R30__is_secondary_instance_of = ma.I9906["square matrix"]
+
         self.assertTrue(M.R4__is_instance_of, ma.I1935["polynomial matrix"])
         self.assertTrue(M.ma__R8736__depends_polyonomially_on, s)
 
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polyonomially_on, s)
+
+    def test_c03__publications(self):
+        x = ag.I7558["2002_Khalil"]
+        self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])
+
+        segment = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
+        self.assertEqual(segment.ag__R8437__has_segment_specification, ["Section 4.1"])
+
+        segment2 = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
+        self.assertTrue(segment2 is segment)

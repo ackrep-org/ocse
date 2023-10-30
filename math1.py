@@ -162,18 +162,41 @@ class IntegerRangeElement:
         self.r1 = None
         self.r2 = None
 
+    @staticmethod
+    def is_positive(i: Union[int, p.Item]) -> bool:
+        if isinstance(i, int):
+            return i > 0
+        else:
+            return p.is_instance_of(i, p.I39["positive integer"])
+
+    @staticmethod
+    def is_nonnegative(i: Union[int, p.Item]) -> bool:
+        if isinstance(i, int):
+            return i >= 0
+        else:
+            return p.is_instance_of(i, p.I38["non-negative integer"])
+
     def __enter__(self):
         """
         implicitly called in the head of the with statemet
         :return:
         """
 
-        element = p.instance_of(I6012["integer range element"], self.r1, self.r2)
+        if self.is_positive(self.start) and self.is_positive(self.step):
+            class_item = p.I39["positive integer"]
+        elif self.is_nonnegative(self.start) and self.is_nonnegative(self.step):
+            class_item = p.I38["non-negative integer"]
+        else:
+            class_item = p.I37["integer number"]
+
+        element = p.instance_of(class_item, self.r1, self.r2)
+        element.R30__is_secondary_instance_of = I6012["integer range element"]
 
         element.R1616__has_start_value = self.start
         element.R1617__has_stop_value = self.stop
         element.R1618__has_step_value = self.step
 
+        element.finalize()
         return element
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -327,6 +350,8 @@ I5006 = p.create_item(
     R1__has_label="imaginary part",
     R2__has_description="returns the imaginary part of a complex number",
     R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I34["complex number"],
+    R11__has_range_of_result=p.I35["real number"],
 )
 
 I5807 = p.create_item(
@@ -460,7 +485,7 @@ I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_
 
 
 I4239 = p.create_item(
-    R1__has_label="monovariate polynomial",
+    R1__has_label="abstract monovariate polynomial",
     R2__has_description=(
         "abstract monovariate polynomial (argument might be a complex-valued scalar, a matrix, an operator, etc.)"
     ),
@@ -498,14 +523,14 @@ I9739 = p.create_item(
 R3668 = p.create_relation(
     R1__has_label="has sequence of coefficients",
     R2__has_description="object is the enumerated sequence of coefficients of a monovariate polynomial",
-    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R8__has_domain_of_argument_1=I4239["abstract monovariate polynomial"],
     R11__has_range_of_result=I9739["finite scalar sequence"],
 )
 
 
 with I1594["Stodolas necessary condition for polynomial coefficients"].scope("setting") as cm:
 
-    cm.new_var(p=p.instance_of(I4239["monovariate polynomial"]))
+    cm.new_var(p=p.instance_of(I4239["abstract monovariate polynomial"]))
     cm.new_var(set_of_roots=p.instance_of(I5484["finite set of complex numbers"]))
     cm.new_var(seq_of_coeffs=p.instance_of(I9739["finite scalar sequence"]))
 
@@ -529,7 +554,7 @@ with I1594["Stodolas necessary condition for polynomial coefficients"].scope("as
 I4240 = p.create_item(
     R1__has_label="matrix polynomial",
     R2__has_description="monovariate polynomial of quadratic matrices",
-    R3__is_subclass_of=I4239["monovariate polynomial"],
+    R3__is_subclass_of=I4239["abstract monovariate polynomial"],
 )
 
 I1935 = p.create_item(
@@ -649,6 +674,10 @@ with I1373["definition of set of eigenvalues of a matrix"].scope("setting") as c
 
     # auxiliary variables
     M = I6324["canonical first order monic polynomial matrix"](cm.A, cm.s)
+
+    # TODO: __automate_typing__
+    M.R30__is_secondary_instance_of = I9906["square matrix"]
+
     d = I5359["determinant"](M)
 
 with I1373["definition of set of eigenvalues of a matrix"].scope("premise") as cm:
@@ -657,6 +686,14 @@ with I1373["definition of set of eigenvalues of a matrix"].scope("premise") as c
 with I1373["definition of set of eigenvalues of a matrix"].scope("assertion") as cm:
     cm.new_equation(I9160["set of eigenvalues of a matrix"](cm.A), cm.r)
 
+# TODO: relate/unify this with R3668__has_sequence_of_coefficients
+I3058 = p.create_item(
+    R1__has_label="coefficients of characteristic polynomial",
+    R2__has_description="...",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R11__has_range_of_result=I9739["finite scalar sequence"],
+)
 
 # the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
 # see also https://pyerk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
@@ -696,7 +733,7 @@ I3589 = p.create_item(
     R1__has_label="monovariate polynomial degree",
     R2__has_description="returns degree of a monovariate polynomial",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I4239["monovariate polynomial"],
+    R8__has_domain_of_argument_1=I4239["abstract monovariate polynomial"],
     R11__has_range_of_result=p.I38["non-negative integer"],
 )
 
@@ -710,7 +747,7 @@ I9628 = p.create_item(
 )
 
 with I9628["theorem on the number of roots of a polynomial"].scope("setting") as cm:
-    P = cm.new_var(P=p.instance_of(I4239["monovariate polynomial"]))
+    P = cm.new_var(P=p.instance_of(I4239["abstract monovariate polynomial"]))
     r = cm.new_var(r=p.instance_of(I5484["finite set of complex numbers"]))
 
 with I9628["theorem on the number of roots of a polynomial"].scope("premises") as cm:
@@ -721,22 +758,207 @@ with I9628["theorem on the number of roots of a polynomial"].scope("premises") a
 with I9628["theorem on the number of roots of a polynomial"].scope("assertions") as cm:
     cm.new_math_relation(deg, "==", card)
 
+I6709 = p.create_item(
+    R1__has_label="Lipschitz continuity",
+    R2__has_description="states that the slope of a function is bounded",
+    R4__is_instance_of=p.I11["mathematical property"],
+    ag__R6876__is_named_after=ag.I7906["Rudolf Lipschitz"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q652707"
+)
 
 
+# imported entities from control_theory1.py:
+
+R3326 = p.create_relation(
+    R1__has_label="has dimension",
+    R2__has_description="specifies the dimension of a (dimensional) mathematical object",
+    R8__has_domain_of_argument_1=p.I12["mathematical object"],
+    R11__has_range_of_result=p.I38["non-negative integer"],
+    R22__is_functional=True,
+)
+
+# TODO: improve taxonomy here
+I5166 = p.create_item(
+    R1__has_label="vector space",
+    R2__has_description="type for a vector space",
+    R3__is_subclass_of=p.I13["mathematical set"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q125977",
+    R41__has_required_instance_relation=R3326["has dimension"],
+)
+
+
+# TODO: consider "state manifold"
+I5167 = p.create_item(
+    R1__has_label="state space",
+    R2__has_description="type for a state space of a dynamical system (I6886)",
+    R3__is_subclass_of=I5166["vector space"],
+
+    # this should be defined via inheritance from vector space
+    # TODO: test that this is the case
+    # R41__has_required_instance_relation=R3326["has dimension"],
+)
+
+
+R5405 = p.create_relation(
+    R1__has_label="has associated state space",
+    R2__has_description="specifies the associated state space of the subject (e.g. a I9273__explicit...ode_system)",
+    R8__has_domain_of_argument_1=p.I12["mathematical object"],
+    R11__has_range_of_result=I5167["state space"],
+    R22__is_functional=True,
+)
+
+
+I1168 = p.create_item(
+    R1__has_label="point in state space",
+    R2__has_description="type for a point in a given state space",
+    R3__is_subclass_of=p.I12["mathematical object"],
+    R41__has_required_instance_relation=R5405["has associated state space"],
+)
+# TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
+
+I1169 = p.create_item(
+    R1__has_label="point in vector space",
+    R2__has_description="type for a point in a given vector space",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+R9651 = p.create_relation(
+    R1__has_label="has domain",
+    R2__has_description="specifies that the subject (a function or operator) is defined for all values of the object (a set)",
+    R8__has_domain_of_argument_1=I4895["mathematical operator"],
+    R11__has_range_of_result=p.I13["mathematical set"],
+    R22__is_functional=True,
+)
+
+
+R3798 = p.create_relation(
+    R1__has_label="has origin",
+    R2__has_description="specifies that the subject (a vector space) has the object as origin",
+    R8__has_domain_of_argument_1=I5166["vector space"],
+    R11__has_range_of_result=I1169["point in vector space"],
+    R22__is_functional=True,
+)
+
+
+I9923 = p.create_item(
+    R1__has_label="scalar field",
+    R2__has_description="...",
+    R3__is_subclass_of=I4895["mathematical operator"],
+)
+
+
+I9841 = p.create_item(
+    R1__has_label="vector field",
+    R2__has_description="...",
+    R3__is_subclass_of=I4895["mathematical operator"],
+)
+
+
+# The following is contributed by Xinghao Huang (during a semester project 2022/23)
+# supervision: Carsten Knoll
+# adaptation: assume only the origin is the point of interest
+
+
+I5843 = p.create_item(
+    R1__has_label="neighbourhood",
+    R2__has_description="a region of space around a point",
+    R3__is_subclass_of=p.I13["mathematical set"],
+)
+
+
+R4963 = p.create_relation(
+    R1__has_label="is neighbourhood of",
+    R2__has_description="specifies that the subject (a set) is a neighbourhood of the object (a point)",
+    R8__has_domain_of_argument_1=I5843["neighbourhood"],
+    R11__has_range_of_result=I1168["point in state space"],
+)
+
+I3133 = p.create_item(
+    R1__has_label="positive definiteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
+
+I3134 = p.create_item(
+    R1__has_label="definition of positive definiteness",
+    R2__has_description="the defining statement of positive definite",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I3134["definition of positive definiteness"].scope("setting") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
+    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
+    x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
+
+    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
+
+    u = cm.new_var(u=p.uq_instance_of(I5843["neighbourhood"]))
+    cm.new_rel(cm.M, R3326["has dimension"], cm.n)
+
+    cm.new_rel(cm.M, R3798["has origin"], cm.x0)
+    cm.new_rel(cm.u, R4963["is neighbourhood of"], cm.x0)
+    cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
+
+    cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
+    cm.new_rel(cm.h, R9651["has domain"], cm.M)
+
+    # TODO: __automate_typing__ (or via convenience function)
+    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
+    h.R11__has_range_of_result = p.I35["real number"]
+
+    cm.item.h_value = h(x)
+
+with I3134["definition of positive definiteness"].scope("premises") as cm:
+
+    with p.ImplicationStatement() as imp1:
+        imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
+        imp1.consequent_relation(lhs=cm.item.h_value, rsgn="==", rhs=I5000["scalar zero"])
+
+    with p.ImplicationStatement() as imp2:
+        imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
+        imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])
+
+with I3134["definition of positive definiteness"].scope("assertions") as cm:
+    cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
+
+
+I3133["positive definiteness"].set_relation(
+    p.R37["has definition"], I3134["definition of positive definiteness"]
+)
+
+# TODO: for the following properties it would be nice to state the definition "relatively" to the
+# definition of I3133["positive definiteness"]
+# for now: leave them as stubs
+
+I3135 = p.create_item(
+    R1__has_label="positive semidefiniteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
+
+I3136 = p.create_item(
+    R1__has_label="negative definiteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
+
+I3137 = p.create_item(
+    R1__has_label="negative semidefiniteness",
+    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R8__has_domain_of_argument_1=I9923["scalar field"],
+)
 
 
 p.end_mod()
 
 """
 
-I6709      R6709
-I3133      R3133
-I1770      R1770
-I5843      R5843
-I4963      R4963
-I9651      R9651
-I3798      R3798
-I3058      R3058
 I7280      R7280
 I1913      R1913
 I2917      R2917

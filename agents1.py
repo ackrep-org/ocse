@@ -64,7 +64,6 @@ def create_person(given_name: str, family_name: str, r2: str, r33=None):
         item.set_relation(p.R33["has corresponding wikidata entity"], r33)
     return item
 
-
 I2746 = create_person("Rudolf", "Kalman", "electrical engineer and mathematician")
 
 
@@ -137,23 +136,142 @@ I2151.set_relation(p.R33["has corresponding wikidata entity"], "https://www.wiki
 
 I1257 = create_person("Joseph Pierre", "LaSalle", "mathematician", r33="https://www.wikidata.org/wiki/Q15455952")
 
+I8430 = create_person("Eduardo Daniel", "Sontag", "mathematician", r33="https://www.wikidata.org/wiki/Q3709600")
+
+I7906 = create_person("Rudolf", "Lipschitz", "mathematician", r33="https://www.wikidata.org/wiki/Q77322")
+I4853 = create_person("Sophus", "Lie", "mathematician", r33="https://www.wikidata.org/wiki/Q30769")
+
+
+I6591 = p.create_item(
+    R1__has_label="source document",
+    R2__has_description="type for items that represent books, papers etc",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
+
+R8433 = p.create_relation(
+    R1__has_label="has authors",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["source document"],
+    R11__has_range_of_result=I7435["human"],
+)
+
+R8434 = p.create_relation(
+    R1__has_label="has title",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["source document"],
+    R11__has_range_of_result=p.I19["multilingual string literal"],
+)
+
+R8435 = p.create_relation(
+    R1__has_label="has year",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["source document"],
+    R11__has_range_of_result=p.I37["integer number"],
+)
+
+R8436 = p.create_relation(
+    R1__has_label="has DOI",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["source document"],
+    R11__has_range_of_result=str,
+)
+
+
+def create_source(title:str, authors, year: int, doi: str=None):
+    """
+    This is a convenience function that simplifies the creation of a published source (paper, book, ...)
+    """
+    item_key = p.get_key_str_by_inspection()
+
+    if not isinstance(authors, (list, tuple)):
+        authors = [authors]
+
+    for author in authors:
+        assert isinstance(author, p.Item)
+    assert len(authors) > 0
+
+    first_authors_name = authors[0].R7781__has_family_name[0]
+    if len(authors) > 1:
+        suffix = "_etal"
+    else:
+        suffix = ""
+
+    r1 = f"{year}_{first_authors_name}{suffix}"
+    r2 = f"publication '{title}' by {first_authors_name}{suffix.replace('_', ' ')}"
+    new_item: p.Item  = p.create_item(
+        item_key,
+        R1__has_label=r1,
+        R2__has_description=r2,
+        R4__is_instance_of=I6591["source document"],
+        R8433__has_authors=authors,
+        R8434__has_title=title,
+        R8435__has_year=year,
+    )
+
+    if doi:
+        new_item.set_relation(R8436["hasDOI"], doi)
+    return new_item
+
+
+I9700 = create_person("Hassan", "Khalil", "electrical engineneer", r33="https://www.wikidata.org/wiki/Q102278369")
+
+I7558 = create_source("Nonlinear Systems", I9700["Hassan Khalil"], 2002)
+
+
+I7800 = p.create_item(
+    R1__has_label="source segment",
+    R2__has_description="type to represent a segment (chapter, section, ...) of an I6591__source_document instance",
+    R4__is_instance_of=p.I2["Metaclass"],
+)
+
+
+
+R8437 = p.create_relation(
+    R1__has_label="has segment specification",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I7800["source segment"],
+    R11__has_range_of_result=str,
+)
+
+
+
+SOURCE_SEGMENT_CACHE = {}
+
+@p.wrap_function_with_search_uri_context
+def get_source_segment(source_doc: p.Item, segment_specification: str):
+    """
+    :param segment_specification:   str, e.g. "Chapter 3" or "Section 2.5.2" or "Page 84"
+
+    This is a convenience function which creates (or returns an existing) item
+    representing a segment of a source document (section, chapter, page, ...)
+    """
+
+    r1 = f"{source_doc.R1__has_label} -- {segment_specification}"
+    key = (source_doc.uri, segment_specification)
+    if item := SOURCE_SEGMENT_CACHE.get(key):
+        pass
+    else:
+        item = p.instance_of(I7800["source segment"], r1=r1)
+        SOURCE_SEGMENT_CACHE[key] = item
+        item.R8437__has_segment_specification = segment_specification
+    return item
+
+
+R8439 = p.create_relation(
+    R1__has_label="is based on source",
+    R2__has_description="specifies that the item (e.g. a theorem) is based on some source document",
+    R8__has_domain_of_argument_1=p.I46["knowledge artifact"],
+    R11__has_range_of_result=[I7800["source segment"], I6591["source document"]],
+)
+
+
 
 p.end_mod()
-
 
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-      R1257
-I8430      R8430
-I7906      R7906
-I4853      R4853
-I6591      R6591
-I8433      R8433
-I7558      R7558
-I9700      R9700
-I7800      R7800
-I1848      R1848
+I1848
 I7115      R7115
 I3474      R3474
 I1639      R1639
