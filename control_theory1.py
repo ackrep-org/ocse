@@ -238,7 +238,6 @@ I2640 = p.create_item(
 p.R37["has definition"].set_relation(p.R8["has domain of argument 1"], p.I12["mathematical object"])
 
 
-I4236 = ma.I4236["mathematical expression"]
 I4237 = ma.I4237["monovariate rational function"]
 I4239 = ma.I4239["abstract monovariate polynomial"]
 
@@ -313,7 +312,7 @@ I7208 = p.create_item(
 I4975 = p.create_item(
     R1__has_label="general algebraic equation",
     R2__has_description="explicit algebraic equation",
-    R3__is_subclass_of=I4236["mathematical expression"],
+    R3__is_subclass_of=p.I18["mathematical expression"],
     # TODO: this has to use create_equation (to be implemented)
     R6__has_defining_mathematical_relation=p.create_expression(r"$0 = f(x)$"),
 )
@@ -492,8 +491,13 @@ I3749 = p.create_item(
 with I3749["Cayley-Hamilton theorem"].scope("setting") as cm:
     cm.new_var(A=p.uq_instance_of(I9906["square matrix"]))
     cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(coeffs_cp_A=ma.I3058["coefficients of characteristic polynomial"](cm.A))
 
     cm.new_var(P=p.instance_of(ma.I4240["matrix polynomial"]))
+
+    # TODO: __automate_typing__
+    cm.P.R8__has_domain_of_argument_1 = ma.I9906["square matrix"]
+
     cm.new_var(Z=p.instance_of(I9905["zero matrix"]))
 
     cm.new_rel(cm.A, R5938["has row number"], cm.n)
@@ -622,7 +626,7 @@ I2753 = p.create_item(
 I4122 = p.create_item(
     R1__has_label="independent variable",
     R2__has_description="type for an independent variable",
-    R3__is_subclass_of=p.I12["mathematical object"],
+    R3__is_subclass_of=p.I18["mathematical expression"],
 )
 
 
@@ -630,9 +634,9 @@ I3513 = p.create_item(
     R1__has_label="derivative w.r.t. scalar parameter",
     R2__has_description="operator yielding the derivative of an expression w.r.t. a parameter",
     R4__is_instance_of=ma.I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I4236["mathematical expression"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=I4122["independent variable"],
-    R11__has_range_of_result=I4236["mathematical expression"],
+    R11__has_range_of_result=p.I18["mathematical expression"],
     R13__has_canonical_symbol=r"$\frac{d}{d(\cdot_2}) (\cdot_1)$",
 )
 
@@ -642,10 +646,10 @@ I2075 = p.create_item(
         "operator yielding an new expression where in expression arg1 the subexpression arg2 is replaced by arg3"
     ),
     R4__is_instance_of=ma.I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I4236["mathematical expression"],
-    R9__has_domain_of_argument_2=I4236["mathematical expression"],
-    R10__has_domain_of_argument_3=I4236["mathematical expression"],
-    R11__has_range_of_result=I4236["mathematical expression"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I18["mathematical expression"],
+    R10__has_domain_of_argument_3=p.I18["mathematical expression"],
+    R11__has_range_of_result=p.I18["mathematical expression"],
     R13__has_canonical_symbol=r"$\left.(\cdot_1)\left|_{(\cdot_2)=(\cdot_3)}$",
 )
 
@@ -695,15 +699,27 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     cm.new_rel(cm.ode_sys, R5405["has associated state space"], cm.M)
     cm.new_rel(cm.ode_sys, R4122["has associated drift vector field"], cm.f)
 
+    # TODO: __automate_typing__
+    t.R30__is_secondary_instance_of = p.I35["real number"]
+
     # evaluate the mappings
     phi = I2753["flow of a vector field"](x, t, ode_sys)
+
+    # TODO: __automate_typing__
+    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
+    h.R11__has_range_of_result = p.I35["real number"]
+
     h_evaluated = h(phi)
+
+    # TODO: __automate_typing__
+    h_evaluated.R30__is_secondary_instance_of = ma.p.I18["mathematical expression"]
 
     # perform the derivative
     deriv_evaluated = I3513["derivative w.r.t. scalar parameter"](h_evaluated, t)
 
     # some auxiliary expressions are stored as attributes of the parent item of the cm
-    cm.item.subs = I2075["substitution"](deriv_evaluated, t, 0)
+
+    cm.item.subs = I2075["substitution"](deriv_evaluated, t, ma.I5000["scalar zero"])
     cm.item.L_evaluated = I1347["Lie derivative of scalar field"](h, f, x)
 
 
@@ -1099,12 +1115,12 @@ I9223 = p.create_item(
 )
 
 # general equation of linear second order pde with 2 independant variables
-I2112 = p.instance_of(I4236["mathematical expression"])
+I2112 = p.instance_of(p.I18["mathematical expression"])
 I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
 
 I1070 = p.new_equation(lhs=I2112, rhs=ma.I5000["scalar zero"])
 
-I6963 = p.instance_of(I4236["mathematical expression"])
+I6963 = p.instance_of(p.I18["mathematical expression"])
 I6963.set_relation(p.R24["has LaTeX string"], r"$B^2-AC$")
 
 I2279 = p.new_mathematical_relation(lhs=I6963, rsgn="<", rhs=ma.I5000["scalar zero"])

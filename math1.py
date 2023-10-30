@@ -169,6 +169,13 @@ class IntegerRangeElement:
         else:
             return p.is_instance_of(i, p.I39["positive integer"])
 
+    @staticmethod
+    def is_nonnegative(i: Union[int, p.Item]) -> bool:
+        if isinstance(i, int):
+            return i >= 0
+        else:
+            return p.is_instance_of(i, p.I38["non-negative integer"])
+
     def __enter__(self):
         """
         implicitly called in the head of the with statemet
@@ -177,6 +184,8 @@ class IntegerRangeElement:
 
         if self.is_positive(self.start) and self.is_positive(self.step):
             class_item = p.I39["positive integer"]
+        elif self.is_nonnegative(self.start) and self.is_nonnegative(self.step):
+            class_item = p.I38["non-negative integer"]
         else:
             class_item = p.I37["integer number"]
 
@@ -666,7 +675,7 @@ with I1373["definition of set of eigenvalues of a matrix"].scope("setting") as c
     # auxiliary variables
     M = I6324["canonical first order monic polynomial matrix"](cm.A, cm.s)
 
-    # TODO: this should be inferred automatically
+    # TODO: __automate_typing__
     M.R30__is_secondary_instance_of = I9906["square matrix"]
 
     d = I5359["determinant"](M)
@@ -677,6 +686,14 @@ with I1373["definition of set of eigenvalues of a matrix"].scope("premise") as c
 with I1373["definition of set of eigenvalues of a matrix"].scope("assertion") as cm:
     cm.new_equation(I9160["set of eigenvalues of a matrix"](cm.A), cm.r)
 
+# TODO: relate/unify this with R3668__has_sequence_of_coefficients
+I3058 = p.create_item(
+    R1__has_label="coefficients of characteristic polynomial",
+    R2__has_description="...",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R11__has_range_of_result=I9739["finite scalar sequence"],
+)
 
 # the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
 # see also https://pyerk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
@@ -888,7 +905,7 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
     cm.new_rel(cm.h, R9651["has domain"], cm.M)
 
-    # TODO: this should be inferred automatically (or via convenience function)
+    # TODO: __automate_typing__ (or via convenience function)
     h.R8__has_domain_of_argument_1 = I1168["point in state space"]
     h.R11__has_range_of_result = p.I35["real number"]
 
@@ -942,9 +959,6 @@ p.end_mod()
 
 """
 
-I9651
-I3798
-I3058      R3058
 I7280      R7280
 I1913      R1913
 I2917      R2917

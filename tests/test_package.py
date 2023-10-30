@@ -72,6 +72,9 @@ class Test_02_math(unittest.TestCase):
         # construct sI - A
         M = ma.I6324["canonical first order monic polynomial matrix"](A, s)
 
+        # TODO: __automate_typing__
+        M.R30__is_secondary_instance_of = ma.I9906["square matrix"]
+
         self.assertTrue(M.R4__is_instance_of, ma.I1935["polynomial matrix"])
         self.assertTrue(M.ma__R8736__depends_polyonomially_on, s)
 
