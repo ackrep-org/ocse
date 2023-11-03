@@ -495,9 +495,6 @@ with I3749["Cayley-Hamilton theorem"].scope("setting") as cm:
 
     cm.new_var(P=p.instance_of(ma.I4240["matrix polynomial"]))
 
-    # TODO: __automate_typing__
-    cm.P.R8__has_domain_of_argument_1 = ma.I9906["square matrix"]
-
     cm.new_var(Z=p.instance_of(I9905["zero matrix"]))
 
     cm.new_rel(cm.A, R5938["has row number"], cm.n)
@@ -683,6 +680,12 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
     h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
+
+    # TODO: this should be more specific (related to cm.M)
+    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
+    # TODO: __automate_typing__
+    # h.R11__has_range_of_result = p.I35["real number"]
+
     f = cm.new_var(f=p.uq_instance_of(I9841["vector field"]))
 
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
@@ -706,9 +709,6 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     # evaluate the mappings
     phi = I2753["flow of a vector field"](x, t, ode_sys)
 
-    # TODO: __automate_typing__
-    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
-    h.R11__has_range_of_result = p.I35["real number"]
 
     h_evaluated = h(phi)
 

@@ -22,7 +22,7 @@ ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py
 
 class Test_01_basics(unittest.TestCase):
     def test_a00__ensure_version(self):
-        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.8.1"))
+        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.10.1"))
 
 
 class Test_02_math(unittest.TestCase):

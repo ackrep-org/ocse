@@ -555,6 +555,8 @@ I4240 = p.create_item(
     R1__has_label="matrix polynomial",
     R2__has_description="monovariate polynomial of quadratic matrices",
     R3__is_subclass_of=I4239["abstract monovariate polynomial"],
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R11__has_range_of_result=I9906["square matrix"],
 )
 
 I1935 = p.create_item(
