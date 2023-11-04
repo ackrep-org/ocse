@@ -12,7 +12,7 @@ If you want to be deleted from or added to this file please create a pull-reques
 import pyerk as p
 
 
-__URI__ = "erk:/ocse/0.2/agents"
+__URI__ =  "erk:/ocse/0.2/agents"
 
 keymanager = p.KeyManager(keyseed=1239)
 p.register_mod(__URI__, keymanager)
@@ -25,6 +25,7 @@ R7781 = p.create_relation(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P734",
 )
 
+
 R7782 = p.create_relation(
     R1__has_label="has given name",
     R2__has_description="first name or another given name of this person",
@@ -35,11 +36,20 @@ R7782 = p.create_relation(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P735",
 )
 
+
 R3474 = p.create_relation(
     R1__has_label="has ORCID",
     R2__has_description="specifies the orcid of a researcher",
     R18__has_usage_hint="This can be used if no wikidata entry is yet available",
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P496",
+)
+
+
+R3475 = p.create_relation(
+    R1__has_label="has DBLP author ID",
+    R2__has_description="specifies the DBLP author ID of a researcher",
+    R18__has_usage_hint="This can be used if neither wikidata nor ORCID is yet available",
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P2456",
 )
 
 
@@ -51,7 +61,7 @@ I7435 = p.create_item(
 )
 
 
-def create_person(given_name: str, family_name: str, r2: str, r33=None, r3474=None):
+def create_person(given_name: str, family_name: str, r2: str, r33=None, r3474=None, r3475=None):
     """
     This is a convenience function that simplifies the creation of items for humans
     """
@@ -73,8 +83,12 @@ def create_person(given_name: str, family_name: str, r2: str, r33=None, r3474=No
     if r3474:
         assert isinstance(r3474, str)
         item.set_relation(R3474["has ORCID"], r3474)
+    if r3475:
+        assert isinstance(r3475, str)
+        item.set_relation(R3475["has DBLP author ID"], r3475)
 
     return item
+
 
 I2746 = create_person("Rudolf", "Kalman", "electrical engineer and mathematician")
 
@@ -86,6 +100,7 @@ I1342 = p.create_item(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q4671277",
 )
 
+
 I9942 = p.create_item(
     R1__has_label="Stanford University",
     R2__has_description="private research university in California, USA",
@@ -93,12 +108,14 @@ I9942 = p.create_item(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q41506",
 )
 
+
 I7301 = p.create_item(
     R1__has_label="ETH Zürich",
     R2__has_description="Swiss Federal Institute of Technology in Zürich",
     R4__is_instance_of=I1342["academic institution"],
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q11942",
 )
+
 
 R1833 = p.create_relation(
     R1__has_label="has employer",
@@ -115,6 +132,8 @@ end_time = p.QualifierFactory(p.R49["has end time"])
 I2746["Rudolf Kalman"].set_relation(
     R1833["has employer"], I9942["Stanford University"], qualifiers=[start_time("1964"), end_time("1971")]
 )
+
+
 I2746["Rudolf Kalman"].set_relation(
     R1833["has employer"], I7301["ETH Zürich"], qualifiers=[start_time("1973"), end_time("1997")]
 )
@@ -143,6 +162,7 @@ R6876 = p.create_relation(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/P138",
 )
 
+
 I2151 = create_person("Aleksandr", "Lyapunov", "mathematician and physicist")
 I2151.set_relation(p.R33["has corresponding wikidata entity"], "https://www.wikidata.org/wiki/Q310788")
 
@@ -170,11 +190,11 @@ I5667 = create_person("Kathrin", "Flaßkamp", "engineer", r3474="https://orcid.o
 
 I8521 = create_person("Jan", "Winkler", "engineer", r3474="https://orcid.org/0000-0001-9499-0030")
 
-I3973 = create_person("Kurt", "Schlacher", "engineer")
+I3973 = create_person("Kurt", "Schlacher", "engineer", r3474="https://orcid.org/0000-0002-9497-8258")
 
 I7642 = create_person("Hugues", "Mounier", "engineer", r3474="https://orcid.org/0000-0002-7069-3119")
 
-I3749 = create_person("Greta", "Zimmer", "engineer")
+I3749 = create_person("Gerta", "Zimmer", "engineer", r3475="https://dblp.org/pid/189/9499.html")
 
 I3520 = create_person("Jörg", "Raisch", "engineer", r33="https://www.wikidata.org/wiki/Q107287703")
 
@@ -208,7 +228,7 @@ I4666 = create_person("Daniel", "Gerbet", "engineer", r3474="https://orcid.org/0
 
 I6725 = create_person("Claus", "Hillermeier", "engineer", r33="https://www.wikidata.org/wiki/Q112355168")
 
-I9170 = create_person("Peter", "Hippe", "engineer")
+I9170 = create_person("Peter", "Hippe", "engineer", r3475="https://dblp.org/pid/20/7860.html")
 
 I7086 = create_person("Abdurrahman", "Irscheid", "engineer", r3474="https://orcid.org/0000-0002-5913-2468")
 
@@ -216,20 +236,197 @@ I4786 = create_person("Paul", "Kotyczka", "engineer", r3474="https://orcid.org/0
 
 I3764 = create_person("Boris", "Lohmann", "engineer", r33="https://www.wikidata.org/wiki/Q59543808")
 
-# note: unclear whether orcid exists (too many people with this name)
-I8739 = create_person("Victor", "Lopez", "engineer")
+I8739 = create_person("Victor", "Lopez", "engineer", r3474="https://orcid.org/0000-0003-3989-4091")
 
-# note: unclear whether orcid exists (too many people with this name)
-I9992 = create_person("Matthias", "Müller", "engineer")
+I9992 = create_person("Matthias", "Müller", "engineer", r3474="https://orcid.org/0000-0002-4911-9526")
 
-I4854 = create_person("Amine", "Othmane", "engineer")
+I4854 = create_person("Amine", "Othmane", "engineer", r3475="https://dblp.org/pid/306/0282.html")
 
-I3431 = create_person("Karl", "Worthmann", "mathematician")
+I3431 = create_person("Karl", "Worthmann", "mathematician", r33="https://www.wikidata.org/wiki/Q102403582")
 
 I1361 = create_person("Jens", "Wurm", "engineer", r3474="https://orcid.org/0000-0002-6760-7160")
 
+I7328 = create_person("Julius", "Fiedler", "engineer", r3474="https://orcid.org/0009-0009-0163-9600")
+
+I4258 = create_person("Arjan", "van der Schaft", "control theorist", r33="https://www.wikidata.org/wiki/Q22280351")
+
+I3191 = create_person("Volker", "Mehrmann", "control theorist", r33="mathematician")
+
+I3820 = create_person("Lars", "Grüne", "researcher", r33="https://www.wikidata.org/wiki/Q102179115")
+
+I4579 = create_person("Oliver", "Sawodny", "researcher", r3474="https://orcid.org/0000-0002-6910-2473")
+
+I1373 = create_person("Peter", "Eberhard", "mechanical engineer", r3474="https://www.wikidata.org/wiki/Q56514424")
+
+I8599 = create_person("Jörg", "Fehr", "researcher", r33="https://www.wikidata.org/wiki/Q102440929")
+
+I2682 = create_person("Moritz", "Schulze Darup", "researcher", r3474="https://orcid.org/0000-0002-1868-4098")
+
+I4141 = create_person("Markus", "Schöberl", "researcher", r3474="https://orcid.org/0000-0001-7559-2619")
+
+I1233 = create_person("Bernd", "Kolar", "researcher", r3474="https://orcid.org/0000-0001-9710-8445")
+
+I6487 = create_person("Wolfgang", "Kemmetmüller", "researcher", r3474="https://orcid.org/0000-0001-7825-5917")
+
+I4122 = create_person("Stefan", "Palis", "researcher", r3474="https://orcid.org/0000-0002-1941-2289")
+
+I4024 = create_person("Lothar", "Kilz", "engineer", r3474="https://orcid.org/0000-0003-1219-8037")
+
+I6943 = create_person("Matthias", "Konz", "engineer", r3474="https://orcid.org/0000-0003-3512-2297")
+
+I9576 = create_person("Christoph", "Ament", "researcher", r3474="https://orcid.org/0000-0002-6396-4355")
+
+I2705 = create_person("Arnim", "Kargl", "researcher", r3474="https://orcid.org/0009-0003-0824-339X")
+
+I5642 = create_person("Alexander", "Schaum", "researcher", r33="https://www.wikidata.org/wiki/Q103830185")
+
+I1479 = create_person("Veit", "Hagenmeyer", "researcher", r33="https://www.wikidata.org/wiki/Q92362390")
+
+I6641 = create_person("Christian", "Bohn", "researcher", r3475="https://dblp.org/pid/26/3901.html")
+
+I1974 = create_person("Julian", "Berberich", "researcher", r3474="https://orcid.org/0000-0001-6366-6238")
+
+I3289 = create_person("Tobias", "Glück", "researcher", r3474="https://orcid.org/0000-0003-1497-6138")
+
+I6284 = create_person("Andreas", "Völz", "researcher", r3474="https://orcid.org/0009-0006-2017-2389")
+
+I6082 = create_person("Marcus", "Riesmeier", "researcher", r3475="https://dblp.org/pid/189/1747.html")
+
+I6276 = create_person("Peter", "Benner", "researcher", r33="https://www.wikidata.org/wiki/Q26838423")
+
+I9152 = create_person("Lutz", "Gröll", "researcher", r3475="https://dblp.org/pid/57/757.html")
+
+I7867 = create_person("Harald", "Aschemann", "researcher", r3474="https://dblp.org/pid/13/1059.html")
+
+I3511 = create_person("Miroslav", "Krstić", "researcher", r33="https://www.wikidata.org/wiki/Q6873980")
+
+I4357 = create_person("Jean", "Lévine", "researcher", r33="https://www.wikidata.org/wiki/Q102162024")
+
+I4657 = create_person("Pierre", "Rouchon", "researcher", r33="https://www.wikidata.org/wiki/Q102162023")
+
+I8937 = create_person("Philippe", "Martin", "researcher", r33="https://www.wikidata.org/wiki/Q102396724")
+
+I3477 = create_person("Michael", "Zeitz", "researcher", r33="https://www.wikidata.org/wiki/Q102337611")
+
+I5057 = create_person("Ernst Dieter", "Gilles", "researcher", r33="https://www.wikidata.org/wiki/Q1357858")
+
+I9833 = create_person("Richard", "Murray", "researcher", r33="https://www.wikidata.org/wiki/Q41048386")
+
+I6533 = create_person("Maximilian", "Gerwien", "researcher", r3475="https://dblp.org/pid/258/0769.html")
+
+I2973 = create_person("Jean-Jacques", "Slotine", "researcher", r33="https://www.wikidata.org/wiki/Q33197264")
+
+I1906 = create_person("Mark W.", "Spong", "researcher", r33="https://www.wikidata.org/wiki/Q6770174")
+
+I6139 = create_person("Robert", "Seifried", "researcher", r3474="https://orcid.org/0000-0001-5795-7610")
+
+I6734 = create_person("John", "Baillieul", "researcher", r33="https://www.wikidata.org/wiki/Q19955733")
+
+I5760 = create_person("Andrew David", "Lewis", "researcher", r33="https://www.wikidata.org/wiki/Q102312710")
+
+I8789 = create_person("Muruhan", "Rathinam", "researcher", r33="https://www.wikidata.org/wiki/Q88336591")
+
+I4402 = create_person("S. Shankar", "Shankar", "researcher", r3475="https://dblp.org/pid/s/ShankarSastry.html")
+
+I6309 = create_person("Giuseppe", "Oriolo", "researcher", r33="https://www.wikidata.org/wiki/Q50864904")
+
+I4578 = create_person("Henk", "Nijmeijer", "researcher", r33="https://www.wikidata.org/wiki/Q102253589", r3475="https://dblp.org/pid/75/4680.html")
+
+I1960 = create_person("Witold", "Respondek", "researcher", r33="https://www.wikidata.org/wiki/Q102231063", r3475="https://dblp.org/pid/36/4681.html")
+
+I3772 = create_person("Florentina", "Nicolau", "researcher", r3474="https://orcid.org/0000-0001-5580-8849", r3475="https://dblp.org/pid/143/6152.html")
+
+I5575 = create_person("Jan", "Lunze", "researcher", r33="https://www.wikidata.org/wiki/Q1269292", r3475="https://dblp.org/pid/05/6089.html")
+
+I5093 = create_person("Günter", "Ludyk", "researcher", r33="https://www.wikidata.org/wiki/Q56027049")
+
+I2934 = create_person("Gilmer L.", "Blankenship", "researcher", r33="https://www.wikidata.org/wiki/Q102404879", r3475="https://dblp.org/pid/01/3786.html")
+
+I6489 = create_person("Harry", "Kwatny", "engineer", r33="https://www.wikidata.org/wiki/Q28086053", r3475="https://dblp.org/pid/86/4797.html")
+
+I6490 = create_person("Klaus", "Janschek", "researcher", r3475="https://dblp.org/pid/70/5404.html")
+
+I9650 = create_person("Rolf", "Isermann", "engineer", r33="https://www.wikidata.org/wiki/Q1513529", r3475="https://dblp.org/pid/95/5975.html")
+
+I1683 = create_person("Malo L. J.", "Hautus", "researcher", r33="https://www.wikidata.org/wiki/Q102205835", r3475="https://dblp.org/pid/33/2916.html")
+
+I8855 = create_person("Jan Camiel", "Willems", "researcher", r33="https://www.wikidata.org/wiki/Q15429591", r3475="https://dblp.org/pid/54/2783.html")
+
+I2288 = create_person("Stefan", "Trenn", "researcher", r33="https://www.wikidata.org/wiki/Q102354249", r3475="https://dblp.org/pid/77/8131.html")
+
+I1760 = create_person("Otto", "Föllinger", "researcher", r33="https://www.wikidata.org/wiki/Q126359")
+
+# TODO: https://en.wikipedia.org/wiki/Ackermann%27s_formula https://www.wikidata.org/wiki/Q42417197
+I2339 = create_person("Jürgen", "Ackermann", "researcher", r3475="https://dblp.org/pid/03/8092.html")
+
+I3142 = create_person("Tobias", "Zaiczek", "researcher", r3475="https://dblp.org/pid/75/11054.html")
+
+I5404 = create_person("Klemens", "Fritzsche", "researcher", r3475="https://dblp.org/pid/190/6473.html")
+
+I8157 = create_person("Sunil K.", "Agrawal", "researcher", r33="https://www.wikidata.org/wiki/Q27063027", r3475="https://dblp.org/pid/122/1844.html")
+
+I5669 = create_person("Rogelio", "Lozano", "researcher", r33="https://www.wikidata.org/wiki/Q112404548", r3475="https://dblp.org/pid/25/3367.html")
+
+I9439 = create_person("Isabelle", "Fantoni", "researcher", r33="https://www.wikidata.org/wiki/Q112404547", r3475="https://dblp.org/pid/37/1797.html")
+
+I3991 = create_person("Alessandro", "De Luca", "researcher", r33="https://www.wikidata.org/wiki/Q88501421", r3475="https://dblp.org/pid/95/1233-1.html")
+
+I5420 = create_person("Giuseppe", "Conte", "researcher", r3474="https://orcid.org/0000-0001-6615-1539", r3475="https://dblp.org/pid/33/4439.html")
+
+I8609 = create_person("Claude H.", "Moog", "researcher", r33="https://www.wikidata.org/wiki/Q102405059", r3475="https://dblp.org/pid/48/25.html")
+
+I1360 = create_person("Ravi N.", "Banavar", "researcher", r33="https://www.wikidata.org/wiki/Q103370835", r3475="https://dblp.org/pid/44/5767.html")
+
+I9849 = create_person("Anna Maria", "Perdon", "researcher", r3474="https://orcid.org/0000-0001-5679-555X", r3475="https://dblp.org/pid/40/476.html")
+
+I8033 = create_person("Sriram", "Sankaranarayanan", "researcher", r33="https://www.wikidata.org/wiki/Q93947056", r3474="https://orcid.org/0000-0001-7315-4340", r3475="https://dblp.org/pid/82/1542.html")
+
+I9161 = create_person("Olfa", "Boubaker", "researcher", r33="https://www.wikidata.org/wiki/Q95603570", r3475="https://dblp.org/pid/45/9836.html")
+
+# TODO: examine wikidata page (many useful properties)
+I8259 = create_person("Francesco", "Bullo", "researcher", r33="https://www.wikidata.org/wiki/Q57020529", r3475="https://dblp.org/pid/39/6707.html")
+
+I8905 = create_person("Andrea", "Bacciotti", "researcher", r3475="https://dblp.org/pid/25/6392.html")
+
+I3512 = create_person("Marco", "Sabatini", "researcher", r3474="", r3475="https://dblp.org/pid/70/6163.html")
+
+I7856 = create_person("Luisa", "Mazzi", "researcher", r3474="", r3475="https://dblp.org/pid/98/8143.html")
+
+I1451 = create_person("Christopher I.", "Byrnes", "researcher", r33="https://www.wikidata.org/wiki/Q5591426", r3475="https://dblp.org/pid/47/1166.html")
+
+I1324 = create_person("Dennis S.", "Bernstein", "researcher", r33="https://www.wikidata.org/wiki/Q68334606", r3475="https://dblp.org/pid/53/6254.html")
+
+I8461 = create_person("Anthony", "Bloch", "researcher", r33="https://www.wikidata.org/wiki/Q102188472", r3475="https://dblp.org/pid/02/6645.html")
+
+I1252 = create_person("Roger W.", "Brockett", "researcher", r33="https://www.wikidata.org/wiki/Q7359064", r3475="https://dblp.org/pid/47/3380.html")
+
+I2026 = create_person("Katsuhisa", "Furuta", "researcher", r33="https://www.wikidata.org/wiki/Q18235077", r3475="https://dblp.org/pid/57/895.html")
+
+I9169 = create_person("Karl Johan", "Åström", "control theorist", r3474="https://www.wikidata.org/wiki/Q462685", r3475="https://dblp.org/pid/93/8098.html")
+
+I7780 = create_person("N. Harris", "McClamroch", "researcher", r33="https://www.wikidata.org/wiki/Q102156340", r3475="https://dblp.org/pid/03/1935.html")
+
+I9526 = create_person("Bodo", "Heimann", "researcher", r3475="https://dblp.org/pid/86/2842.html")
+
+I9049 = create_person("Kazuhiro", "Sato", "researcher", r3474="https://orcid.org/0000-0003-1895-6548", r3475="https://dblp.org/pid/86/806.html")
+
+I1314 = create_person("Petar V.", "Kokotovic", "researcher", r33="https://www.wikidata.org/wiki/Q7171760", r3475="https://dblp.org/pid/77/2290.html")
+
+I9005 = create_person("Mrdjan", "Jankovic", "researcher", r33="https://www.wikidata.org/wiki/Q102354678", r3475="https://dblp.org/pid/07/6166.html")
+
+I7204 = create_person("Rodolphe", "Sepulchre", "researcher", r33="https://www.wikidata.org/wiki/Q86483928", r3475="https://dblp.org/pid/54/461.html")
+
+I9543 = create_person("Felix", "Antritter", "researcher", r3475="https://dblp.org/pid/62/1221.html")
+
+I5318 = create_person("Michiel", "Van Nieuwstadt", "researcher", r3474="https://orcid.org/0000-0002-6100-422X", r3475="https://dblp.org/pid/202/5645.html")
+
+I8560 = create_person("William A.", "Wolovich", "researcher", r3475="https://dblp.org/pid/27/5698.html")
+
+I9336 = create_person("George", "Labahn", "researcher", r33="https://www.wikidata.org/wiki/Q102271968", r3475="https://dblp.org/pid/l/GeorgeLabahn.html")
 
 
+# template for creating more entries (then use pyerk -ik)
+# _newitemkey_ = create_person("", "", "researcher", r33="", r3475="")
 
 
 I6591 = p.create_item(
@@ -361,7 +558,6 @@ p.end_mod()
 """
 key reservoir created with: `pyerk -l agents1.py ag -nk 100`
 
-I3854      R3854
 I7934      R7934
 I6514      R6514
 I8469      R8469
