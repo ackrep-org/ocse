@@ -510,7 +510,7 @@ with I3749["Cayley-Hamilton theorem"].scope("assertions") as cm:
 
 
 # todo: find the context of this and reformulate as IntegerRangeSequence
-# p.Sequence("y", p.I000["time derivative of order i"], link_op=p.I000["listing"], start=0, stop="k")
+# p.Sequence("y", p._I000["time derivative of order i"], link_op=p._I000["listing"], start=0, stop="k")
 
 # → it would be nice if one could interactively execute/write out such a sequence for given variable values
 
@@ -1220,6 +1220,7 @@ I4635 = p.create_item(
     R3__is_subclass_of=I2699["general ackrep entity"],
 )
 
+
 I1161 = p.create_item(
     R1__has_label="old tag",
     R2__has_description="",
@@ -1232,6 +1233,7 @@ R1070 = p.create_relation(
     R8__has_domain_of_argument_1=I2699["general ackrep entity"],
     R11__has_range_of_result=I1161["old tag"],
 )
+
 
 I2933 = p.create_item(
     R1__has_label="Lyapunov Function",
@@ -1257,6 +1259,279 @@ I3369 = p.create_item(
     R72__is_generally_related_to=I5483["Control Lyapunov Function"],
 )
 
+
+I7916 = p.create_item(
+    R1__has_label="pole placement",
+    R2__has_description="control design method for LTI systems (explicitly specifying the roots of the CLCP)",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I4201 = p.create_item(
+    R1__has_label="Ackermans Formula",
+    R2__has_description="...",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+    ag__R6876__is_named_after=ag.I2339["Jürgen Ackermann"],
+    # TODO:
+    R72__is_generally_related_to=I7916["pole placement"],
+)
+
+
+I6950 = p.create_item(
+    R1__has_label="controller",
+    R2__has_description="sub system of a dynamical system which is designed to impose desired behavior to the overall system",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I5829 = p.create_item(
+    R1__has_label="open loop controller",
+    R2__has_description="",
+    R3__is_subclass_of=I6950["controller"]
+)
+
+
+I1068 = p.create_item(
+    R1__has_label="closed loop controller",
+    R2__has_description="",
+    R3__is_subclass_of=I6950["controller"]
+)
+
+
+I2314 = p.create_item(
+    R1__has_label="open loop controller",
+    R2__has_description="",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I8048 = p.create_item(
+    R1__has_label="control loop",
+    R2__has_description="dynamical system consisting of components one of which is an I000__controller",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I4023 = p.create_item(
+    R1__has_label="plant",
+    R2__has_description="subsystem of a I000__control_loop which is to be influenced by the I000__controller",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I4596 = p.create_item(
+    R1__has_label="feedback",
+    R2__has_description="type of connection between subsystems of a dynamical system: input depends on output.",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+# TODO: align this with the topology of the default control loop (where the controller is not located in the backward path)
+I9152 = p.create_item(
+    R1__has_label="feedback law",
+    R2__has_description="other word for controller",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I9395 = p.create_item(
+    R1__has_label="overshooting",
+    R2__has_description="type of behavior of a dynamical system, for some excitation, wrt. some reference",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I3506 = p.create_item(
+    R1__has_label="undershooting",
+    R2__has_description="type of behavior of a dynamical system, for some excitation, wrt. some reference",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I5036 = p.create_item(
+    R1__has_label="system quantity",
+    R2__has_description="quantity (variable) that numerically describes some aspect of a dynamical system at a given time instant",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I3573 = p.create_item(
+    R1__has_label="input signal",
+    R2__has_description="type of system quantity the numerical value of which is provided from outside of the system boundaries",
+    R3__is_subclass_of=I5036["system quantity"]
+)
+
+
+I4741 = p.create_item(
+    R1__has_label="measurable output signal",
+    R2__has_description="type of system quantity the numerical value of which is available outside of the system boundaries",
+    R3__is_subclass_of=I5036["system quantity"]
+)
+
+
+I5698 = p.create_item(
+    R1__has_label="output signal to be controlled",
+    R2__has_description="type of system quantity the numerical value of which is should be influenced (e.g. by the control facility)",
+    R3__is_subclass_of=I5036["system quantity"]
+)
+
+
+I3432 = p.create_item(
+    R1__has_label="SISO",
+    R2__has_description="property of a dynamical system to have a single scalar input and a single scalar output",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I7214 = p.create_item(
+    R1__has_label="MIMO",
+    R2__has_description="property of a dynamical system to have a multiple scalar inputs and a multiple scalar outputs",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I6873 = p.create_item(
+    R1__has_label="stabilization (feedback law)",
+    R2__has_description="specialization of feedback law that achieves some sort of I7207__stability for a dynamical system",
+    R3__is_subclass_of=I9152["feedback law"]
+)
+
+
+I2531 = p.create_item(
+    R1__has_label="stabilization (effect)",
+    R2__has_description=(
+        "effect imposed on a dynamical system, e.g. by application of a feedback law or parameter change "
+        "leading to property change from I7599__instability to I7207__stability"
+    ),
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I9936 = p.create_item(
+    R1__has_label="destabilization",
+    R2__has_description=(
+        "effect imposed on a dynamical system, e.g. by application of a feedback law or parameter change "
+        "leading to property change I7207__stability to from I7599__instability"
+    ),
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I4857 = p.create_item(
+    R1__has_label="reference trajectory",
+    R2__has_description="input signal of a closed control loop or a controller",
+    R3__is_subclass_of=I3573["input signal"]
+)
+
+
+# TODO: allow multilinguality in create item
+I5290 = p.create_item(
+    R1__has_label="reference value",
+    # R1__has_label__de="Sollwert",
+    R2__has_description="reference trajectory evaluated at some given time instant",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I2108 = p.create_item(
+    R1__has_label="noise",
+    R2__has_description="stochastic signal",
+    R4__is_instance_of=p.I50["stub"]
+)
+
+
+I6197 = p.create_item(
+    R1__has_label="differential equation",
+    R2__has_description="type of mathematical equation that involves derivatives",
+    R3__is_subclass_of=p.I12["mathematical object"]
+)
+
+
+I3123 = p.create_item(
+    R1__has_label="partial differential equation",
+    R2__has_description="differential equation which contains derivatives w.r.t. more than one independent variable",
+    R3__is_subclass_of=I6197["differential equation"]
+)
+
+
+I1462 = p.create_item(
+    R1__has_label="ordinary differential equation",
+    R2__has_description="differential equation which contains only derivatives w.r.t. one variable",
+    R3__is_subclass_of=I6197["differential equation"]
+)
+
+
+I9671 = p.create_item(
+    R1__has_label="fractional order differential equation",
+    R2__has_description="...",
+    R3__is_subclass_of=I6197["differential equation"]
+)
+
+I8095 = p.create_item(
+    R1__has_label="differential algebraic equation",
+    R2__has_description="type of (vector valued) equation which contains both ode and algebraic components",
+    R3__is_subclass_of=I6197["differential equation"]
+)
+
+# TODO: elaborate on the taxonomy (e.g. there could be combinations of pde, fractional, time delayed, dae-property)
+# -> find a clever way to extend the taxonomy as needed
+
+I3035 = p.create_item(
+    R1__has_label="solution of a differential equation",
+    R2__has_description="...",
+    R4__is_instance_of=p.I50["stub"],
+    R72__is_generally_related_to=I2753["flow of a vector field"]
+)
+
+
+# TODO: export to math
+I2083 = p.create_item(
+    R1__has_label="dimension",
+    R2__has_description="...",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R72__is_generally_related_to=ma.I5166["vector space"],
+)
+
+
+# TODO: introduce alternative lable: state quatity (Zustandsgröße@de)
+I8679 = p.create_item(
+    R1__has_label="state (of a dynamical system)",
+    R2__has_description="",
+    R4__is_instance_of=p.I50["stub"],
+    R72__is_generally_related_to=I1168["point in state space"],
+)
+
+
+I3554 = p.create_item(
+    R1__has_label="state component",
+    R2__has_description="one entry of the state vector of a state space system",
+    R4__is_instance_of=p.I50["stub"],
+    R5__is_part_of=I8679["state (of a dynamical system)"],
+    R72__is_generally_related_to=I5036["system quantity"],
+)
+
+
+I8092 = p.create_item(
+    R1__has_label="observer",
+    R2__has_description="dynamical system which serves to estimate inner quatities of another dynamical system",
+    R4__is_instance_of=p.I50["stub"],
+# TODO: introduce duality
+    R72__is_generally_related_to=I6950["controller"],
+)
+
+
+# <new_entities>
+
+# this section in the source file is helpful for bulk-insertion of new items
+
+# _newitemkey_ = p.create_item(
+#     R1__has_label="",
+#     R2__has_description="",
+#     R4__is_instance_of=p.I50["stub"]
+# )
+
+
+#</new_entities>
 
 
 # <theorem>
