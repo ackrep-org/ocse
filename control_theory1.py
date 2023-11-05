@@ -657,7 +657,7 @@ I1347 = p.create_item(
     R2__has_description=(
         "mathematical operation wich maps a scalar field h_1 to a new scalar field h_2, depending on a vector field f; "
         "h2 can be interpreted as the time derivative of h_1 along the solution of the ode associated with f; "
-        "in other words: along the flow of f",
+        "in other words: along the flow of f"
     ),
     R4__is_instance_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9923["scalar field"],

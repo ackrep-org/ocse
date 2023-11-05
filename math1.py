@@ -49,8 +49,8 @@ I9904 = p.create_item(
 I3240 = p.create_item(
     R1__has_label="matrix element",
     R2__has_description=(
-        "mathematical operation wich maps a Matrix A, and two integers i, j to the scalar matrix entry A[i, j]."
-        "Index counting starts at 1",
+        "mathematical operation wich maps a Matrix A, and two integers i, j to the scalar matrix entry A[i, j]. "
+        "Index counting starts at 1"
     ),
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9904["matrix"],
@@ -331,7 +331,8 @@ with I7169["definition of identity matrix"].scope("assertions") as cm:
 # ---------------------------------------------------------------------------------------------------------------------
 
 I8133 = p.create_item(
-    R1__has_label=["field of numbers" @ p.en, "Zahlenkörper" @ p.de],
+    R1__has_label="field of numbers",
+    R1__has_label__de="Zahlenkörper",
     R2__has_description="general field of numbers; baseclass for the fields of real and complex numbers",
     R3__is_subclass_of=p.I13["mathematical set"],
 )
