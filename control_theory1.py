@@ -512,7 +512,8 @@ with I3749["Cayley-Hamilton theorem"].scope("assertions") as cm:
 # </theorem>
 
 
-p.Sequence("y", p.I000["time derivative of order i"], link_op=p.I000["listing"], start=0, stop="k")
+# todo: find the context of this and reformulate as IntegerRangeSequence
+# p.Sequence("y", p.I000["time derivative of order i"], link_op=p.I000["listing"], start=0, stop="k")
 
 # → it would be nice if one could interactively execute/write out such a sequence for given variable values
 
