@@ -1221,6 +1221,7 @@ I4635 = p.create_item(
 )
 
 
+# TODO: move ackrep-specific entities to own module
 I1161 = p.create_item(
     R1__has_label="old tag",
     R2__has_description="",
@@ -1427,7 +1428,7 @@ I4857 = p.create_item(
 # TODO: allow multilinguality in create item
 I5290 = p.create_item(
     R1__has_label="reference value",
-    # R1__has_label__de="Sollwert",
+    R1__has_label__de="Sollwert",
     R2__has_description="reference trajectory evaluated at some given time instant",
     R4__is_instance_of=p.I50["stub"]
 )

@@ -22,7 +22,7 @@ ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py
 
 class Test_01_basics(unittest.TestCase):
     def test_a00__ensure_version(self):
-        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.10.1"))
+        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.11.0"))
 
 
 class Test_02_math(unittest.TestCase):
@@ -90,3 +90,8 @@ class Test_02_math(unittest.TestCase):
 
         segment2 = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
         self.assertTrue(segment2 is segment)
+
+
+class Test_02_control_theory(unittest.TestCase):
+    def test_b01__test_multilinguality(self):
+        ct.I5290["reference value"].R1__has_label__de == "Sollwert"@p.de
