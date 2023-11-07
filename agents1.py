@@ -446,7 +446,7 @@ R8434 = p.create_relation(
     R1__has_label="has title",
     R2__has_description="...",
     R8__has_domain_of_argument_1=I6591["source document"],
-    R11__has_range_of_result=p.I19["multilingual string literal"],
+    R11__has_range_of_result=p.I19["language-specified string literal"],
 )
 
 R8435 = p.create_relation(
@@ -460,7 +460,7 @@ R8436 = p.create_relation(
     R1__has_label="has DOI",
     R2__has_description="...",
     R8__has_domain_of_argument_1=I6591["source document"],
-    R11__has_range_of_result=str,
+    R11__has_range_of_result=p.I52["string"],
 )
 
 
@@ -517,7 +517,7 @@ R8437 = p.create_relation(
     R1__has_label="has segment specification",
     R2__has_description="...",
     R8__has_domain_of_argument_1=I7800["source segment"],
-    R11__has_range_of_result=str,
+    R11__has_range_of_result=p.I52["string"],
 )
 
 

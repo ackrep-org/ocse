@@ -1198,7 +1198,7 @@ R2950 = p.create_relation(
     R1__has_label="has corresponding ackrep key",
     R2__has_description="...",
     R8__has_domain_of_argument_1=I7641["general system model"],
-    R11__has_range_of_result=str,
+    R11__has_range_of_result=p.I52["string"],
     R22__is_functional=True,
 )
 
