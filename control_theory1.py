@@ -783,7 +783,9 @@ I7733 = p.create_item(
     R2__has_description="states that the model of a dynamical system (i.e. its parameters) does not change over time",
     R4__is_instance_of=I5356["general system property"],
     R17__is_subproperty_of=I4101["general time variance"],
+    R77__has_alternative_label="autonomy",
 )
+
 
 I9030 = p.create_item(
     R1__has_label="strict time variance",
@@ -980,7 +982,7 @@ I8744 = p.create_item(
 )
 
 I4900 = p.create_item(
-    R1__has_label="local asymtotical stability",
+    R1__has_label="local asymptotical stability",
     R2__has_description="states that all trajectories that start close enough to the equilibrium remain close enough \
         and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
@@ -988,13 +990,13 @@ I4900 = p.create_item(
 )
 
 I5677 = p.create_item(
-    R1__has_label="global asymtotical stability",
+    R1__has_label="global asymptotical stability",
     R2__has_description="states that all trajectories remain close enough to the equilibrium and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
     R17__is_subproperty_of=[
         I8744["global Lyapunov stability"],
         I8059["global attractiveness"],
-        I4900["local asymtotical stability"],
+        I4900["local asymptotical stability"],
     ],
 )
 
@@ -1003,7 +1005,7 @@ I9642 = p.create_item(
     R2__has_description="states that an equilibrium is locally asymptotically stable and all trajectories converge at \
         least exponentially fast",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=I4900["local asymtotical stability"],
+    R17__is_subproperty_of=I4900["local asymptotical stability"],
 )
 
 I5100 = p.create_item(
@@ -1011,7 +1013,7 @@ I5100 = p.create_item(
     R2__has_description="states that an equilibrium is globally asymptotically stable and all trajectories converge at \
         least exponentially fast",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=[I5677["global asymtotical stability"], I9642["local exponential stability"]],
+    R17__is_subproperty_of=[I5677["global asymptotical stability"], I9642["local exponential stability"]],
 )
 
 I8303 = p.create_item(
@@ -1521,20 +1523,6 @@ I8092 = p.create_item(
 )
 
 
-# <new_entities>
-
-# this section in the source file is helpful for bulk-insertion of new items
-
-# _newitemkey_ = p.create_item(
-#     R1__has_label="",
-#     R2__has_description="",
-#     R4__is_instance_of=p.I50["stub"]
-# )
-
-
-#</new_entities>
-
-
 # <theorem>
 I4663 = p.create_item(
     R1__has_label="theorem for Lyapunov stability of state space system",
@@ -1543,7 +1531,7 @@ I4663 = p.create_item(
         "of a statespace system"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
+    ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("setting") as cm:
@@ -1588,7 +1576,7 @@ I8733 = p.create_item(
         "of a statespace system"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    ag__R8439__is_based_on_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
+    ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
 with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
@@ -1599,32 +1587,119 @@ with I8733["theorem for asymptotic Lyapunov stability of state space system"].sc
 
 with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here
-    # TODO: check wording on I5677__global_asymtotical_stability
-    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymtotical stability"])
+    # TODO: check wording on I5677__global_asymptotical_stability
+    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
 
 # </theorem>
 
 
-
-"""
-template:
-= p.create_item(
-    R1__has_label="",
-    R2__has_description="",
-    R4__is_instance_of=I5356["general system property"],
+I3503 = p.create_item(
+    R1__has_label="input-to-state stability",
+    R2__has_description=(
+        "ISS; property is fulfilled if the control system is globally asymptotically stable "
+        "in the absence of external inputs and if its trajectories are bounded by a function "
+        "of the size of the input for all sufficiently large times. "
+    ),
+    R17__is_subproperty_of=I5677["global asymptotical stability"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q48995800",
+    R72__is_generally_related_to=I7208["BIBO stability"],
 )
 
-key reservoir J
+
+I6994 = p.create_item(
+    R1__has_label="Chetaev instability theorem",
+    R2__has_description="",
+    R4__is_instance_of=p.I15["implication proposition"],
+    ag__R6876__is_named_after=ag.I1511["Nikolaï Gouryevitch Tchetaev"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q17006544",
+    ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Theorem 4.4"),
+)
+
+I3303 = p.create_item(
+    R1__has_label="attractor",
+    R2__has_description="trajectory of a dynamical system to which other trajectories converge",
+    R3__is_subclass_of=I7062["trajectory"],
+)
+
+
+I5106 = p.create_item(
+    R1__has_label="repulsor",
+    R2__has_description="trajectory of a dynamical system to which other trajectories converge in backward time",
+    R43__is_opposite_of=I3303["attractor"],
+    R3__is_subclass_of=I7062["trajectory"],
+)
+
+
+# TODO: add definition
+I9875 = p.create_item(
+    R1__has_label="region of attraction",
+    R2__has_description=(
+        "subset of a state space from which all trajectories converge towards an I3303__attractor"
+    ),
+    R4__is_instance_of=p.I13["mathematical set"],
+    R72__is_generally_related_to=I3303["attractor"]
+)
+
+
+I9903 = p.create_item(
+    R1__has_label="LaSalle's invariance principle",
+    R2__has_description="establishes a sufficient condition for asymptotic stability",
+    R4__is_instance_of=p.I15["implication proposition"],
+    R72__is_generally_related_to=I5677["global asymptotical stability"],
+    R77__has_alternative_label="Krasovskii-LaSalle principle",
+    ag__R6876__is_named_after=[ag.I1257["Joseph Pierre LaSalle"]], # I7934
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q3922068",
+)
+
+I9903.set_relation(p.R77["has alternative label"], "Barbashin-Krasovskii-LaSalle principle")
+I9903.set_relation(ag.R6876["is named after"], ag.I7934["Nikolai Krasovsky"])
+
+
+
+I9199 = p.create_item(
+    R1__has_label="strong Lyapunov Function",
+    R2__has_description="Lyapunov function with a negative definite Lie Derivative",
+
+    # TODO: evaluate wether R3 is a good relation here
+    R3__is_subclass_of=I2933["Lyapunov Function"],
+    R77__has_alternative_label="strict Lyapunov Function"
+)
+
+
+I9208 = p.create_item(
+    R1__has_label="weak Lyapunov Function",
+    R2__has_description="Lyapunov function with a negative semidefinite Lie Derivative",
+
+    # TODO: evaluate wether R3 is a good relation here
+    R3__is_subclass_of=I2933["Lyapunov Function"],
+    R77__has_alternative_label="non-strict Lyapunov Function"
+)
+
+
+# <new_entities>
+
+# this section in the source file is helpful for bulk-insertion of new items
+# use it together with `pyerk --insert-keys-for-placeholders path/to/this_module.py`
+# this will replace the `_newitemkey_` and `p.I000["..."]` strings accordingly
+# see also pyerk --help
+
+# _newitemkey_ = p.create_item(
+#     R1__has_label="",
+#     R2__has_description="",
+#     R4__is_instance_of=p.I50["stub"],
+#     R72__is_generally_related_to=p.I000["item specified by label"]
+# )
+
+
+
+#</new_entities>
 
 
 
 
+"""
 
 
-
-
-      R8733
-I5106      R5106
 I5600      R5600
 I8026      R8026
 I5536      R5536

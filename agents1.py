@@ -424,9 +424,14 @@ I8560 = create_person("William A.", "Wolovich", "researcher", r3475="https://dbl
 
 I9336 = create_person("George", "Labahn", "researcher", r33="https://www.wikidata.org/wiki/Q102271968", r3475="https://dblp.org/pid/l/GeorgeLabahn.html")
 
+I1511 = create_person("Nikolaï Gouryevitch", "Tchetaev", "mathematician", r33="https://www.wikidata.org/wiki/Q4514946")
+
+I7934 = create_person("Nikolai", "Krasovsky", "mathematician", r33="https://www.wikidata.org/wiki/Q3710069")
 
 # template for creating more entries (then use pyerk -ik)
+#<new_entities>
 # _newitemkey_ = create_person("", "", "researcher", r33="", r3475="")
+#</new_entities>
 
 
 I6591 = p.create_item(
@@ -545,8 +550,8 @@ def get_source_segment(source_doc: p.Item, segment_specification: str):
 
 
 R8439 = p.create_relation(
-    R1__has_label="is based on source",
-    R2__has_description="specifies that the item (e.g. a theorem) is based on some source document",
+    R1__has_label="is described by source",
+    R2__has_description="specifies that the subject (e.g. a theorem) is described by some source document",
     R8__has_domain_of_argument_1=p.I46["knowledge artifact"],
     R11__has_range_of_result=[I7800["source segment"], I6591["source document"]],
 )

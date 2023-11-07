@@ -958,6 +958,50 @@ I3137 = p.create_item(
 )
 
 
+I9807 = p.create_item(
+    R1__has_label="local Lipschitz continuity",
+    R2__has_description="",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R17__is_subproperty_of=I6709["Lipschitz continuity"]
+)
+
+
+I4505 = p.create_item(
+    R1__has_label="global Lipschitz continuity",
+    R2__has_description="",
+    R4__is_instance_of=p.I11["mathematical property"],
+    R17__is_subproperty_of=I6709["Lipschitz continuity"]
+)
+
+
+# TOOD: specify to which objects this property can be meaningfully applied
+I5753 = p.create_item(
+    R1__has_label="radially unboundedness",
+    R2__has_description=(
+        "states that a function tend towards infinity if the argument goes to infinity "
+        "(independet of direction)"
+    ),
+    R4__is_instance_of=p.I11["mathematical property"],
+)
+
+# <new_entities>
+
+# this section in the source file is helpful for bulk-insertion of new items
+# use it together with `pyerk --insert-keys-for-placeholders path/to/this_module.py`
+# this will replace the `_newitemkey_` and `p.I000["..."]` strings accordingly
+# see also pyerk --help
+
+# _newitemkey_ = p.create_item(
+#     R1__has_label="",
+#     R2__has_description="",
+#     R4__is_instance_of=p.I50["stub"],
+#     R72__is_generally_related_to=p.I000["item specified by label"]
+# )
+
+
+#</new_entities>
+
+
 p.end_mod()
 
 """
