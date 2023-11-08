@@ -1,6 +1,6 @@
 # Ontology of Control Systems Engineering (OCSE)
 
-This repo contains formally represented knowledge of the domain of *Control Engineering*, including relevant sections of mathematics.
+This repo contains formally represented knowledge of the domain of *Control Engineering*, including relevant sections of mathematics. It is still in **early stage of development**.
 
 
 ## History and Background
@@ -9,4 +9,6 @@ Until 2022-10-01 the repo with primary URL (<https://github.com/ackrep-org/ocse/
 
 ## Tips:
 
-use `pyerk -ac` to generate `.ac_candidates.txt` file used for [autocompletion](https://github.com/ackrep-org/erk-fzf) in *code* editor.
+
+- Use `pytest` (executed in the root directory of this repo) to run the OCSE unittests.
+- Use `pyerk -ac` to generate `.ac_candidates.txt` file used for [autocompletion](https://github.com/ackrep-org/erk-fzf) in *code* editor.
