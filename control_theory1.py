@@ -91,7 +91,7 @@ I1793 = p.create_item(
     R1__has_label="general model representation property",
     R2__has_description="general property of the representation of a model of a dynamical system \
         (not an intrinsic system property)",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
 )
 
 I2928 = p.create_item(
@@ -270,7 +270,7 @@ I8181 = p.create_item(
         "applicable to monovariate rational functions; "
         "satisfied if degree of denominator is not smaller than degree of numerator"
     ),
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
 )
 
 I8182 = p.create_item(
@@ -282,20 +282,20 @@ I8182 = p.create_item(
 # I7206 = p.create_item(
 #     R1__has_label="system-dynamical property",
 #     R2__has_description="base class for all systemdynamical properties",
-#     R3__is_subclass_of=p.I11["mathematical property"],
+#     R3__is_subclass_of=p.I54["mathematical property"],
 # )
 
 I7207 = p.create_item(
     R1__has_label="stability",
     R2__has_description="tendency to stay close to some distinguished trajectory (e.g. equilibrium)",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
 )
 
 I7599 = p.create_item(
     R1__has_label="instability",
     R2__has_description="tendency to not stay close to some distinguished trajectory (e.g. equilibrium)",
     # TODO: description not ideal
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R43__is_opposite_of=I7207["stability"],
 )
 
@@ -897,7 +897,7 @@ I5718 = p.create_item(
 I5236 = p.create_item(
     R1__has_label="general trajectory property",
     R2__has_description="general property of a trajectory",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
 )
 
 I7062 = p.create_item(
@@ -1491,7 +1491,7 @@ I3035 = p.create_item(
 I2083 = p.create_item(
     R1__has_label="dimension",
     R2__has_description="...",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R72__is_generally_related_to=ma.I5166["vector space"],
 )
 

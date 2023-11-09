@@ -772,7 +772,7 @@ with I9628["theorem on the number of roots of a polynomial"].scope("assertions")
 I6709 = p.create_item(
     R1__has_label="Lipschitz continuity",
     R2__has_description="states that the slope of a function is bounded",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     ag__R6876__is_named_after=ag.I7906["Rudolf Lipschitz"],
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q652707",
     R78__is_applicable_to=I1060["general function"],
@@ -889,7 +889,7 @@ R4963 = p.create_relation(
 I3133 = p.create_item(
     R1__has_label="positive definiteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
@@ -948,21 +948,21 @@ I3133["positive definiteness"].set_relation(
 I3135 = p.create_item(
     R1__has_label="positive semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3136 = p.create_item(
     R1__has_label="negative definiteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
@@ -970,7 +970,7 @@ I3137 = p.create_item(
 I9807 = p.create_item(
     R1__has_label="local Lipschitz continuity",
     R2__has_description="",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R17__is_subproperty_of=I6709["Lipschitz continuity"]
 )
 
@@ -978,7 +978,7 @@ I9807 = p.create_item(
 I4505 = p.create_item(
     R1__has_label="global Lipschitz continuity",
     R2__has_description="",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R17__is_subproperty_of=I6709["Lipschitz continuity"]
 )
 
@@ -990,7 +990,7 @@ I5753 = p.create_item(
         "states that a function tend towards infinity if the argument goes to infinity "
         "(independet of direction)"
     ),
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
