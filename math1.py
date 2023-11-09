@@ -470,10 +470,17 @@ I4236 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I1060 = p.create_item(
+    R1__has_label="general function",
+    R2__has_description="function that maps from some set (domain) into another (range);",
+    R3__is_subclass_of=I4236["mathematical expression"],
+    R18__has_usage_hint="this is the base class for more specifc types of functions",
+)
+
 I1063 = p.create_item(
     R1__has_label="scalar function",
     R2__has_description="function that has one (in general complex) number as result",
-    R3__is_subclass_of=I4236["mathematical expression"],
+    R3__is_subclass_of=I1060["general function"],
 )
 
 I4237 = p.create_item(
@@ -761,12 +768,14 @@ with I9628["theorem on the number of roots of a polynomial"].scope("premises") a
 with I9628["theorem on the number of roots of a polynomial"].scope("assertions") as cm:
     cm.new_math_relation(deg, "==", card)
 
+
 I6709 = p.create_item(
     R1__has_label="Lipschitz continuity",
     R2__has_description="states that the slope of a function is bounded",
     R4__is_instance_of=p.I11["mathematical property"],
     ag__R6876__is_named_after=ag.I7906["Rudolf Lipschitz"],
-    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q652707"
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q652707",
+    R78__is_applicable_to=I1060["general function"],
 )
 
 
@@ -881,7 +890,7 @@ I3133 = p.create_item(
     R1__has_label="positive definiteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
     R4__is_instance_of=p.I11["mathematical property"],
-    R8__has_domain_of_argument_1=I9923["scalar field"],
+    R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3134 = p.create_item(
@@ -940,21 +949,21 @@ I3135 = p.create_item(
     R1__has_label="positive semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
     R4__is_instance_of=p.I11["mathematical property"],
-    R8__has_domain_of_argument_1=I9923["scalar field"],
+    R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3136 = p.create_item(
     R1__has_label="negative definiteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
     R4__is_instance_of=p.I11["mathematical property"],
-    R8__has_domain_of_argument_1=I9923["scalar field"],
+    R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
     R4__is_instance_of=p.I11["mathematical property"],
-    R8__has_domain_of_argument_1=I9923["scalar field"],
+    R78__is_applicable_to=I9923["scalar field"],
 )
 
 
@@ -982,6 +991,7 @@ I5753 = p.create_item(
         "(independet of direction)"
     ),
     R4__is_instance_of=p.I11["mathematical property"],
+    R78__is_applicable_to=I9923["scalar field"],
 )
 
 # <new_entities>
