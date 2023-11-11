@@ -254,7 +254,7 @@ with I9223["definition of zero matrix"].scope("setting") as cm:
     cm.new_rel(cm.M, R5939["has column number"], cm.nc)
 
 
-with I9223["definition of zero matrix"].scope("premises") as cm:
+with I9223["definition of zero matrix"].scope("premise") as cm:
     with IntegerRangeElement(start=1, stop=cm.nr) as i:
         with IntegerRangeElement(start=1, stop=cm.nc) as j:
 
@@ -263,7 +263,7 @@ with I9223["definition of zero matrix"].scope("premises") as cm:
             cm.new_equation(lhs=M_ij, rhs=I5000["scalar zero"])
 
 
-with I9223["definition of zero matrix"].scope("assertions") as cm:
+with I9223["definition of zero matrix"].scope("assertion") as cm:
     cm.new_rel(cm.M, p.R30["is secondary instance of"], I9905["zero matrix"])
 
 #            end defintion
@@ -297,7 +297,7 @@ with I7169["definition of identity matrix"].scope("setting") as cm:
     cm.new_rel(cm.M, R5938["has row number"], cm.nr)
 
 
-with I7169["definition of identity matrix"].scope("premises") as cm:
+with I7169["definition of identity matrix"].scope("premise") as cm:
 
     # todo: the running indicses should be related to the context cm
     # there should be a context stack
@@ -323,7 +323,7 @@ with I7169["definition of identity matrix"].scope("premises") as cm:
                 imp2.consequent_relation(lhs=M_ij, rsgn="==", rhs=I5001["scalar one"])
 
 
-with I7169["definition of identity matrix"].scope("assertions") as cm:
+with I7169["definition of identity matrix"].scope("assertion") as cm:
     cm.new_rel(cm.M, p.R30["is secondary instance of"], I1608["identity matrix"])
 
 #            end defintion
@@ -399,10 +399,10 @@ with I1979["definition of open left half plane"].scope("setting") as cm:
     imag = I5006["imaginary part"]
     cm.new_var(y=imag(cm.z))
 
-with I1979["definition of open left half plane"].scope("premises") as cm:
+with I1979["definition of open left half plane"].scope("premise") as cm:
     cm.new_math_relation(cm.y, "<", I5000["scalar zero"])
 
-with I1979["definition of open left half plane"].scope("assertions") as cm:
+with I1979["definition of open left half plane"].scope("assertion") as cm:
     cm.new_rel(cm.HP, p.R47["is same as"], I2739["open left half plane"])
 
 
@@ -552,10 +552,10 @@ with I1594["Stodolas necessary condition for polynomial coefficients"].scope("se
     cm.new_rel(cm.c2, p.R15["is element of"], cm.seq_of_coeffs, qualifiers=p.univ_quant(True))
 
 
-with I1594["Stodolas necessary condition for polynomial coefficients"].scope("premises") as cm:
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("premise") as cm:
     cm.new_rel(cm.set_of_roots, p.R14["is subset of"], I2739["open left half plane"])
 
-with I1594["Stodolas necessary condition for polynomial coefficients"].scope("assertions") as cm:
+with I1594["Stodolas necessary condition for polynomial coefficients"].scope("assertion") as cm:
     cm.new_math_relation(lhs=I5807["sign"](cm.c1), rsgn="==", rhs=I5807["sign"](cm.c2))
 
 
@@ -720,14 +720,82 @@ I1566 = p.create_item(
 with I1566["theorem on the successor of integer numbers"].scope("setting") as cm:
     cm.new_var(x=p.instance_of(p.I37["integer number"]))
 
-with I1566["theorem on the successor of integer numbers"].scope("premises") as cm:
+with I1566["theorem on the successor of integer numbers"].scope("premise") as cm:
     # no further condition apart from the setting
     pass
 
-with I1566["theorem on the successor of integer numbers"].scope("assertions") as cm:
+with I1566["theorem on the successor of integer numbers"].scope("assertion") as cm:
     # technical note: the qualifier is passed to `instance_of()`, not to `new_var`
     cm.new_var(y=p.instance_of(p.I37["integer number"], qualifiers=[p.exis_quant(True)]))
     cm.new_math_relation(cm.y, ">", cm.x)
+
+
+# preparation for next theorem
+
+R5940 = p.create_relation(
+    R1__has_label="has characteristic polynomial",
+    R2__has_description="specifies the characteristic polynomial of a square matrix A, i.e. det(s·I-A)",
+    R8__has_domain_of_argument_1=I9906["square matrix"],
+    R11__has_range_of_result=I4239["abstract monovariate polynomial"],
+)
+
+# <definition>
+I9907 = p.create_item(
+    R1__has_label="definition of square matrix",
+    R2__has_description="the defining statement of what a square matrix is",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I9907.scope("setting") as cm:
+    cm.new_var(M=p.uq_instance_of(I9904["matrix"]))
+    cm.new_var(nr=p.uq_instance_of(p.I39["positive integer"]))
+
+    cm.new_var(nc=p.instance_of(p.I39["positive integer"]))
+
+    cm.new_rel(cm.M, R5938["has row number"], cm.nr)
+    cm.new_rel(cm.M, R5939["has column number"], cm.nc)
+
+with I9907.scope("premise") as cm:
+    # number of rows == number of columns
+    cm.new_equation(lhs=cm.nr, rhs=cm.nc)
+
+with I9907.scope("assertion") as cm:
+    cm.new_rel(cm.M, p.R30["is secondary instance of"], I9906["square matrix"])
+
+# </definition>
+
+I9906["square matrix"].set_relation(p.R37["has definition"], I9907["definition of square matrix"])
+
+# <theorem>
+
+I3749 = p.create_item(
+    R1__has_label="Cayley-Hamilton theorem",
+    R2__has_description="establishes that every square matrix is a root of its own characteristic polynomial",
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+# TODO: specify universal quantification for A and n
+
+with I3749["Cayley-Hamilton theorem"].scope("setting") as cm:
+    cm.new_var(A=p.uq_instance_of(I9906["square matrix"]))
+    cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    cm.new_var(coeffs_cp_A=I3058["coefficients of characteristic polynomial"](cm.A))
+
+    cm.new_var(P=p.instance_of(I4240["matrix polynomial"]))
+
+    cm.new_var(Z=p.instance_of(I9905["zero matrix"]))
+
+    cm.new_rel(cm.A, R5938["has row number"], cm.n)
+    cm.new_rel(cm.A, R5940["has characteristic polynomial"], cm.P)
+    cm.new_rel(cm.Z, R5938["has row number"], cm.n)
+    cm.new_rel(cm.Z, R5939["has column number"], cm.n)
+    cm.new_rel(cm.Z, p.R24["has LaTeX string"], r"\mathbf{0}")
+
+with I3749["Cayley-Hamilton theorem"].scope("assertion") as cm:
+    cm.new_equation(lhs=cm.P(cm.A), rhs=cm.Z)
+
+# </theorem>
+
 
 
 I7559 = p.create_item(
@@ -760,19 +828,19 @@ with I9628["theorem on the number of roots of a polynomial"].scope("setting") as
     P = cm.new_var(P=p.instance_of(I4239["abstract monovariate polynomial"]))
     r = cm.new_var(r=p.instance_of(I5484["finite set of complex numbers"]))
 
-with I9628["theorem on the number of roots of a polynomial"].scope("premises") as cm:
+with I9628["theorem on the number of roots of a polynomial"].scope("premise") as cm:
     cm.new_rel(P, R1757["has set of roots"], r)
     deg = I3589["monovariate polynomial degree"](P)
     card = I7559["cardinality"](r)
 
-with I9628["theorem on the number of roots of a polynomial"].scope("assertions") as cm:
+with I9628["theorem on the number of roots of a polynomial"].scope("assertion") as cm:
     cm.new_math_relation(deg, "==", card)
 
 
 I6709 = p.create_item(
     R1__has_label="Lipschitz continuity",
     R2__has_description="states that the slope of a function is bounded",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     ag__R6876__is_named_after=ag.I7906["Rudolf Lipschitz"],
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q652707",
     R78__is_applicable_to=I1060["general function"],
@@ -889,7 +957,7 @@ R4963 = p.create_relation(
 I3133 = p.create_item(
     R1__has_label="positive definiteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
@@ -923,7 +991,7 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
 
     cm.item.h_value = h(x)
 
-with I3134["definition of positive definiteness"].scope("premises") as cm:
+with I3134["definition of positive definiteness"].scope("premise") as cm:
 
     with p.ImplicationStatement() as imp1:
         imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
@@ -933,7 +1001,7 @@ with I3134["definition of positive definiteness"].scope("premises") as cm:
         imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
         imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])
 
-with I3134["definition of positive definiteness"].scope("assertions") as cm:
+with I3134["definition of positive definiteness"].scope("assertion") as cm:
     cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
 
 
@@ -948,21 +1016,21 @@ I3133["positive definiteness"].set_relation(
 I3135 = p.create_item(
     R1__has_label="positive semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3136 = p.create_item(
     R1__has_label="negative definiteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
@@ -970,7 +1038,7 @@ I3137 = p.create_item(
 I9807 = p.create_item(
     R1__has_label="local Lipschitz continuity",
     R2__has_description="",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R17__is_subproperty_of=I6709["Lipschitz continuity"]
 )
 
@@ -978,7 +1046,7 @@ I9807 = p.create_item(
 I4505 = p.create_item(
     R1__has_label="global Lipschitz continuity",
     R2__has_description="",
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R17__is_subproperty_of=I6709["Lipschitz continuity"]
 )
 
@@ -990,7 +1058,7 @@ I5753 = p.create_item(
         "states that a function tend towards infinity if the argument goes to infinity "
         "(independet of direction)"
     ),
-    R4__is_instance_of=p.I11["mathematical property"],
+    R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
