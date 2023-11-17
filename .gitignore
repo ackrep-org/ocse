@@ -1,1 +1,9 @@
 __pycache__/
+
+# this directory is filled by the editor in pyerk-django (`pyerk -dj`)
+_backup/
+
+# autocompletion support file
+.ac_candidates.txt
+
+.vscode
