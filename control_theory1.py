@@ -1609,6 +1609,99 @@ I9208 = p.create_item(
     R77__has_alternative_label="non-strict Lyapunov Function"
 )
 
+I6338 = p.create_item(
+    R1__has_label="Lyapunov equation",
+    R2__has_description="...",
+    R3__is_subclass_of=p.I23["equation"],
+    R8__has_domain_of_argument_1=ma.I9906["square matrix"],     # A
+    R9__has_domain_of_argument_2=ma.I9906["square matrix"],     # P
+    R10__has_domain_of_argument_3=ma.I9906["square matrix"],    # Q
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
+)
+
+# <definition>
+I3712 = p.create_item(
+    R1__has_label="definition of Lyapunov equation",
+    R2__has_description="the defining statement of what a Lyapunov equation is",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I3712.scope("setting") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
+    Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
+
+    cm.new_rel(A, ma.R5938["has row number"], n)
+    cm.new_rel(P, ma.R5938["has row number"], n)
+    cm.new_rel(Q, ma.R5938["has row number"], n)
+
+    d = ma.I5359["determinant"](A)
+
+
+with I3712.scope("premises") as cm:
+    cm.new_math_relation(d, "!=", ma.I5000["scalar zero"])
+
+with I3712.scope("assertions") as cm:
+    cm.new_equation(ma.I1536["negation"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"](ma.I3263["transpose"](cm.A), cm.P)))
+
+I6338["Lyapunov equation"].set_relation(p.R37["has definition"], I3712["definition of Lyapunov equation"])
+# </definition>
+
+
+# <theorem>
+I2613 = p.create_item(
+    R1__has_label="theorem for Lyapunov function for linear systems",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    # ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
+)
+
+with I2613["theorem for Lyapunov function for linear systems"].scope("setting") as cm:
+    # uq ... because the theorem holds for all n
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+
+    # TODO: decide about universal quantification here
+    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+
+    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
+    cm.new_rel(ode_sys, p.R16["has property"], I4761["linearity"])
+    cm.new_rel(ode_sys, ma.R5405["has associated state space"], D)
+
+    x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+    x = cm.new_var(x=p.instance_of(ma.I9904["matrix"])) # TODO this hsould be of type state vector or similar
+    cm.new_rel(x, p.R15["is element of"], D)
+
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
+    I = cm.new_var(I=p.instance_of(ma.I1608["identity matrix"]))
+    cm.new_rel(A, ma.R5938["has row number"], n)
+    cm.new_rel(P, ma.R5938["has row number"], n)
+    cm.new_rel(I, ma.R5938["has row number"], n)
+
+    LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
+    LE.R8__has_domain_of_argument_1=A
+    LE.R9__has_domain_of_argument_2=P
+    LE.R10__has_domain_of_argument_3=I
+
+
+with I2613["theorem for Lyapunov function for linear systems"].scope("premise") as cm:
+    cm.new_rel(cm.P, p.R16["has property"], ma.I3133["positive definiteness"])
+
+with I2613["theorem for Lyapunov function for linear systems"].scope("assertion") as cm:
+    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
+    V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"]))
+    defV = cm.new_var(
+        defV=p.new_mathematical_relation(
+            V, "==", ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](cm.x), cm.P), cm.x)
+        )
+    )
+
+# </theorem>
 
 # <new_entities>
 
@@ -1673,10 +1766,10 @@ I9987
 I6548
 I6189
 I4274
-I3712
-I6338
-I2613
-I2983
+
+
+
+
 """
 
 p.end_mod()
