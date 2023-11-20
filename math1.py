@@ -435,7 +435,7 @@ I3237 = p.create_item(
 
 I5177 = p.create_item(
     R1__has_label="matmul",
-    R2__has_description=("matrix multplication operator"),
+    R2__has_description=("matrix multiplication operator"),
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9904["matrix"],
     R9__has_domain_of_argument_2=I9904["matrix"],
