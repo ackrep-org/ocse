@@ -1436,7 +1436,7 @@ I8092 = p.create_item(
 
 # <theorem>
 I4663 = p.create_item(
-    R1__has_label="theorem for Lyapunov stability of state space system",
+    R1__has_label="theorem for Lyapunov stability of state space system", # TODO this is one formulation among many
     R2__has_description=(
         "establishes a sufficient condition for the stability of an equilibrium point "
         "of a statespace system"
@@ -1473,8 +1473,8 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("premis
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
-    # TODO: double check the meaning of global here
-    cm.new_rel(cm.x0, p.R16["has property"], I8744["global Lyapunov stability"])
+    # TODO: double check the meaning of global here @ca: gloabl is wrong here
+    cm.new_rel(cm.x0, p.R16["has property"], I2931["local Lyapunov stability"])
 
 # </theorem>
 
@@ -1498,7 +1498,30 @@ with I8733["theorem for asymptotic Lyapunov stability of state space system"].sc
 
 with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here
-    # TODO: check wording on I5677__global_asymptotical_stability
+    # TODO: check wording on I5677__global_asymptotical_stability, @ca again this is a local criterium
+    cm.new_rel(cm.x0, p.R16["has property"], I4900["local asymptotical stability"])
+
+# </theorem>
+
+# <theorem>
+I2983 = p.create_item(
+    R1__has_label="theorem for global asymptotic Lyapunov stability of state space system",
+    R2__has_description=(
+        "establishes a sufficient condition for the global asymptotic stability of an equilibrium point "
+        "of a statespace system"
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
+)
+
+with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
+    cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
+
+with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
+    cm.new_rel(cm.V, p.R16["has property"], ma.I5753["radially unboundedness"])
+
+with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
 
 # </theorem>
