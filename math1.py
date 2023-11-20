@@ -452,6 +452,31 @@ I1474 = p.create_item(
     R11__has_range_of_result=I9904["matrix"],
 )
 
+I9493 = p.create_item(
+    R1__has_label="matadd",
+    R2__has_description="matrix addition operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R9__has_domain_of_argument_2=I9904["matrix"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+I1536 = p.create_item(
+    R1__has_label="negation",
+    R2__has_description="negation operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"], #(I9904["matrix"], p.I35["real number"]),
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+I3263 = p.create_item(
+    R1__has_label="transpose",
+    R2__has_description="matrix transposition operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
 # copied from control_theory1:
 
 
@@ -1112,9 +1137,9 @@ I7481      R7481
 I4291      R4291
 I5441      R5441
 I1778      R1778
-I1536      R1536
-I9493      R9493
-I3263      R3263
+      R1536
+      R9493
+      R3263
 
 
 
