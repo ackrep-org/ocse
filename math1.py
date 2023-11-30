@@ -689,7 +689,7 @@ I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
 I9160 = p.create_item(
     R1__has_label="set of eigenvalues of a matrix",
     R2__has_description="returns the set of eigenvalues of a matrix",
-    R4__is_instance_of=I4895["mathematical operator"],
+    R4__is_instance_of=I4895["mathematical operator"], # TODO is this type correct? name set vs type operator
     R8__has_domain_of_argument_1=I9906["square matrix"],
     R11__has_range_of_result=I5484["finite set of complex numbers"],
 )
@@ -1087,6 +1087,41 @@ I5753 = p.create_item(
     R78__is_applicable_to=I9923["scalar field"],
 )
 
+I1778 = p.create_item(
+    R1__has_label="homogeneity",
+    R2__has_description=(
+        "states that if all arguments of a function are multiplied by a scalar value, the function value is multplied"
+        " by some power k of same scalar"
+    ),
+    R4__is_instance_of=p.I54["mathematical property"],
+    R78__is_applicable_to=I1060["general function"],
+)
+
+I5441 = p.create_item(
+    R1__has_label="sum",
+    R2__has_description="sum operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I4236["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I37["integer number"], # start
+    R10__has_domain_of_argument_3=p.I37["integer number"], # stop
+    R11__has_range_of_result=I4236["mathematical expression"],
+)
+
+I4291 = p.create_item(
+    R1__has_label="infinity",
+    R2__has_description="infinity",
+    R4__is_instance_of=I4236["mathematical expression"], # TODO type?
+)
+
+I7481 = p.create_item(
+    R1__has_label="jacobian",
+    R2__has_description="jacobi matrix of a vector field, operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9841["vector field"],
+    R11__has_range_of_result=I9906["square matrix"],
+)
+
+
 # <new_entities>
 
 # this section in the source file is helpful for bulk-insertion of new items
@@ -1133,10 +1168,10 @@ I2378      R2378
 I1716      R1716
 I9827      R9827
 I7151      R7151
-I7481      R7481
-I4291      R4291
-I5441      R5441
-I1778      R1778
+      R7481
+      R4291
+      R5441
+      R1778
       R1536
       R9493
       R3263

@@ -1649,17 +1649,113 @@ I6338["Lyapunov equation"].set_relation(p.R37["has definition"], I3712["definiti
 # </definition>
 
 
+
+
 # <theorem>
-I2613 = p.create_item(
-    R1__has_label="theorem for Lyapunov function for linear systems",
+I8142 = p.create_item(
+    R1__has_label="theorem for Lyapunov functions for nonlinear systems",
     R2__has_description=(
         ""
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    # ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
+    # [1] A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
+    # Systems,” Automatica, vol. 21, no. 1, pp. 69–60, 1985, doi: https://doi.org/10.1016/0005-1098(85)90099-8.
+    # Theorem 4
+
+
 )
 
-with I2613["theorem for Lyapunov function for linear systems"].scope("setting") as cm:
+with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("setting") as cm:
+    sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
+    state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
+    f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
+    cm.new_rel(state_space_sys, R4122["has associated drift vector field"], f)
+    Fi = cm.new_var(Fi=p.instance_of(ma.I9841["vector field"])) # TODO this is not accurate
+
+    cm.new_equation(f, ma.I5441["sum"](Fi, ma.I5001["scalar one"], ma.I4291["infinity"]))
+
+    cm.new_rel(Fi, p.R16["has property"], ma.I1778["homogeneity"])
+
+
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+    cm.new_rel(state_space_sys, ma.R5405["has associated state space"], D)
+
+    x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+
+    cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
+
+with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premise") as cm:
+    F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"]))
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    cm.new_equation(A, ma.I7481["jacobian"](F1))
+
+    # linearized system is asymptotically stable
+    eig = cm.new_var(eig=p.instance_of(ma.I5484["finite set of complex numbers"]))
+    # eig = cm.new_var(eig=p.instance_of(ma.I9160["set of eigenvalues of a matrix"](A)))
+    cm.new_rel(eig, p.R14["is subset of"], ma.I2739["open left half plane"])
+
+
+with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("assertion") as cm:
+    # algorithm to iteratively calcultate lyapunov function
+    pass
+
+# </theorem>
+
+
+# <theorem>
+I4274 = p.create_item(
+    R1__has_label="theorem for Lyapunov functions for polynomial systems",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    # [1] E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
+    # lyapunov functions for polynomial systems through Darboux polynomials,” in 2014 American Control Conference,
+    # Portland, OR, USA: IEEE, Jun. 2014, pp. 3571–3578. doi: 10.1109/ACC.2014.6859330.
+
+)
+
+with I4274["theorem for Lyapunov functions for polynomial systems"].scope("setting") as cm:
+    sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
+    cm.new_rel(sys, R5100["has model representation property"], I5247["polynomial"])
+
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+    cm.new_rel(sys, ma.R5405["has associated state space"], D)
+
+    x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+
+    cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
+
+with I4274["theorem for Lyapunov functions for polynomial systems"].scope("premise") as cm:
+    # find rational differential variants of Darboux polynomials
+    # using sum of squares method
+    # combine invariants to create a polynomial with 3 conditions
+    # if solution to exists
+    pass
+
+with I4274["theorem for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
+    # polynomial is Lyapunov function
+    pass
+
+# </theorem>
+
+
+# <theorem>
+I2613 = p.create_item(
+    R1__has_label="theorem for Lyapunov functions for linear systems",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+with I2613["theorem for Lyapunov functions for linear systems"].scope("setting") as cm:
     # uq ... because the theorem holds for all n
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
@@ -1689,10 +1785,10 @@ with I2613["theorem for Lyapunov function for linear systems"].scope("setting") 
     LE.R10__has_domain_of_argument_3=I
 
 
-with I2613["theorem for Lyapunov function for linear systems"].scope("premise") as cm:
+with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
     cm.new_rel(cm.P, p.R16["has property"], ma.I3133["positive definiteness"])
 
-with I2613["theorem for Lyapunov function for linear systems"].scope("assertion") as cm:
+with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
     V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"]))
     defV = cm.new_var(
@@ -1744,7 +1840,7 @@ I6210      R6210
 I1775      R1775
 I7006      R7006
 I4432      R4432
-I8142      R8142
+      R8142
 
 
 
@@ -1765,7 +1861,7 @@ key reservoir C
 I9987
 I6548
 I6189
-I4274
+
 
 
 
