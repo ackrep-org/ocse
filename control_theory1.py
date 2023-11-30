@@ -709,7 +709,7 @@ I9030 = p.create_item(
 I9210 = p.create_item(
     R1__has_label="stabilizability",
     R2__has_description="states that for the model of a dynamical system there exists a state feedback such that the \
-        system is asymptotically stable",
+        system is stable",
     R4__is_instance_of=I5356["general system property"],
 )
 
@@ -724,7 +724,7 @@ I7864 = p.create_item(
 I9853 = p.create_item(
     R1__has_label="detectability",
     R2__has_description="states that all unobservable state components of the model of a dynamical system are \
-        asymptotically stable",
+        stable",
     R4__is_instance_of=I5356["general system property"],
 )
 
@@ -738,7 +738,7 @@ I3227 = p.create_item(
 
 I3321 = p.create_item(
     R1__has_label="minimum phase",
-    R2__has_description="states that the model of a dynamical system has asymptotically stable zero dynamics",
+    R2__has_description="states that the model of a dynamical system has stable zero dynamics",
     R4__is_instance_of=I5356["general system property"],
 )
 
