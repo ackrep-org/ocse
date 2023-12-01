@@ -486,19 +486,10 @@ I5484 = p.create_item(
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
-
-# todo: what is the difference between an object and an expression?
-# TODO: align this with p.I18
-I4236 = p.create_item(
-    R1__has_label="mathematical expression",
-    R2__has_description="common base class for mathematical expressions",
-    R3__is_subclass_of=p.I12["mathematical object"],
-)
-
 I1060 = p.create_item(
     R1__has_label="general function",
     R2__has_description="function that maps from some set (domain) into another (range);",
-    R3__is_subclass_of=I4236["mathematical expression"],
+    R3__is_subclass_of=p.I18["mathematical expression"],
     R18__has_usage_hint="this is the base class for more specifc types of functions",
 )
 
@@ -529,7 +520,7 @@ I4239 = p.create_item(
 R1757 = p.create_relation(
     R1__has_label="has set of roots",
     R2__has_description="set of roots for a monovariate function",
-    R8__has_domain_of_argument_1=I4236["mathematical expression"],  # todo: this is too broad
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],  # todo: this is too broad
     R11__has_range_of_result=I5484["finite set of complex numbers"],
 )
 
@@ -689,7 +680,7 @@ I5359["determinant"].add_method(I5359_cc_pp, "_custom_call_post_process")
 I9160 = p.create_item(
     R1__has_label="set of eigenvalues of a matrix",
     R2__has_description="returns the set of eigenvalues of a matrix",
-    R4__is_instance_of=I4895["mathematical operator"], # TODO is this type correct? name set vs type operator
+    R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9906["square matrix"],
     R11__has_range_of_result=I5484["finite set of complex numbers"],
 )
@@ -1101,16 +1092,16 @@ I5441 = p.create_item(
     R1__has_label="sum",
     R2__has_description="sum operator",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I4236["mathematical expression"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=p.I37["integer number"], # start
-    R10__has_domain_of_argument_3=p.I37["integer number"], # stop
-    R11__has_range_of_result=I4236["mathematical expression"],
+    R10__has_domain_of_argument_3=p.I18["mathematical expression"], # [p.I37["integer number"], I4291["infinity"]], # stop
+    R11__has_range_of_result=p.I18["mathematical expression"],
 )
 
 I4291 = p.create_item(
     R1__has_label="infinity",
     R2__has_description="infinity",
-    R4__is_instance_of=I4236["mathematical expression"], # TODO type?
+    R4__is_instance_of=p.I18["mathematical expression"], # TODO type?
 )
 
 I7481 = p.create_item(

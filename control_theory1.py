@@ -380,10 +380,10 @@ with I4455.scope("setting") as cm:
     cm.new_rel(cm.P, ma.R1757["has set of roots"], cm.set_of_roots)
 
 
-with I4455.scope("premises") as cm:
+with I4455.scope("premise") as cm:
     cm.new_rel(cm.set_of_roots, p.R14["is subset of"], ma.I2739["open left half plane"])
 
-with I4455.scope("assertions") as cm:
+with I4455.scope("assertion") as cm:
     cm.new_rel(cm.P, p.R30["is secondary instance of"], I5325["Hurwitz polynomial"])
 
 I5325["Hurwitz polynomial"].set_relation(p.R37["has definition"], I4455["definition of Hurwitz polynomial"])
@@ -413,11 +413,11 @@ with I3007.scope("setting") as cm:
     cm.new_rel(cm.tf_rep, R5323["has denominator"], cm.denom)
     cm.new_rel(cm.denom, ma.R1757["has set of roots"], cm.set_of_poles)
 
-with I3007.scope("premises") as cm:
+with I3007.scope("premise") as cm:
     cm.new_rel(cm.set_of_poles, p.R14["is subset of"], ma.I2739["open left half plane"])
     cm.new_rel(cm.tf_rep, p.R16["has property"], I8181["properness"])
 
-with I3007.scope("assertions") as cm:
+with I3007.scope("assertion") as cm:
     cm.new_rel(cm.sys, p.R16["has property"], I7208["BIBO stability"])
 # </theorem>
 
@@ -472,10 +472,10 @@ with I4216.scope("setting") as cm:
 
     cm.new_rel(cm.mpc_problem, p.R000["refers to"], cm.sys)
 
-with I4216.scope("premises") as cm:
+with I4216.scope("premise") as cm:
     cm.new_rel(cm.sys, p.R000["refers to"], cm.sys)
 
-with I4216.scope("assertions") as cm:
+with I4216.scope("assertion") as cm:
     cm.new_rel(cm.mpc_problem, p.R000["can be reduced to"], cm.quadratic_problem)
 
 """
@@ -635,7 +635,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     cm.item.L_evaluated = I1347["Lie derivative of scalar field"](h, f, x)
 
 
-with I6229.scope("assertions") as cm:
+with I6229.scope("assertion") as cm:
     # TODO: encode the directional character of this equation (lhs := rhs)
     cm.new_equation(lhs=cm.L_evaluated, rhs=cm.subs)
 
