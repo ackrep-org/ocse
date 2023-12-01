@@ -16,7 +16,7 @@ p.start_mod(__URI__)
 I5000 = p.create_item(
     R1__has_label="scalar zero",
     R2__has_description="entity representing the zero-element in the set of complex numbers and its subsets",
-    R4__is_instance_of=p.I34["complex number"],
+    R4__is_instance_of=p.I38["non-negative integer"],
     R24__has_LaTeX_string="$0$",
 )
 
@@ -24,7 +24,7 @@ I5000 = p.create_item(
 I5001 = p.create_item(
     R1__has_label="scalar one",
     R2__has_description="entity representing the one-element in the set of complex numbers and its subsets",
-    R4__is_instance_of=p.I34["complex number"],
+    R4__is_instance_of=p.I39["positive integer"],
     R24__has_LaTeX_string="$1$",
 )
 
@@ -45,6 +45,11 @@ I9904 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I7151 = p.create_item(
+    R1__has_label="vector",
+    R2__has_description="vector of (in general) complex numbers, i.e. vector over the field of complex numbers",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+)
 
 I3240 = p.create_item(
     R1__has_label="matrix element",
@@ -941,6 +946,8 @@ I9923 = p.create_item(
     R1__has_label="scalar field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
+    # R8__has_domain_of_argument_1=I1168["point in state space"],
+    # R11__has_range_of_result=p.I35["real number"],
 )
 
 
@@ -948,6 +955,8 @@ I9841 = p.create_item(
     R1__has_label="vector field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I1168["point in state space"],
+    R11__has_range_of_result=I7151["vector"],
 )
 
 
@@ -1112,6 +1121,28 @@ I7481 = p.create_item(
     R11__has_range_of_result=I9906["square matrix"],
 )
 
+I2378 = p.create_item(
+    R1__has_label="solution to a mathematical algorithm",
+    R2__has_description="",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+I9827 = p.create_item(
+    R1__has_label="mathematical algorithm",
+    R2__has_description="",
+    R4__is_instance_of=I4895["mathematical operator"],
+    # R8__has_domain_of_argument_1=??,
+    R11__has_range_of_result=p.I53["bool"], # if a solution exists or not
+)
+
+R3263 = p.create_relation(
+    R1__has_label="has solution",
+    R2__has_description="solution of a mathematical algorithm",
+    R8__has_domain_of_argument_1=I9827["mathematical algorithm"],
+    R11__has_range_of_result=I2378["solution to a mathematical algorithm"],
+)
+
+I9827["mathematical algorithm"].set_relation(R3263["has solution"], I2378["solution to a mathematical algorithm"])
 
 # <new_entities>
 
@@ -1155,17 +1186,17 @@ I2328      R2328
 I9489      R9489
 I4864      R4864
 I5094      R5094
-I2378      R2378
-I1716      R1716
-I9827      R9827
-I7151      R7151
+       R2378
+     R1716
+      R9827
+      R7151
       R7481
       R4291
       R5441
       R1778
       R1536
       R9493
-      R3263
+
 
 
 
