@@ -1619,36 +1619,58 @@ I6338 = p.create_item(
     ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
 )
 
-# <definition>
+# <theorem>
 I3712 = p.create_item(
-    R1__has_label="definition of Lyapunov equation",
-    R2__has_description="the defining statement of what a Lyapunov equation is",
-    R4__is_instance_of=p.I20["mathematical definition"],
+    R1__has_label="theorem on Lyapunov equation",
+    R2__has_description="theorem characterizes asymptotic stability of the origin in terms of the solution of the "
+        "Lyapunov equation",
+    # R4__is_instance_of=p.I17["equivalence proposition"], #todo this should be equivalence, but eq prop doesnt have scope
+    R4__is_instance_of=p.I15["implication proposition"],
+    # H. K. Khalil, Nonlinear systems, Pearson new internat. ed., 3. ed. in Always learning. Harlow: Pearson Education, 2014.
+    # Theorem 4.6
+
 )
 
 with I3712.scope("setting") as cm:
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
-    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
     Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
 
     cm.new_rel(A, ma.R5938["has row number"], n)
-    cm.new_rel(P, ma.R5938["has row number"], n)
     cm.new_rel(Q, ma.R5938["has row number"], n)
 
-    d = ma.I5359["determinant"](A)
+    cm.new_rel(Q, p.R16["has property"], ma.I3135["positive semidefiniteness"])
 
+    eig = cm.new_var(eig=p.instance_of(ma.I5484["finite set of complex numbers"]))
+    cm.new_equation(eig, ma.I9160["set of eigenvalues of a matrix"](A))
 
-with I3712.scope("premises") as cm:
-    cm.new_math_relation(d, "!=", ma.I5000["scalar zero"])
+with I3712.scope("premise") as cm:
+    cm.new_rel(eig, p.R14["is subset of"], ma.I2739["open left half plane"])
 
-with I3712.scope("assertions") as cm:
-    cm.new_equation(ma.I1536["negation"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"](ma.I3263["transpose"](cm.A), cm.P)))
+with I3712.scope("assertion") as cm:
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(P, ma.R5938["has row number"], n)
+    cm.new_rel(P, p.R16["has property"], ma.I3133["positive definiteness"])
 
-I6338["Lyapunov equation"].set_relation(p.R37["has definition"], I3712["definition of Lyapunov equation"])
-# </definition>
+    cm.new_equation(ma.I1536["negation"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
+                                                                   (ma.I3263["transpose"](cm.A), cm.P)))
 
+# </theorem>
 
+I4432 = p.create_item(
+    R1__has_label="Vannelli recursive algorithm to find lyapunov function",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=ma.I9827["mathematical algorithm"],
+    # R8__has_domain_of_argument_1=ma.I9841["vector field"], # f -> F_i
+    # R9__has_domain_of_argument_2=ma.I9906["square matrix"], # R_2
+    # R10__has_domain_of_argument_3=ma.I9906["square matrix"], # Q_1
+    # todo how to deal with >3 inputs? nesting?
+    # R11__has_range_of_result=p.I53["bool"], #todo this is done in parent class, sufficient?
+    # A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
+    # Systems,” Automatica, vol. 21, no. 1, pp. 69–60, 1985, doi: https://doi.org/10.1016/0005-1098(85)90099-8.
+)
 
 
 # <theorem>
@@ -1658,26 +1680,40 @@ I8142 = p.create_item(
         ""
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    # [1] A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
+    # A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
     # Systems,” Automatica, vol. 21, no. 1, pp. 69–60, 1985, doi: https://doi.org/10.1016/0005-1098(85)90099-8.
     # Theorem 4
-
-
 )
 
+
 with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("setting") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
     state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
+
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(state_space_sys, R4122["has associated drift vector field"], f)
-    Fi = cm.new_var(Fi=p.instance_of(ma.I9841["vector field"])) # TODO this is not accurate
 
-    cm.new_equation(f, ma.I5441["sum"](Fi, ma.I5001["scalar one"], ma.I4291["infinity"]))
+    x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
 
-    cm.new_rel(Fi, p.R16["has property"], ma.I1778["homogeneity"])
+    # with ma.IntegerRangeElement(start=1, stop=ma.I4291["infinity"]) as i: # todo: IntegerRangeElement doesn work in this module, only in math?
+    # {
+    F_i = cm.new_var(F_i=p.instance_of(ma.I9841["vector field"]))
+    # F_i is a vector of polynomials of degree i
+    evaluated_F_i = cm.new_var(F_i_x=p.instance_of(ma.I7151["vector"]))
+    cm.new_equation(F_i(x), evaluated_F_i)
+    cm.new_rel(evaluated_F_i, p.R16["has property"], ma.I1778["homogeneity"]) # todo does this apply to Fi or Fi_x?
+    # with ma.IntegerRangeElement(start=1, stop=n) as j:
+        # {
+        # F_ij is the j-th element of a vector of polynomials of degree i
+        # evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
+        # cm.new_equation(ma.I3589["monovariate polynomial degree"](evaluated_F_ij), i)
+        # }
 
 
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    # }
+    cm.new_equation(f(x), ma.I5441["sum"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
+
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
     cm.new_rel(state_space_sys, ma.R5405["has associated state space"], D)
@@ -1687,19 +1723,27 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
 
     cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
 
+    Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
+    cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
+
 with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premise") as cm:
-    F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"]))
+    F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"])) #todo relation to F_i with i=1 ??
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
     cm.new_equation(A, ma.I7481["jacobian"](F1))
 
     # linearized system is asymptotically stable
     eig = cm.new_var(eig=p.instance_of(ma.I5484["finite set of complex numbers"]))
-    # eig = cm.new_var(eig=p.instance_of(ma.I9160["set of eigenvalues of a matrix"](A)))
+    cm.new_equation(eig, ma.I9160["set of eigenvalues of a matrix"](A))
     cm.new_rel(eig, p.R14["is subset of"], ma.I2739["open left half plane"])
+
+    # recursive equations are satisfied
+    cm.new_equation(I4432["Vannelli recursive algorithm to find lyapunov function"], True)
 
 
 with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("assertion") as cm:
-    # algorithm to iteratively calcultate lyapunov function
+    # there exists an algorithm to iteratively calcultate lyapunov function
+    cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(I4432["Vannelli recursive algorithm to find lyapunov function"], ma.R3263["has solution"], V)
     pass
 
 # </theorem>
@@ -1712,10 +1756,23 @@ I4274 = p.create_item(
         ""
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    # [1] E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
+    # E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
     # lyapunov functions for polynomial systems through Darboux polynomials,” in 2014 American Control Conference,
     # Portland, OR, USA: IEEE, Jun. 2014, pp. 3571–3578. doi: 10.1109/ACC.2014.6859330.
 
+)
+
+I7006 = p.create_item(
+    R1__has_label="Goubault recursive algorithm to find lyapunov function",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=ma.I9827["mathematical algorithm"],
+    # todo arguments?
+    # R11__has_range_of_result=p.I53["bool"], #todo this is done in parent class, sufficient?
+    # E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
+    # lyapunov functions for polynomial systems through Darboux polynomials,” in 2014 American Control Conference,
+    # Portland, OR, USA: IEEE, Jun. 2014, pp. 3571–3578. doi: 10.1109/ACC.2014.6859330.
 )
 
 with I4274["theorem for Lyapunov functions for polynomial systems"].scope("setting") as cm:
@@ -1737,10 +1794,12 @@ with I4274["theorem for Lyapunov functions for polynomial systems"].scope("premi
     # using sum of squares method
     # combine invariants to create a polynomial with 3 conditions
     # if solution to exists
-    pass
+    cm.new_equation(I7006["Goubault recursive algorithm to find lyapunov function"], True)
 
 with I4274["theorem for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
     # polynomial is Lyapunov function
+    cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(I7006["Goubault recursive algorithm to find lyapunov function"], ma.R3263["has solution"], V)
     pass
 
 # </theorem>
@@ -1759,7 +1818,6 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     # uq ... because the theorem holds for all n
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
-    # TODO: decide about universal quantification here
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
@@ -1769,7 +1827,8 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
     cm.new_rel(D, ma.R3798["has origin"], x0)
-    x = cm.new_var(x=p.instance_of(ma.I9904["matrix"])) # TODO this hsould be of type state vector or similar
+    # x = cm.new_var(x=p.instance_of(ma.I7151["vector"])) # TODO works only with multitype for matmul
+    x = cm.new_var(x=p.instance_of(ma.I9904["matrix"]))
     cm.new_rel(x, p.R15["is element of"], D)
 
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
@@ -1790,7 +1849,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("premise")
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
-    V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"]))
+    V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"]), qualifiers=[p.exis_quant(True)])
     defV = cm.new_var(
         defV=p.new_mathematical_relation(
             V, "==", ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](cm.x), cm.P), cm.x)
@@ -1838,8 +1897,8 @@ I4766      R4766
 I4147      R4147
 I6210      R6210
 I1775      R1775
-I7006      R7006
-I4432      R4432
+      R7006
+      R4432
       R8142
 
 
