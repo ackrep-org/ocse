@@ -1849,7 +1849,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("premise")
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
-    V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"]), qualifiers=[p.exis_quant(True)])
+    V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     defV = cm.new_var(
         defV=p.new_mathematical_relation(
             V, "==", ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](cm.x), cm.P), cm.x)
