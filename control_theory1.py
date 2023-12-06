@@ -1624,8 +1624,7 @@ I3712 = p.create_item(
     R1__has_label="theorem on Lyapunov equation",
     R2__has_description="theorem characterizes asymptotic stability of the origin in terms of the solution of the "
         "Lyapunov equation",
-    # R4__is_instance_of=p.I17["equivalence proposition"], #todo this should be equivalence, but eq prop doesnt have scope
-    R4__is_instance_of=p.I15["implication proposition"],
+    R4__is_instance_of=p.I17["equivalence proposition"],
     # H. K. Khalil, Nonlinear systems, Pearson new internat. ed., 3. ed. in Always learning. Harlow: Pearson Education, 2014.
     # Theorem 4.6
 
@@ -1696,19 +1695,19 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
 
     x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
 
-    # with ma.IntegerRangeElement(start=1, stop=ma.I4291["infinity"]) as i: # todo: IntegerRangeElement doesn work in this module, only in math?
+    with ma.IntegerRangeElement(start=1, stop=ma.I4291["infinity"]) as i:
     # {
-    F_i = cm.new_var(F_i=p.instance_of(ma.I9841["vector field"]))
-    # F_i is a vector of polynomials of degree i
-    evaluated_F_i = cm.new_var(F_i_x=p.instance_of(ma.I7151["vector"]))
-    cm.new_equation(F_i(x), evaluated_F_i)
-    cm.new_rel(evaluated_F_i, p.R16["has property"], ma.I1778["homogeneity"]) # todo does this apply to Fi or Fi_x?
-    # with ma.IntegerRangeElement(start=1, stop=n) as j:
-        # {
-        # F_ij is the j-th element of a vector of polynomials of degree i
-        # evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
-        # cm.new_equation(ma.I3589["monovariate polynomial degree"](evaluated_F_ij), i)
-        # }
+        F_i = cm.new_var(F_i=p.instance_of(ma.I9841["vector field"]))
+        # F_i is a vector of polynomials of degree i
+        evaluated_F_i = cm.new_var(F_i_x=p.instance_of(ma.I7151["vector"]))
+        cm.new_equation(F_i(x), evaluated_F_i)
+        cm.new_rel(evaluated_F_i, p.R16["has property"], ma.I1778["homogeneity"]) # todo does this apply to Fi or Fi_x?
+        with ma.IntegerRangeElement(start=1, stop=n) as j:
+            # {
+            # F_ij is the j-th element of a vector of polynomials of degree i
+            evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
+            cm.new_equation(ma.I3589["monovariate polynomial degree"](evaluated_F_ij), i)
+            # }
 
 
     # }
