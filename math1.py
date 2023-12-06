@@ -498,6 +498,20 @@ I1060 = p.create_item(
     R18__has_usage_hint="this is the base class for more specifc types of functions",
 )
 
+I5094 = p.create_item(
+    R1__has_label="linear function",
+    R2__has_description="linear map from some set (domain) into another (range)",
+    R3__is_subclass_of=I1060["general function"],
+)
+
+R9493 = p.create_relation(
+    R1__has_label="has assigned linear map",
+    R2__has_description="a matrix is assigned a linear map, that describes the transformation between two vector spaces",
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I5094["linear function"],
+    R22__is_functional=True,
+)
+
 I1063 = p.create_item(
     R1__has_label="scalar function",
     R2__has_description="function that has one (in general complex) number as result",
@@ -946,8 +960,8 @@ I9923 = p.create_item(
     R1__has_label="scalar field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
-    # R8__has_domain_of_argument_1=I1168["point in state space"],
-    # R11__has_range_of_result=p.I35["real number"],
+    R8__has_domain_of_argument_1=I1168["point in state space"],
+    R11__has_range_of_result=p.I35["real number"],
 )
 
 
@@ -1011,8 +1025,8 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
     cm.new_rel(cm.h, R9651["has domain"], cm.M)
 
     # TODO: __automate_typing__ (or via convenience function)
-    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
-    h.R11__has_range_of_result = p.I35["real number"]
+    # h.R8__has_domain_of_argument_1 = I1168["point in state space"]
+    # h.R11__has_range_of_result = p.I35["real number"]
 
     cm.item.h_value = h(x)
 
@@ -1185,7 +1199,7 @@ I4218      R4218
 I2328      R2328
 I9489      R9489
 I4864      R4864
-I5094      R5094
+      R5094
        R2378
      R1716
       R9827
@@ -1195,7 +1209,7 @@ I5094      R5094
       R5441
       R1778
       R1536
-      R9493
+
 
 
 

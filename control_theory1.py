@@ -593,7 +593,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     h = cm.new_var(h=p.uq_instance_of(ma.I9923["scalar field"]))
 
     # TODO: this should be more specific (related to cm.M)
-    h.R8__has_domain_of_argument_1 = ma.I1168["point in state space"]
+    # h.R8__has_domain_of_argument_1 = ma.I1168["point in state space"]
     # TODO: __automate_typing__
     # h.R11__has_range_of_result = p.I35["real number"]
 
@@ -1837,6 +1837,11 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     cm.new_rel(A, ma.R5938["has row number"], n)
     cm.new_rel(P, ma.R5938["has row number"], n)
     cm.new_rel(I, ma.R5938["has row number"], n)
+
+    # specity f(x) = Ax
+    f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
+    cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
+    # cm.new_equation(f(x), ma.I5177["matmul"](A, x)) # TODO type error vector != matrix
 
     LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
     LE.R8__has_domain_of_argument_1=A
