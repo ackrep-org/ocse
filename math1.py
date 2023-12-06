@@ -197,9 +197,11 @@ class IntegerRangeElement:
         element = p.instance_of(class_item, self.r1, self.r2)
         element.R30__is_secondary_instance_of = I6012["integer range element"]
 
-        element.R1616__has_start_value = self.start
-        element.R1617__has_stop_value = self.stop
-        element.R1618__has_step_value = self.step
+        # run this explicitly in the context of this module (otherwise R1616 etc. is not defined)
+        with p.uri_context(uri=__URI__):
+            element.R1616__has_start_value = self.start
+            element.R1617__has_stop_value = self.stop
+            element.R1618__has_step_value = self.step
 
         element.finalize()
         return element
