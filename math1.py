@@ -1160,6 +1160,118 @@ R3263 = p.create_relation(
 
 I9827["mathematical algorithm"].set_relation(R3263["has solution"], I2378["solution to a mathematical algorithm"])
 
+# helper function to simplify creation of formulas
+
+item_symbol_storage = {}
+
+def items_to_symbols(*args, relation=None) -> list:
+    import sympy as sp
+    n = len(item_symbol_storage)
+    res = []
+
+    if relation is not None:
+        # apply the provided relation
+        assert isinstance(relation, p.core.Relation)
+        args = [itm.get_relations(relation.uri, return_obj=True)[0] for itm in args]
+
+    for i, itm in enumerate(args, start=n):
+        assert isinstance(itm, p.Item)
+        # TODO: check meaningful types (numbers, expressions, evaluated mappings, but not eg. ag.I7435["human"])
+        suffix = itm.R1__has_label.split(" ")[0]
+        name = f"s{i}_{suffix}"
+        res.append(sp.Symbol(name))
+
+    return res
+
+
+# add knowledge elements of planar geometry (for Pythagorean theorem)
+
+I1913 = p.create_item(
+    R1__has_label="geometric object",
+    R2__has_description="general (unspecified) geometric object",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+I7280 = p.create_item(
+    R1__has_label="planar polygon",
+    R2__has_description="base class for general planar polygons",
+    R3__is_subclass_of=I1913["geometric object"],
+)
+
+
+I2917 = p.create_item(
+    R1__has_label="planar triangle",
+    R2__has_description="base class for general planar triangles",
+    R3__is_subclass_of=I7280["planar polygon"],
+)
+
+
+I8172 = p.create_item(
+    R1__has_label="polygon side",
+    R2__has_description="base class for sides of a polygon",
+    R3__is_subclass_of=I1913["geometric object"],
+)
+
+
+R2495 = p.create_relation(
+    R1__has_label="has length",
+    R2__has_description="specifies the length of a geometric object",
+    R8__has_domain_of_argument_1=I1913["geometric object"],
+    R11__has_range_of_result=p.I35["real number"],
+)
+
+I9148 = p.create_item(
+    R1__has_label="get polygon sides ordered by length",
+    R2__has_description="operator that returns a tuple of I8172__polygon_side instances",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I7280["planar polygon"],
+
+    # TODO: find a way to specify this further (e.g. with qualifiers), because we know the type of the result
+    # another idea: introduce a callable Item like I95["typed tuple"](I8172["polygon side"])
+    R11__has_range_of_result=p.I33["tuple"],
+)
+
+I9148["get polygon sides ordered by length"].add_method(p.create_evaluated_mapping, "_custom_call")
+
+
+def I9148_cc_pp(self, res, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     instance of I33["tuple"] (determined by R11__has_range_of_result)
+    :param args:    arg tuple (<polygon>,) with which the mapping is called
+    """
+    assert len(args) == 1
+    polygon = args[0]
+    res.overwrite_statement("R1__has_label", f"sides-tuple of {polygon}")
+
+    if p.is_instance_of(polygon, I2917["planar triangle"]):
+
+        last_length = None
+        for i, name in zip(range(3), ["a", "b", "c"]):
+            # note: every assignment adds a new R39-statement
+            side = p.instance_of(I8172["polygon side"], r1=name)
+            side.R5__is_part_of = polygon
+
+            length = p.instance_of(p.I35["real number"], r1=f"l_{name}")
+            side.R2495__has_length = length
+            res.R39__has_element = side
+
+            if last_length is not None:
+                # state that this length not less then the last one
+                p.new_mathematical_relation(last_length, "<=", length)
+            last_length = last_length
+            p.core.Entity.set_relation
+    else:
+        raise p.aux.NotYetFinishedError("other types of polygons not yet supported")
+
+    return res
+
+
+I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
+
+
+
 # <new_entities>
 
 # this section in the source file is helpful for bulk-insertion of new items
@@ -1182,12 +1294,12 @@ p.end_mod()
 
 """
 
-I7280      R7280
-I1913      R1913
-I2917      R2917
-I8172      R8172
-I9148      R9148
-I2495      R2495
+      R7280
+      R1913
+      R2917
+      R8172
+      R9148
+I2495
 I9738      R9738
 I6043      R6043
 I5916      R5916

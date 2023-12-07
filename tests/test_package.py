@@ -81,6 +81,24 @@ class Test_02_math(unittest.TestCase):
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polynomially_on, s)
 
+    def test_c04__symbolic_formula(self):
+
+        t = p.instance_of(ma.I2917["planar triangle"])
+        sides = ma.I9148["get polygon sides ordered by length"](t)
+        a, b, c = sides.R39__has_element
+
+        la, lb, lc = ma.items_to_symbols(a, b, c, relation=ma.R2495["has length"])
+        symbolic_sum = la + lb + lc
+
+        # IPS()
+
+
+class Test_02_control_theory(unittest.TestCase):
+    def test_b01__test_multilinguality(self):
+        ct.I5290["reference value"].R1__has_label__de == "Sollwert"@p.de
+
+
+class Test_03_agents(unittest.TestCase):
     def test_c03__publications(self):
         x = ag.I7558["2002_Khalil"]
         self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])
@@ -90,8 +108,3 @@ class Test_02_math(unittest.TestCase):
 
         segment2 = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
         self.assertTrue(segment2 is segment)
-
-
-class Test_02_control_theory(unittest.TestCase):
-    def test_b01__test_multilinguality(self):
-        ct.I5290["reference value"].R1__has_label__de == "Sollwert"@p.de
