@@ -3,7 +3,7 @@ created: 2022-11-30
 original author Carsten Knoll <firstname.lastname@tu-dresden.de>
 
 This module collects knowledge about people and institutions related to control theory. It thus contains personal data,
-however only such which is considered to be publicly available already elswhere (e.g. institution websites, wikidata).
+however only such which is considered to be publicly available already elsewhere (e.g. institution websites, wikidata).
 
 If you want to be deleted from or added to this file please create a pull-request (preferred) or contact the author(s).
 """
@@ -119,7 +119,7 @@ I7301 = p.create_item(
 
 R1833 = p.create_relation(
     R1__has_label="has employer",
-    R2__has_description="specifies for which entity (organisation/person) the subject works",
+    R2__has_description="specifies for which entity (organization/person) the subject works",
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/P108",
 )
 
@@ -505,7 +505,7 @@ def create_source(title:str, authors, year: int, doi: str=None):
     return new_item
 
 
-I9700 = create_person("Hassan", "Khalil", "electrical engineneer", r33="https://www.wikidata.org/wiki/Q102278369")
+I9700 = create_person("Hassan", "Khalil", "electrical engineer", r33="https://www.wikidata.org/wiki/Q102278369")
 
 I7558 = create_source("Nonlinear Systems", I9700["Hassan Khalil"], 2002)
 

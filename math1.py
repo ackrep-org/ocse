@@ -183,7 +183,7 @@ class IntegerRangeElement:
 
     def __enter__(self):
         """
-        implicitly called in the head of the with statemet
+        implicitly called in the head of the with statement
         :return:
         """
 
@@ -242,7 +242,7 @@ R5939 = p.create_relation(
 )
 
 
-#            start defintion
+#            start definition
 
 I9223 = p.create_item(
     R1__has_label="definition of zero matrix",
@@ -273,11 +273,11 @@ with I9223["definition of zero matrix"].scope("premise") as cm:
 with I9223["definition of zero matrix"].scope("assertion") as cm:
     cm.new_rel(cm.M, p.R30["is secondary instance of"], I9905["zero matrix"])
 
-#            end defintion
+#            end definition
 
 # ---------------------------------------------------------------------------------------------------------------------
 
-#            start defintion
+#            start definition
 
 I1608 = p.create_item(
     R1__has_label="identity matrix",  # TODO: also known as "unit matrix"
@@ -306,7 +306,7 @@ with I7169["definition of identity matrix"].scope("setting") as cm:
 
 with I7169["definition of identity matrix"].scope("premise") as cm:
 
-    # todo: the running indicses should be related to the context cm
+    # todo: the running indices should be related to the context cm
     # there should be a context stack
     with IntegerRangeElement(start=1, stop=cm.nr) as i:
         with IntegerRangeElement(start=1, stop=cm.nr) as j:
@@ -314,7 +314,7 @@ with I7169["definition of identity matrix"].scope("premise") as cm:
             # create an auxiliary variable (not part part of the graph)
             M_ij = I3240["matrix element"](cm.M, i, j)
 
-            # Condition in human-readible form:
+            # Condition in human-readable form:
             # In case i != j, the matrix element M_ij must be 0
             # In case i == j, the matrix element M_ij must be 1
 
@@ -333,7 +333,7 @@ with I7169["definition of identity matrix"].scope("premise") as cm:
 with I7169["definition of identity matrix"].scope("assertion") as cm:
     cm.new_rel(cm.M, p.R30["is secondary instance of"], I1608["identity matrix"])
 
-#            end defintion
+#            end definition
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -373,7 +373,7 @@ I5807 = p.create_item(
 
 I2738 = p.create_item(
     R1__has_label="field of complex numbers",
-    R2__has_description="field of complex numnbers",
+    R2__has_description="field of complex numbers",
     R4__is_instance_of=I8133["field of numbers"],
     R13__has_canonical_symbol=r"$\mathbb{C}$",
     R3033__has_type_of_elements=p.I34["complex number"],
@@ -497,7 +497,7 @@ I1060 = p.create_item(
     R1__has_label="general function",
     R2__has_description="function that maps from some set (domain) into another (range);",
     R3__is_subclass_of=p.I18["mathematical expression"],
-    R18__has_usage_hint="this is the base class for more specifc types of functions",
+    R18__has_usage_hint="this is the base class for more specific types of functions",
 )
 
 I5094 = p.create_item(
@@ -625,11 +625,11 @@ I7765 = p.create_item(
 
 
 R8736 = p.create_relation(
-    R1__has_label="depends polyonomially on",
+    R1__has_label="depends polynomially on",
     R2__has_description="subject has a polynomial dependency object",
     R8__has_domain_of_argument_1=p.I12["mathematical object"],
     R11__has_range_of_result=I5030["variable"],
-    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency"),
+    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomial dependency"),
 )
 
 # eigenvalues
@@ -656,7 +656,7 @@ def I6324_cc_pp(self, res, *args, **kwargs):
 
     # check that `var` is an instance of I5030["variable"]
     assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
-    res.set_relation(R8736["depends polyonomially on"], var)
+    res.set_relation(R8736["depends polynomially on"], var)
 
     return res
 
@@ -687,10 +687,10 @@ def I5359_cc_pp(self, res, *args, **kwargs):
     assert len(args) == 1
     (matrix,) = args
 
-    if poly_vars := matrix.R8736__depends_polyonomially_on:
+    if poly_vars := matrix.R8736__depends_polynomially_on:
         for var in poly_vars:
             assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
-            res.set_relation(R8736["depends polyonomially on"], var)
+            res.set_relation(R8736["depends polynomially on"], var)
 
     return res
 
@@ -982,22 +982,22 @@ I9841 = p.create_item(
 
 
 I5843 = p.create_item(
-    R1__has_label="neighbourhood",
+    R1__has_label="neighborhood",
     R2__has_description="a region of space around a point",
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
 
 R4963 = p.create_relation(
-    R1__has_label="is neighbourhood of",
-    R2__has_description="specifies that the subject (a set) is a neighbourhood of the object (a point)",
-    R8__has_domain_of_argument_1=I5843["neighbourhood"],
+    R1__has_label="is neighborhood of",
+    R2__has_description="specifies that the subject (a set) is a neighborhood of the object (a point)",
+    R8__has_domain_of_argument_1=I5843["neighborhood"],
     R11__has_range_of_result=I1168["point in state space"],
 )
 
 I3133 = p.create_item(
     R1__has_label="positive definiteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
@@ -1016,11 +1016,11 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
 
     x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
 
-    u = cm.new_var(u=p.uq_instance_of(I5843["neighbourhood"]))
+    u = cm.new_var(u=p.uq_instance_of(I5843["neighborhood"]))
     cm.new_rel(cm.M, R3326["has dimension"], cm.n)
 
     cm.new_rel(cm.M, R3798["has origin"], cm.x0)
-    cm.new_rel(cm.u, R4963["is neighbourhood of"], cm.x0)
+    cm.new_rel(cm.u, R4963["is neighborhood of"], cm.x0)
     cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
 
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
@@ -1056,21 +1056,21 @@ I3133["positive definiteness"].set_relation(
 
 I3135 = p.create_item(
     R1__has_label="positive semidefiniteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3136 = p.create_item(
     R1__has_label="negative definiteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
@@ -1092,12 +1092,12 @@ I4505 = p.create_item(
 )
 
 
-# TOOD: specify to which objects this property can be meaningfully applied
+# TODO: specify to which objects this property can be meaningfully applied
 I5753 = p.create_item(
     R1__has_label="radially unboundedness",
     R2__has_description=(
         "states that a function tend towards infinity if the argument goes to infinity "
-        "(independet of direction)"
+        "(independent of direction)"
     ),
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
@@ -1106,7 +1106,7 @@ I5753 = p.create_item(
 I1778 = p.create_item(
     R1__has_label="homogeneity",
     R2__has_description=(
-        "states that if all arguments of a function are multiplied by a scalar value, the function value is multplied"
+        "states that if all arguments of a function are multiplied by a scalar value, the function value is multiplied"
         " by some power k of same scalar"
     ),
     R4__is_instance_of=p.I54["mathematical property"],
@@ -1130,8 +1130,8 @@ I4291 = p.create_item(
 )
 
 I7481 = p.create_item(
-    R1__has_label="jacobian",
-    R2__has_description="jacobi matrix of a vector field, operator",
+    R1__has_label="Jacobian",
+    R2__has_description="Jacobi matrix of a vector field, operator",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9841["vector field"],
     R11__has_range_of_result=I9906["square matrix"],
