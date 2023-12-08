@@ -16,7 +16,7 @@ p.start_mod(__URI__)
 I5000 = p.create_item(
     R1__has_label="scalar zero",
     R2__has_description="entity representing the zero-element in the set of complex numbers and its subsets",
-    R4__is_instance_of=p.I34["complex number"],
+    R4__is_instance_of=p.I38["non-negative integer"],
     R24__has_LaTeX_string="$0$",
 )
 
@@ -24,7 +24,7 @@ I5000 = p.create_item(
 I5001 = p.create_item(
     R1__has_label="scalar one",
     R2__has_description="entity representing the one-element in the set of complex numbers and its subsets",
-    R4__is_instance_of=p.I34["complex number"],
+    R4__is_instance_of=p.I39["positive integer"],
     R24__has_LaTeX_string="$1$",
 )
 
@@ -45,6 +45,11 @@ I9904 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I7151 = p.create_item(
+    R1__has_label="vector",
+    R2__has_description="vector of (in general) complex numbers, i.e. vector over the field of complex numbers",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+)
 
 I3240 = p.create_item(
     R1__has_label="matrix element",
@@ -178,7 +183,7 @@ class IntegerRangeElement:
 
     def __enter__(self):
         """
-        implicitly called in the head of the with statemet
+        implicitly called in the head of the with statement
         :return:
         """
 
@@ -237,7 +242,7 @@ R5939 = p.create_relation(
 )
 
 
-#            start defintion
+#            start definition
 
 I9223 = p.create_item(
     R1__has_label="definition of zero matrix",
@@ -268,11 +273,11 @@ with I9223["definition of zero matrix"].scope("premise") as cm:
 with I9223["definition of zero matrix"].scope("assertion") as cm:
     cm.new_rel(cm.M, p.R30["is secondary instance of"], I9905["zero matrix"])
 
-#            end defintion
+#            end definition
 
 # ---------------------------------------------------------------------------------------------------------------------
 
-#            start defintion
+#            start definition
 
 I1608 = p.create_item(
     R1__has_label="identity matrix",  # TODO: also known as "unit matrix"
@@ -301,7 +306,7 @@ with I7169["definition of identity matrix"].scope("setting") as cm:
 
 with I7169["definition of identity matrix"].scope("premise") as cm:
 
-    # todo: the running indicses should be related to the context cm
+    # todo: the running indices should be related to the context cm
     # there should be a context stack
     with IntegerRangeElement(start=1, stop=cm.nr) as i:
         with IntegerRangeElement(start=1, stop=cm.nr) as j:
@@ -309,7 +314,7 @@ with I7169["definition of identity matrix"].scope("premise") as cm:
             # create an auxiliary variable (not part part of the graph)
             M_ij = I3240["matrix element"](cm.M, i, j)
 
-            # Condition in human-readible form:
+            # Condition in human-readable form:
             # In case i != j, the matrix element M_ij must be 0
             # In case i == j, the matrix element M_ij must be 1
 
@@ -328,7 +333,7 @@ with I7169["definition of identity matrix"].scope("premise") as cm:
 with I7169["definition of identity matrix"].scope("assertion") as cm:
     cm.new_rel(cm.M, p.R30["is secondary instance of"], I1608["identity matrix"])
 
-#            end defintion
+#            end definition
 
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -368,7 +373,7 @@ I5807 = p.create_item(
 
 I2738 = p.create_item(
     R1__has_label="field of complex numbers",
-    R2__has_description="field of complex numnbers",
+    R2__has_description="field of complex numbers",
     R4__is_instance_of=I8133["field of numbers"],
     R13__has_canonical_symbol=r"$\mathbb{C}$",
     R3033__has_type_of_elements=p.I34["complex number"],
@@ -437,7 +442,7 @@ I3237 = p.create_item(
 
 I5177 = p.create_item(
     R1__has_label="matmul",
-    R2__has_description=("matrix multplication operator"),
+    R2__has_description=("matrix multiplication operator"),
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9904["matrix"],
     R9__has_domain_of_argument_2=I9904["matrix"],
@@ -454,6 +459,31 @@ I1474 = p.create_item(
     R11__has_range_of_result=I9904["matrix"],
 )
 
+I9493 = p.create_item(
+    R1__has_label="matadd",
+    R2__has_description="matrix addition operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R9__has_domain_of_argument_2=I9904["matrix"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+I1536 = p.create_item(
+    R1__has_label="negation",
+    R2__has_description="negation operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"], #(I9904["matrix"], p.I35["real number"]),
+    R11__has_range_of_result=I9904["matrix"],
+)
+
+I3263 = p.create_item(
+    R1__has_label="transpose",
+    R2__has_description="matrix transposition operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I9904["matrix"],
+)
+
 # copied from control_theory1:
 
 
@@ -463,20 +493,25 @@ I5484 = p.create_item(
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
-
-# todo: what is the difference between an object and an expression?
-# TODO: align this with p.I18
-I4236 = p.create_item(
-    R1__has_label="mathematical expression",
-    R2__has_description="common base class for mathematical expressions",
-    R3__is_subclass_of=p.I12["mathematical object"],
-)
-
 I1060 = p.create_item(
     R1__has_label="general function",
     R2__has_description="function that maps from some set (domain) into another (range);",
-    R3__is_subclass_of=I4236["mathematical expression"],
-    R18__has_usage_hint="this is the base class for more specifc types of functions",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+    R18__has_usage_hint="this is the base class for more specific types of functions",
+)
+
+I5094 = p.create_item(
+    R1__has_label="linear function",
+    R2__has_description="linear map from some set (domain) into another (range)",
+    R3__is_subclass_of=I1060["general function"],
+)
+
+R9493 = p.create_relation(
+    R1__has_label="has assigned linear map",
+    R2__has_description="a matrix is assigned a linear map, that describes the transformation between two vector spaces",
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I5094["linear function"],
+    R22__is_functional=True,
 )
 
 I1063 = p.create_item(
@@ -506,7 +541,7 @@ I4239 = p.create_item(
 R1757 = p.create_relation(
     R1__has_label="has set of roots",
     R2__has_description="set of roots for a monovariate function",
-    R8__has_domain_of_argument_1=I4236["mathematical expression"],  # todo: this is too broad
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],  # todo: this is too broad
     R11__has_range_of_result=I5484["finite set of complex numbers"],
 )
 
@@ -590,11 +625,11 @@ I7765 = p.create_item(
 
 
 R8736 = p.create_relation(
-    R1__has_label="depends polyonomially on",
+    R1__has_label="depends polynomially on",
     R2__has_description="subject has a polynomial dependency object",
     R8__has_domain_of_argument_1=p.I12["mathematical object"],
     R11__has_range_of_result=I5030["variable"],
-    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomoial dependency"),
+    R18__has_usage_hint=("This relation is intentionally not functional to model multivariate polynomial dependency"),
 )
 
 # eigenvalues
@@ -621,7 +656,7 @@ def I6324_cc_pp(self, res, *args, **kwargs):
 
     # check that `var` is an instance of I5030["variable"]
     assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
-    res.set_relation(R8736["depends polyonomially on"], var)
+    res.set_relation(R8736["depends polynomially on"], var)
 
     return res
 
@@ -652,10 +687,10 @@ def I5359_cc_pp(self, res, *args, **kwargs):
     assert len(args) == 1
     (matrix,) = args
 
-    if poly_vars := matrix.R8736__depends_polyonomially_on:
+    if poly_vars := matrix.R8736__depends_polynomially_on:
         for var in poly_vars:
             assert ("R4", I5030["variable"]) in p.get_taxonomy_tree(var)
-            res.set_relation(R8736["depends polyonomially on"], var)
+            res.set_relation(R8736["depends polynomially on"], var)
 
     return res
 
@@ -927,6 +962,8 @@ I9923 = p.create_item(
     R1__has_label="scalar field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I1168["point in state space"],
+    R11__has_range_of_result=p.I35["real number"],
 )
 
 
@@ -934,6 +971,8 @@ I9841 = p.create_item(
     R1__has_label="vector field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I1168["point in state space"],
+    R11__has_range_of_result=I7151["vector"],
 )
 
 
@@ -943,22 +982,22 @@ I9841 = p.create_item(
 
 
 I5843 = p.create_item(
-    R1__has_label="neighbourhood",
+    R1__has_label="neighborhood",
     R2__has_description="a region of space around a point",
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
 
 R4963 = p.create_relation(
-    R1__has_label="is neighbourhood of",
-    R2__has_description="specifies that the subject (a set) is a neighbourhood of the object (a point)",
-    R8__has_domain_of_argument_1=I5843["neighbourhood"],
+    R1__has_label="is neighborhood of",
+    R2__has_description="specifies that the subject (a set) is a neighborhood of the object (a point)",
+    R8__has_domain_of_argument_1=I5843["neighborhood"],
     R11__has_range_of_result=I1168["point in state space"],
 )
 
 I3133 = p.create_item(
     R1__has_label="positive definiteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
@@ -977,19 +1016,19 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
 
     x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
 
-    u = cm.new_var(u=p.uq_instance_of(I5843["neighbourhood"]))
+    u = cm.new_var(u=p.uq_instance_of(I5843["neighborhood"]))
     cm.new_rel(cm.M, R3326["has dimension"], cm.n)
 
     cm.new_rel(cm.M, R3798["has origin"], cm.x0)
-    cm.new_rel(cm.u, R4963["is neighbourhood of"], cm.x0)
+    cm.new_rel(cm.u, R4963["is neighborhood of"], cm.x0)
     cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
 
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
     cm.new_rel(cm.h, R9651["has domain"], cm.M)
 
     # TODO: __automate_typing__ (or via convenience function)
-    h.R8__has_domain_of_argument_1 = I1168["point in state space"]
-    h.R11__has_range_of_result = p.I35["real number"]
+    # h.R8__has_domain_of_argument_1 = I1168["point in state space"]
+    # h.R11__has_range_of_result = p.I35["real number"]
 
     cm.item.h_value = h(x)
 
@@ -1017,21 +1056,21 @@ I3133["positive definiteness"].set_relation(
 
 I3135 = p.create_item(
     R1__has_label="positive semidefiniteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3136 = p.create_item(
     R1__has_label="negative definiteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
-    R2__has_description="a special property of a scalar field in a neighbourhood of the origin",
+    R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
@@ -1053,16 +1092,73 @@ I4505 = p.create_item(
 )
 
 
-# TOOD: specify to which objects this property can be meaningfully applied
+# TODO: specify to which objects this property can be meaningfully applied
 I5753 = p.create_item(
     R1__has_label="radially unboundedness",
     R2__has_description=(
         "states that a function tend towards infinity if the argument goes to infinity "
-        "(independet of direction)"
+        "(independent of direction)"
     ),
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
+
+I1778 = p.create_item(
+    R1__has_label="homogeneity",
+    R2__has_description=(
+        "states that if all arguments of a function are multiplied by a scalar value, the function value is multiplied"
+        " by some power k of same scalar"
+    ),
+    R4__is_instance_of=p.I54["mathematical property"],
+    R78__is_applicable_to=I1060["general function"],
+)
+
+I5441 = p.create_item(
+    R1__has_label="sum",
+    R2__has_description="sum operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I37["integer number"], # start
+    R10__has_domain_of_argument_3=p.I18["mathematical expression"], # [p.I37["integer number"], I4291["infinity"]], # stop
+    R11__has_range_of_result=p.I18["mathematical expression"],
+)
+
+I4291 = p.create_item(
+    R1__has_label="infinity",
+    R2__has_description="infinity",
+    R4__is_instance_of=p.I18["mathematical expression"], # TODO type?
+)
+
+I7481 = p.create_item(
+    R1__has_label="Jacobian",
+    R2__has_description="Jacobi matrix of a vector field, operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9841["vector field"],
+    R11__has_range_of_result=I9906["square matrix"],
+)
+
+I2378 = p.create_item(
+    R1__has_label="solution to a mathematical algorithm",
+    R2__has_description="",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+I9827 = p.create_item(
+    R1__has_label="mathematical algorithm",
+    R2__has_description="",
+    R4__is_instance_of=I4895["mathematical operator"],
+    # R8__has_domain_of_argument_1=??,
+    R11__has_range_of_result=p.I53["bool"], # if a solution exists or not
+)
+
+R3263 = p.create_relation(
+    R1__has_label="has solution",
+    R2__has_description="solution of a mathematical algorithm",
+    R8__has_domain_of_argument_1=I9827["mathematical algorithm"],
+    R11__has_range_of_result=I2378["solution to a mathematical algorithm"],
+)
+
+I9827["mathematical algorithm"].set_relation(R3263["has solution"], I2378["solution to a mathematical algorithm"])
 
 # <new_entities>
 
@@ -1105,18 +1201,18 @@ I4218      R4218
 I2328      R2328
 I9489      R9489
 I4864      R4864
-I5094      R5094
-I2378      R2378
-I1716      R1716
-I9827      R9827
-I7151      R7151
-I7481      R7481
-I4291      R4291
-I5441      R5441
-I1778      R1778
-I1536      R1536
-I9493      R9493
-I3263      R3263
+      R5094
+       R2378
+     R1716
+      R9827
+      R7151
+      R7481
+      R4291
+      R5441
+      R1778
+      R1536
+
+
 
 
 

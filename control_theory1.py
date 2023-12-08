@@ -153,7 +153,7 @@ R7178 = p.create_relation(
     R8__has_domain_of_argument_1=I7641["general system model"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q2480745"
-    # TODO: add formal comment to clearify the conflicting usages of language:
+    # TODO: add formal comment to clarify the conflicting usages of language:
     # "degree of freedom" vs. "number of degrees of freedom"
 )
 
@@ -271,7 +271,7 @@ I8182 = p.create_item(
 
 # I7206 = p.create_item(
 #     R1__has_label="system-dynamical property",
-#     R2__has_description="base class for all systemdynamical properties",
+#     R2__has_description="base class for all system-dynamical properties",
 #     R3__is_subclass_of=p.I54["mathematical property"],
 # )
 
@@ -342,22 +342,22 @@ I9964 = p.create_item(
 
 I2557 = p.create_item(
     R1__has_label="quasilinearity",
-    R2__has_description="states that in a pde the highest order derivatives appear linearly, with their coeffitients \
-        being functions of the independant variables and their (lower order) derivatives",
+    R2__has_description="states that in a pde the highest order derivatives appear linearly, with their coefficients \
+        being functions of the independent variables and their (lower order) derivatives",
     R17__is_subproperty_of=I2562["general property of pde"],
 )
 
 I3114 = p.create_item(
     R1__has_label="semilinearity",
-    R2__has_description="states that in a pde the highest order derivatives appear linearly, with their coeffitients \
-        being functions of only the independant variables",
+    R2__has_description="states that in a pde the highest order derivatives appear linearly, with their coefficients \
+        being functions of only the independent variables",
     R17__is_subproperty_of=I2557["quasilinearity"],
 )
 
 I3863 = p.create_item(
     R1__has_label="linearity",
-    R2__has_description="states that in a pde the unknown function and all its derivatives appear linearly, with their coeffitients \
-        being functions of only the independant variables",
+    R2__has_description="states that in a pde the unknown function and all its derivatives appear linearly, with their coefficients \
+        being functions of only the independent variables",
     R17__is_subproperty_of=I3114["semilinearity"],
 )
 
@@ -380,10 +380,10 @@ with I4455.scope("setting") as cm:
     cm.new_rel(cm.P, ma.R1757["has set of roots"], cm.set_of_roots)
 
 
-with I4455.scope("premises") as cm:
+with I4455.scope("premise") as cm:
     cm.new_rel(cm.set_of_roots, p.R14["is subset of"], ma.I2739["open left half plane"])
 
-with I4455.scope("assertions") as cm:
+with I4455.scope("assertion") as cm:
     cm.new_rel(cm.P, p.R30["is secondary instance of"], I5325["Hurwitz polynomial"])
 
 I5325["Hurwitz polynomial"].set_relation(p.R37["has definition"], I4455["definition of Hurwitz polynomial"])
@@ -391,7 +391,7 @@ I5325["Hurwitz polynomial"].set_relation(p.R37["has definition"], I4455["definit
 
 
 # TODO: open question should  I3007["stability theorem for a rational transfer function"] be constructed by using I5325["Hurwitz polynomial"]
-# con: BIBO-stability might be meaningfull also for Transferfunctions with nonpolynomial denominators
+# con: BIBO-stability might be meaningful also for transfer functions with non-polynomial denominators
 
 
 # <theorem>
@@ -413,11 +413,11 @@ with I3007.scope("setting") as cm:
     cm.new_rel(cm.tf_rep, R5323["has denominator"], cm.denom)
     cm.new_rel(cm.denom, ma.R1757["has set of roots"], cm.set_of_poles)
 
-with I3007.scope("premises") as cm:
+with I3007.scope("premise") as cm:
     cm.new_rel(cm.set_of_poles, p.R14["is subset of"], ma.I2739["open left half plane"])
     cm.new_rel(cm.tf_rep, p.R16["has property"], I8181["properness"])
 
-with I3007.scope("assertions") as cm:
+with I3007.scope("assertion") as cm:
     cm.new_rel(cm.sys, p.R16["has property"], I7208["BIBO stability"])
 # </theorem>
 
@@ -472,10 +472,10 @@ with I4216.scope("setting") as cm:
 
     cm.new_rel(cm.mpc_problem, p.R000["refers to"], cm.sys)
 
-with I4216.scope("premises") as cm:
+with I4216.scope("premise") as cm:
     cm.new_rel(cm.sys, p.R000["refers to"], cm.sys)
 
-with I4216.scope("assertions") as cm:
+with I4216.scope("assertion") as cm:
     cm.new_rel(cm.mpc_problem, p.R000["can be reduced to"], cm.quadratic_problem)
 
 """
@@ -486,7 +486,7 @@ precomputed.
 
 # </statement>
 
-# defined in math because positie definiteness etc depends on it
+# defined in math because positive definiteness etc depends on it
 assert ma.R5405["has associated state space"]
 assert ma.I1168["point in state space"]
 
@@ -593,7 +593,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     h = cm.new_var(h=p.uq_instance_of(ma.I9923["scalar field"]))
 
     # TODO: this should be more specific (related to cm.M)
-    h.R8__has_domain_of_argument_1 = ma.I1168["point in state space"]
+    # h.R8__has_domain_of_argument_1 = ma.I1168["point in state space"]
     # TODO: __automate_typing__
     # h.R11__has_range_of_result = p.I35["real number"]
 
@@ -635,7 +635,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     cm.item.L_evaluated = I1347["Lie derivative of scalar field"](h, f, x)
 
 
-with I6229.scope("assertions") as cm:
+with I6229.scope("assertion") as cm:
     # TODO: encode the directional character of this equation (lhs := rhs)
     cm.new_equation(lhs=cm.L_evaluated, rhs=cm.subs)
 
@@ -709,7 +709,7 @@ I9030 = p.create_item(
 I9210 = p.create_item(
     R1__has_label="stabilizability",
     R2__has_description="states that for the model of a dynamical system there exists a state feedback such that the \
-        system is asymptotically stable",
+        system is stable",
     R4__is_instance_of=I5356["general system property"],
 )
 
@@ -724,7 +724,7 @@ I7864 = p.create_item(
 I9853 = p.create_item(
     R1__has_label="detectability",
     R2__has_description="states that all unobservable state components of the model of a dynamical system are \
-        asymptotically stable",
+        stable",
     R4__is_instance_of=I5356["general system property"],
 )
 
@@ -738,7 +738,7 @@ I3227 = p.create_item(
 
 I3321 = p.create_item(
     R1__has_label="minimum phase",
-    R2__has_description="states that the model of a dynamical system has asymptotically stable zero dynamics",
+    R2__has_description="states that the model of a dynamical system has stable zero dynamics",
     R4__is_instance_of=I5356["general system property"],
 )
 
@@ -833,7 +833,7 @@ R5031 = p.create_relation(
 
 I9820 = p.create_item(
     R1__has_label="equilibrium point",
-    R2__has_description="constant solution to a diffenrential equation",
+    R2__has_description="constant solution to a differential equation",
     R3__is_subclass_of=I7062["trajectory"],
 )
 
@@ -853,7 +853,7 @@ R3898 = p.create_relation(
 
 R6134 = p.create_relation(
     R1__has_label="has highest time derivative",
-    R2__has_description="the highest time derivative occuring in the model equations",
+    R2__has_description="the highest time derivative occurring in the model equations",
     R8__has_domain_of_argument_1=I7641["general system model"],
     R11__has_range_of_result=p.I38["non-negative integer"],
     R22__is_functional=True,
@@ -968,7 +968,7 @@ I3241 = p.create_item(
 
 I1779 = p.create_item(
     R1__has_label="driftlessness",
-    R2__has_description="states that the dirft term of an input affine system is always 0",
+    R2__has_description="states that the drift term of an input affine system is always 0",
     R4__is_instance_of=I1793["general model representation property"],
     R17__is_subproperty_of=I6091["control affine"],
 )
@@ -1028,7 +1028,7 @@ I9223 = p.create_item(
     R3__is_subclass_of=I1696["physical domain"],
 )
 
-# general equation of linear second order pde with 2 independant variables
+# general equation of linear second order pde with 2 independent variables
 I2112 = p.instance_of(p.I18["mathematical expression"])
 I2112.set_relation(p.R24["has LaTeX string"], r"$A(x,y)u_{xx} + 2B(x,y)u_{xy} + C(x,y)u_{yy} + f(x,y,u,u_x,u_y)$")
 
@@ -1080,20 +1080,20 @@ R9746 = p.create_relation(
 
 # TODO: make a connection to system order >= 2 , consistency checking rule
 I6830 = p.create_item(
-    R1__has_label="dirichlet boundary condition",
+    R1__has_label="Dirichlet boundary condition",
     R2__has_description="explicit specification of the values of the solution at the boundary of the domain",
     R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I7095 = p.create_item(
-    R1__has_label="robin boundary condition",
+    R1__has_label="Robin boundary condition",
     R2__has_description="explicit specification of a linear combination solution values and solution derivative values \
         at the boundary of the domain",
     R3__is_subclass_of=I1892["boundary condition"],
 )
 
 I3659 = p.create_item(
-    R1__has_label="neumann boundary condition",
+    R1__has_label="Neumann boundary condition",
     R2__has_description="explicit specification of the values of the derivative of the solution at the boundary of \
         the domain",
     R3__is_subclass_of=I1892["boundary condition"],
@@ -1166,7 +1166,7 @@ I5483 = p.create_item(
 
 
 I3369 = p.create_item(
-    R1__has_label="Sontags Formula",
+    R1__has_label="Sontags formula",
     R2__has_description="...",
     R3__is_subclass_of=p.I18["mathematical expression"],
     ag__R6876__is_named_after=ag.I8430["Eduardo Daniel Sontag"],
@@ -1182,7 +1182,7 @@ I7916 = p.create_item(
 
 
 I4201 = p.create_item(
-    R1__has_label="Ackermans Formula",
+    R1__has_label="Ackermanns Formula",
     R2__has_description="...",
     R3__is_subclass_of=p.I18["mathematical expression"],
     ag__R6876__is_named_after=ag.I2339["Jürgen Ackermann"],
@@ -1407,7 +1407,7 @@ I2083 = p.create_item(
 )
 
 
-# TODO: introduce alternative lable: state quatity (Zustandsgröße@de)
+# TODO: introduce alternative lable: state quantity (Zustandsgröße@de)
 I8679 = p.create_item(
     R1__has_label="state (of a dynamical system)",
     R2__has_description="",
@@ -1427,7 +1427,7 @@ I3554 = p.create_item(
 
 I8092 = p.create_item(
     R1__has_label="observer",
-    R2__has_description="dynamical system which serves to estimate inner quatities of another dynamical system",
+    R2__has_description="dynamical system which serves to estimate inner quantities of another dynamical system",
     R4__is_instance_of=p.I50["stub"],
 # TODO: introduce duality
     R72__is_generally_related_to=I6950["controller"],
@@ -1436,10 +1436,10 @@ I8092 = p.create_item(
 
 # <theorem>
 I4663 = p.create_item(
-    R1__has_label="theorem for Lyapunov stability of state space system",
+    R1__has_label="theorem for Lyapunov stability of state space system", # TODO this is one formulation among many
     R2__has_description=(
         "establishes a sufficient condition for the stability of an equilibrium point "
-        "of a statespace system"
+        "of a state space system"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
     ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
@@ -1473,8 +1473,8 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("premis
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
-    # TODO: double check the meaning of global here
-    cm.new_rel(cm.x0, p.R16["has property"], I8744["global Lyapunov stability"])
+    # TODO: double check the meaning of global here @ca: global is wrong here
+    cm.new_rel(cm.x0, p.R16["has property"], I2931["local Lyapunov stability"])
 
 # </theorem>
 
@@ -1484,7 +1484,7 @@ I8733 = p.create_item(
     R1__has_label="theorem for asymptotic Lyapunov stability of state space system",
     R2__has_description=(
         "establishes a sufficient condition for the asymptotic stability of an equilibrium point "
-        "of a statespace system"
+        "of a states pace system"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
     ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
@@ -1498,7 +1498,30 @@ with I8733["theorem for asymptotic Lyapunov stability of state space system"].sc
 
 with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here
-    # TODO: check wording on I5677__global_asymptotical_stability
+    # TODO: check wording on I5677__global_asymptotical_stability, @ca again this is a local criterion
+    cm.new_rel(cm.x0, p.R16["has property"], I4900["local asymptotical stability"])
+
+# </theorem>
+
+# <theorem>
+I2983 = p.create_item(
+    R1__has_label="theorem for global asymptotic Lyapunov stability of state space system",
+    R2__has_description=(
+        "establishes a sufficient condition for the global asymptotic stability of an equilibrium point "
+        "of a state space system"
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
+)
+
+with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
+    cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
+
+with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
+    cm.new_rel(cm.V, p.R16["has property"], ma.I5753["radially unboundedness"])
+
+with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
 
 # </theorem>
@@ -1586,6 +1609,253 @@ I9208 = p.create_item(
     R77__has_alternative_label="non-strict Lyapunov Function"
 )
 
+I6338 = p.create_item(
+    R1__has_label="Lyapunov equation",
+    R2__has_description="...",
+    R3__is_subclass_of=p.I23["equation"],
+    R8__has_domain_of_argument_1=ma.I9906["square matrix"],     # A
+    R9__has_domain_of_argument_2=ma.I9906["square matrix"],     # P
+    R10__has_domain_of_argument_3=ma.I9906["square matrix"],    # Q
+    ag__R6876__is_named_after=ag.I2151["Aleksandr Lyapunov"],
+)
+
+# <theorem>
+I3712 = p.create_item(
+    R1__has_label="theorem on Lyapunov equation",
+    R2__has_description="theorem characterizes asymptotic stability of the origin in terms of the solution of the "
+        "Lyapunov equation",
+    R4__is_instance_of=p.I17["equivalence proposition"],
+    # H. K. Khalil, Nonlinear systems, Pearson new internat. ed., 3. ed. in Always learning. Harlow: Pearson Education, 2014.
+    # Theorem 4.6
+
+)
+
+with I3712.scope("setting") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
+
+    cm.new_rel(A, ma.R5938["has row number"], n)
+    cm.new_rel(Q, ma.R5938["has row number"], n)
+
+    cm.new_rel(Q, p.R16["has property"], ma.I3135["positive semidefiniteness"])
+
+    eig = cm.new_var(eig=p.instance_of(ma.I5484["finite set of complex numbers"]))
+    cm.new_equation(eig, ma.I9160["set of eigenvalues of a matrix"](A))
+
+with I3712.scope("premise") as cm:
+    cm.new_rel(eig, p.R14["is subset of"], ma.I2739["open left half plane"])
+
+with I3712.scope("assertion") as cm:
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(P, ma.R5938["has row number"], n)
+    cm.new_rel(P, p.R16["has property"], ma.I3133["positive definiteness"])
+
+    cm.new_equation(ma.I1536["negation"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
+                                                                   (ma.I3263["transpose"](cm.A), cm.P)))
+
+# </theorem>
+
+I4432 = p.create_item(
+    R1__has_label="Vannelli recursive algorithm to find Lyapunov function",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=ma.I9827["mathematical algorithm"],
+    # R8__has_domain_of_argument_1=ma.I9841["vector field"], # f -> F_i
+    # R9__has_domain_of_argument_2=ma.I9906["square matrix"], # R_2
+    # R10__has_domain_of_argument_3=ma.I9906["square matrix"], # Q_1
+    # todo how to deal with >3 inputs? nesting?
+    # R11__has_range_of_result=p.I53["bool"], #todo this is done in parent class, sufficient?
+    # A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
+    # Systems,” Automatica, vol. 21, no. 1, pp. 69–60, 1985, doi: https://doi.org/10.1016/0005-1098(85)90099-8.
+)
+
+
+# <theorem>
+I8142 = p.create_item(
+    R1__has_label="theorem for Lyapunov functions for nonlinear systems",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    # A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
+    # Systems,” Automatica, vol. 21, no. 1, pp. 69–60, 1985, doi: https://doi.org/10.1016/0005-1098(85)90099-8.
+    # Theorem 4
+)
+
+
+with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("setting") as cm:
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
+    state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
+
+    f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
+    cm.new_rel(state_space_sys, R4122["has associated drift vector field"], f)
+
+    x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
+
+    with ma.IntegerRangeElement(start=1, stop=ma.I4291["infinity"]) as i:
+        F_i = cm.new_var(F_i=p.instance_of(ma.I9841["vector field"]))
+        # F_i is a vector of polynomials of degree i
+        evaluated_F_i = cm.new_var(F_i_x=p.instance_of(ma.I7151["vector"]))
+        cm.new_equation(F_i(x), evaluated_F_i)
+        cm.new_rel(evaluated_F_i, p.R16["has property"], ma.I1778["homogeneity"]) # todo does this apply to Fi or Fi_x?
+        with ma.IntegerRangeElement(start=1, stop=n) as j:
+            # F_ij is the j-th element of a vector of polynomials of degree i
+            evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
+            cm.new_equation(ma.I3589["monovariate polynomial degree"](evaluated_F_ij), i)
+
+    cm.new_equation(f(x), ma.I5441["sum"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
+
+    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+    cm.new_rel(state_space_sys, ma.R5405["has associated state space"], D)
+
+    x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+
+    cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
+
+    Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
+    cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
+
+with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premise") as cm:
+    F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"])) #todo relation to F_i with i=1 ??
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    cm.new_equation(A, ma.I7481["Jacobian"](F1))
+
+    # linearized system is asymptotically stable
+    eig = cm.new_var(eig=p.instance_of(ma.I5484["finite set of complex numbers"]))
+    cm.new_equation(eig, ma.I9160["set of eigenvalues of a matrix"](A))
+    cm.new_rel(eig, p.R14["is subset of"], ma.I2739["open left half plane"])
+
+    # recursive equations are satisfied
+    cm.new_equation(I4432["Vannelli recursive algorithm to find Lyapunov function"], True)
+
+
+with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("assertion") as cm:
+    # there exists an algorithm to iteratively calculate Lyapunov function
+    cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(I4432["Vannelli recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
+    pass
+
+# </theorem>
+
+
+# <theorem>
+I4274 = p.create_item(
+    R1__has_label="theorem for Lyapunov functions for polynomial systems",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+    # E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
+    # Lyapunov functions for polynomial systems through Darboux polynomials,” in 2014 American Control Conference,
+    # Portland, OR, USA: IEEE, Jun. 2014, pp. 3571–3578. doi: 10.1109/ACC.2014.6859330.
+
+)
+
+I7006 = p.create_item(
+    R1__has_label="Goubault recursive algorithm to find Lyapunov function",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=ma.I9827["mathematical algorithm"],
+    # todo arguments?
+    # R11__has_range_of_result=p.I53["bool"], #todo this is done in parent class, sufficient?
+    # E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
+    # Lyapunov functions for polynomial systems through Darboux polynomials,” in 2014 American Control Conference,
+    # Portland, OR, USA: IEEE, Jun. 2014, pp. 3571–3578. doi: 10.1109/ACC.2014.6859330.
+)
+
+with I4274["theorem for Lyapunov functions for polynomial systems"].scope("setting") as cm:
+    sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
+    cm.new_rel(sys, R5100["has model representation property"], I5247["polynomial"])
+
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+    cm.new_rel(sys, ma.R5405["has associated state space"], D)
+
+    x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+
+    cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
+
+with I4274["theorem for Lyapunov functions for polynomial systems"].scope("premise") as cm:
+    # find rational differential variants of Darboux polynomials
+    # using sum of squares method
+    # combine invariants to create a polynomial with 3 conditions
+    # if solution to exists
+    cm.new_equation(I7006["Goubault recursive algorithm to find Lyapunov function"], True)
+
+with I4274["theorem for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
+    # polynomial is Lyapunov function
+    cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(I7006["Goubault recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
+    pass
+
+# </theorem>
+
+
+# <theorem>
+I2613 = p.create_item(
+    R1__has_label="theorem for Lyapunov functions for linear systems",
+    R2__has_description=(
+        ""
+    ),
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+with I2613["theorem for Lyapunov functions for linear systems"].scope("setting") as cm:
+    # uq ... because the theorem holds for all n
+    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+
+    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    cm.new_rel(D, ma.R3326["has dimension"], n)
+
+    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
+    cm.new_rel(ode_sys, p.R16["has property"], I4761["linearity"])
+    cm.new_rel(ode_sys, ma.R5405["has associated state space"], D)
+
+    x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
+    cm.new_rel(D, ma.R3798["has origin"], x0)
+    # x = cm.new_var(x=p.instance_of(ma.I7151["vector"])) # TODO works only with multi-type for matmul
+    x = cm.new_var(x=p.instance_of(ma.I9904["matrix"]))
+    cm.new_rel(x, p.R15["is element of"], D)
+
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
+    I = cm.new_var(I=p.instance_of(ma.I1608["identity matrix"]))
+    cm.new_rel(A, ma.R5938["has row number"], n)
+    cm.new_rel(P, ma.R5938["has row number"], n)
+    cm.new_rel(I, ma.R5938["has row number"], n)
+
+    # specify f(x) = Ax
+    f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
+    cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
+    # cm.new_equation(f(x), ma.I5177["matmul"](A, x)) # TODO type error vector != matrix
+
+    LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
+    LE.R8__has_domain_of_argument_1=A
+    LE.R9__has_domain_of_argument_2=P
+    LE.R10__has_domain_of_argument_3=I
+
+
+with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
+    cm.new_rel(cm.P, p.R16["has property"], ma.I3133["positive definiteness"])
+
+with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
+    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
+    V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
+    defV = cm.new_var(
+        defV=p.new_mathematical_relation(
+            V, "==", ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](cm.x), cm.P), cm.x)
+        )
+    )
+
+# </theorem>
 
 # <new_entities>
 
@@ -1626,9 +1896,9 @@ I4766      R4766
 I4147      R4147
 I6210      R6210
 I1775      R1775
-I7006      R7006
-I4432      R4432
-I8142      R8142
+      R7006
+      R4432
+      R8142
 
 
 
@@ -1649,11 +1919,11 @@ key reservoir C
 I9987
 I6548
 I6189
-I4274
-I3712
-I6338
-I2613
-I2983
+
+
+
+
+
 """
 
 p.end_mod()

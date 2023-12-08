@@ -12,7 +12,7 @@ if os.environ.get("IPYDEX_AIOE") == "true":
     activate_ips_on_exception()
 
 if not os.environ.get("PYERK_DISABLE_CONSISTENCY_CHECKING", "").lower() == "true":
-    p.cc.enable_consitency_checking()
+    p.cc.enable_consistency_checking()
 
 PACKAGE_ROOT_PATH = Path(__file__).parent.parent.absolute().as_posix()
 ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
@@ -41,7 +41,7 @@ class Test_02_math(unittest.TestCase):
         # different ways to define column stacks:
         colstack1: p.Item = p.instance_of(ma.I3237["column stack"])
 
-        # add the elements of the columnstack element by element
+        # add the elements of the column-stack element by element
         colstack1.set_relation(ma.R7490["has sequence element"], A)
         colstack1.set_relation(ma.R7490["has sequence element"], b)
 
@@ -49,15 +49,15 @@ class Test_02_math(unittest.TestCase):
         rels = colstack1.get_relations("ma__R7490__has_sequence_element", return_obj=True)
         self.assertEqual(rels, [A, b])
 
-        # add the elements of the columnstack all at once
+        # add the elements of the column-stack all at once
         colstack2: p.Item = p.instance_of(ma.I3237["column stack"])
-        colstack2.set_mutliple_relations(ma.R7490["has sequence element"], (A, b))
+        colstack2.set_multiple_relations(ma.R7490["has sequence element"], (A, b))
 
         # check
         rels = colstack2.get_relations("ma__R7490__has_sequence_element", return_obj=True)
         self.assertEqual(rels, [A, b])
 
-        # construct a situation like in the Kalman controlability matrix: Q = (b, A*b, A^2*b, ...)
+        # construct a situation like in the Kalman controllability matrix: Q = (b, A*b, A^2*b, ...)
         colstack3: p.Item = p.instance_of(ma.I3237["column stack"])
 
         # arbitrary range (here from 0 to 24)
@@ -76,10 +76,10 @@ class Test_02_math(unittest.TestCase):
         M.R30__is_secondary_instance_of = ma.I9906["square matrix"]
 
         self.assertTrue(M.R4__is_instance_of, ma.I1935["polynomial matrix"])
-        self.assertTrue(M.ma__R8736__depends_polyonomially_on, s)
+        self.assertTrue(M.ma__R8736__depends_polynomially_on, s)
 
         d = ma.I5359["determinant"](M)
-        self.assertTrue(d.ma__R8736__depends_polyonomially_on, s)
+        self.assertTrue(d.ma__R8736__depends_polynomially_on, s)
 
     def test_c03__publications(self):
         x = ag.I7558["2002_Khalil"]
