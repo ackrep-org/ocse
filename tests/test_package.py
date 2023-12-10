@@ -81,7 +81,7 @@ class Test_02_math(unittest.TestCase):
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polynomially_on, s)
 
-    def test_c04__symbolic_formula(self):
+    def test_c04_symbolic_formula1(self):
 
         t = p.instance_of(ma.I2917["planar triangle"])
         sides = ma.I9148["get polygon sides ordered by length"](t)
@@ -90,7 +90,15 @@ class Test_02_math(unittest.TestCase):
         la, lb, lc = ma.items_to_symbols(a, b, c, relation=ma.R2495["has length"])
         symbolic_sum = la + lb + lc
 
-        # IPS()
+        sum_item = ma.symbolic_expression_to_graph_expression(symbolic_sum)
+        self.assertEqual(sum_item.get_arguments()[0].get_arguments(), [a.R2495__has_length, b.R2495__has_length])
+        self.assertEqual(sum_item.get_arguments()[1], c.R2495__has_length)
+        self.assertEqual(sum_item.R4__is_instance_of, ma.I6043["sum"])
+
+        symbolic_prod = la*lb
+        prod_item = ma.symbolic_expression_to_graph_expression(symbolic_prod)
+        self.assertEqual(prod_item.get_arguments(), [a.R2495__has_length, b.R2495__has_length])
+        self.assertEqual(prod_item.R4__is_instance_of, ma.I5916["product"])
 
 
 class Test_02_control_theory(unittest.TestCase):

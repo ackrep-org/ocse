@@ -12,6 +12,9 @@ keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
 p.start_mod(__URI__)
 
+# data store on module level
+ds = {}
+
 
 I5000 = p.create_item(
     R1__has_label="scalar zero",
@@ -1113,14 +1116,28 @@ I1778 = p.create_item(
     R78__is_applicable_to=I1060["general function"],
 )
 
-I5441 = p.create_item(
+
+I6043 = p.create_item(
     R1__has_label="sum",
-    R2__has_description="sum operator",
+    R2__has_description="base class for general sums (result of addition)",
+    R3__is_subclass_of=p.I18["mathematical expression"]
+)
+
+I5916 = p.create_item(
+    R1__has_label="product",
+    R2__has_description="base class for general products (result of multiplication)",
+    R3__is_subclass_of=p.I18["mathematical expression"]
+)
+
+
+I5441 = p.create_item(
+    R1__has_label="sum over index",
+    R2__has_description="summation operator (capital Sigma)",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=p.I37["integer number"], # start
     R10__has_domain_of_argument_3=p.I18["mathematical expression"], # [p.I37["integer number"], I4291["infinity"]], # stop
-    R11__has_range_of_result=p.I18["mathematical expression"],
+    R11__has_range_of_result=I6043["sum"],
 )
 
 I4291 = p.create_item(
@@ -1160,13 +1177,40 @@ R3263 = p.create_relation(
 
 I9827["mathematical algorithm"].set_relation(R3263["has solution"], I2378["solution to a mathematical algorithm"])
 
+
+# items to specify components of formulas
+
+
+I2495 = p.create_item(
+    R1__has_label="add",
+    R2__has_description="general addition operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I18["mathematical expression"],
+    R11__has_range_of_result=I6043["sum"],
+)
+
+I9738 = p.create_item(
+    R1__has_label="mul",
+    R2__has_description="general multiplcation operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I18["mathematical expression"],
+    R11__has_range_of_result=I5916["product"],
+)
+
+
 # helper function to simplify creation of formulas
 
-item_symbol_storage = {}
 
 def items_to_symbols(*args, relation=None) -> list:
+
+    if not "item_symbol_map" in ds:
+        ds["item_symbol_map"] = p.aux.OneToOneMapping()
+    item_symbol_map = ds["item_symbol_map"]
+
     import sympy as sp
-    n = len(item_symbol_storage)
+    n = len(item_symbol_map.a)
     res = []
 
     if relation is not None:
@@ -1179,9 +1223,74 @@ def items_to_symbols(*args, relation=None) -> list:
         # TODO: check meaningful types (numbers, expressions, evaluated mappings, but not eg. ag.I7435["human"])
         suffix = itm.R1__has_label.split(" ")[0]
         name = f"s{i}_{suffix}"
-        res.append(sp.Symbol(name))
+        symb = sp.Symbol(name)
+        res.append(symb)
+
+        # a: keys=uris, values=symbols; b: keys=symbols, values=uris;
+        item_symbol_map.add_pair(itm.uri, symb)
 
     return res
+
+
+class symbolicExpressionToGraphExpressionConverter:
+    def __init__(self, symb_expression) -> None:
+        try:
+            self.item_symbol_map = ds["item_symbol_map"]
+        except KeyError:
+            raise p.aux.PyERKError("no item-symbol-associations were registered")
+
+        # prevent sympy import on global level (because it is unnecessary in most cases)
+        import sympy
+        self.sp = sympy
+
+        self.symb_expression = symb_expression
+
+    def convert(self):
+        return self._conv_object(self.symb_expression)
+
+    def _conv_object(self, obj):
+        if isinstance(obj, p.Item):
+            return obj
+        elif isinstance(obj, self.sp.Symbol):
+            try:
+                uri = self.item_symbol_map.b[obj]
+            except KeyError:
+                msg = f"unknown symbol {obj} while converting expression {self.symb_expression}"
+            return p.ds.get_entity_by_uri(uri)
+        elif isinstance(obj, self.sp.Add):
+            return self._conv_add(obj.args)
+        elif isinstance(obj, self.sp.Mul):
+            return self._conv_mul(obj.args)
+
+    def _conv_add(self, args):
+        return self._apply_operator(args, I2495["add"])
+
+    def _conv_mul(self, args):
+        return self._apply_operator(args, I9738["mul"])
+
+    def _apply_operator(self, args, operator_item):
+        if len(args) == 2:
+            arg1, arg2 = self._conv_object(args[0]), self._conv_object(args[1])
+            return operator_item(arg1, arg2)
+
+        elif len(args) > 2:
+            new_args = (self._apply_operator(args[:2], operator_item), *args[2:])
+            assert len(new_args) == len(args) - 1
+            return self._apply_operator(new_args, operator_item)
+        else:
+            self._raise_error_invalid_length(len(args))
+
+
+    def _raise_error_invalid_length(self, length):
+        msg = f"unexpected length of arguments: {length} while converting expression {self.symb_expression}"
+        raise p.aux.PyERKError(msg)
+
+
+def symbolic_expression_to_graph_expression(symb_expression):
+    converter = symbolicExpressionToGraphExpressionConverter(symb_expression=symb_expression)
+    return converter.convert()
+
+
 
 
 # add knowledge elements of planar geometry (for Pythagorean theorem)
@@ -1219,6 +1328,7 @@ R2495 = p.create_relation(
     R2__has_description="specifies the length of a geometric object",
     R8__has_domain_of_argument_1=I1913["geometric object"],
     R11__has_range_of_result=p.I35["real number"],
+    R22__is_functional=True,
 )
 
 I9148 = p.create_item(
@@ -1299,10 +1409,8 @@ p.end_mod()
       R2917
       R8172
       R9148
-I2495
-I9738      R9738
-I6043      R6043
-I5916      R5916
+      R9738
+     R5916
 I6117      R6117
 I9192      R9192
 I3648      R3648

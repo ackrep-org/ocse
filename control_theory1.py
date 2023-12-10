@@ -1706,7 +1706,7 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
             evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
             cm.new_equation(ma.I3589["monovariate polynomial degree"](evaluated_F_ij), i)
 
-    cm.new_equation(f(x), ma.I5441["sum"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
+    cm.new_equation(f(x), ma.I5441["sum over index"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
 
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
