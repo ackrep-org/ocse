@@ -1821,8 +1821,8 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
     cm.new_rel(D, ma.R3798["has origin"], x0)
-    # x = cm.new_var(x=p.instance_of(ma.I7151["vector"])) # TODO works only with multi-type for matmul
-    x = cm.new_var(x=p.instance_of(ma.I9904["matrix"]))
+    x = cm.new_var(x=p.instance_of(ma.I7151["vector"])) # TODO works only with multi-type for matmul
+    # x = cm.new_var(x=p.instance_of(ma.I9904["matrix"]))
     cm.new_rel(x, p.R15["is element of"], D)
 
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
@@ -1835,7 +1835,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     # specify f(x) = Ax
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
-    # cm.new_equation(f(x), ma.I5177["matmul"](A, x)) # TODO type error vector != matrix
+    # cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, ma.I9489["vector to matrix"](x)))) # TODO type error vector != matrix
 
     LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
     LE.R8__has_domain_of_argument_1=A
@@ -1849,9 +1849,11 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("premise")
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
     V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
+    x_mat = ma.I9489["vector to matrix"](cm.x)
+
     defV = cm.new_var(
         defV=p.new_mathematical_relation(
-            V, "==", ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](cm.x), cm.P), cm.x)
+            V, "==", ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))
         )
     )
 

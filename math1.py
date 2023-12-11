@@ -42,7 +42,7 @@ I4895["mathematical operator"].add_method(p.create_evaluated_mapping, "_custom_c
 I9904 = p.create_item(
     R1__has_label="matrix",
     R2__has_description="matrix of (in general) complex numbers, i.e. matrix over the field of complex numbers",
-    R3__is_subclass_of=p.I12["mathematical object"],
+    R3__is_subclass_of=p.I18["mathematical expression"],
 )
 
 I7151 = p.create_item(
@@ -472,7 +472,7 @@ I1536 = p.create_item(
     R1__has_label="negation",
     R2__has_description="negation operator",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I9904["matrix"], #(I9904["matrix"], p.I35["real number"]),
+    R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=I9904["matrix"],
 )
 
@@ -1113,21 +1113,52 @@ I1778 = p.create_item(
     R78__is_applicable_to=I1060["general function"],
 )
 
+I4864 = p.create_item(
+    R1__has_label="infinity class",
+    R2__has_description="class for typechecking of infinity-object",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+)
+
+I4291 = p.create_item(
+    R1__has_label="infinity",
+    R2__has_description="infinity",
+    R4__is_instance_of=I4864["infinity class"],
+)
+
 I5441 = p.create_item(
     R1__has_label="sum",
     R2__has_description="sum operator",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=p.I37["integer number"], # start
-    R10__has_domain_of_argument_3=p.I18["mathematical expression"], # [p.I37["integer number"], I4291["infinity"]], # stop
+    R10__has_domain_of_argument_3=[p.I37["integer number"], I4864["infinity class"]], # stop
     R11__has_range_of_result=p.I18["mathematical expression"],
 )
 
-I4291 = p.create_item(
-    R1__has_label="infinity",
-    R2__has_description="infinity",
-    R4__is_instance_of=p.I18["mathematical expression"], # TODO type?
+I9489 = p.create_item(
+    R1__has_label="vector to matrix",
+    R2__has_description="convert a vector item to a matrix item for calculus",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I7151["vector"],
+    R11__has_range_of_result=I9904["matrix"],
+    R18__has_usage_hint="Use this operator to convert to matrix, then use matmul, matadd etc.",
 )
+
+I4218 = p.create_item(
+    R1__has_label="matrix to vector",
+    R2__has_description="convert a nx1 matrix item to a vector item for calculus",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I7151["vector"],
+)
+
+I2328 = p.create_item(
+    R1__has_label="matrix to scalar",
+    R2__has_description="convert a 1x1 matrix item to a scalar value",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I1063["scalar function"],
+) # TODO build test
 
 I7481 = p.create_item(
     R1__has_label="Jacobian",
@@ -1197,10 +1228,10 @@ I3648      R3648
 I6209      R6209
 I8492      R8492
 I1284      R1284
-I4218      R4218
-I2328      R2328
-I9489      R9489
-I4864      R4864
+      R4218
+      R2328
+      R9489
+      R4864
       R5094
        R2378
      R1716
