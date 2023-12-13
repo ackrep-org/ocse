@@ -925,12 +925,6 @@ R5405 = p.create_relation(
 )
 
 
-I1168 = p.create_item(
-    R1__has_label="point in state space",
-    R2__has_description="type for a point in a given state space",
-    R3__is_subclass_of=p.I12["mathematical object"],
-    R41__has_required_instance_relation=R5405["has associated state space"],
-)
 # TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
 
 I1169 = p.create_item(
@@ -939,6 +933,12 @@ I1169 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I1168 = p.create_item(
+    R1__has_label="point in state space",
+    R2__has_description="type for a point in a given state space",
+    R3__is_subclass_of=I1169["point in vector space"],
+    R41__has_required_instance_relation=R5405["has associated state space"],
+)
 
 R9651 = p.create_relation(
     R1__has_label="has domain",
@@ -1144,6 +1144,15 @@ I9489 = p.create_item(
     R18__has_usage_hint="Use this operator to convert to matrix, then use matmul, matadd etc.",
 )
 
+I1284 = p.create_item(
+    R1__has_label="point in vector space to vector",
+    R2__has_description="convert a point in a vector space to the vector, pointing to that point",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I1169["point in vector space"],
+    R11__has_range_of_result=I7151["vector"],
+    R18__has_usage_hint="Use this operator to convert to vector/ matrix, then use matmul, matadd etc.",
+)
+
 I4218 = p.create_item(
     R1__has_label="matrix to vector",
     R2__has_description="convert a nx1 matrix item to a vector item for calculus",
@@ -1227,7 +1236,7 @@ I9192      R9192
 I3648      R3648
 I6209      R6209
 I8492      R8492
-I1284      R1284
+      R1284
       R4218
       R2328
       R9489
