@@ -1674,7 +1674,7 @@ I4432 = p.create_item(
 
 # <theorem>
 I8142 = p.create_item(
-    R1__has_label="theorem for Lyapunov functions for nonlinear systems",
+    R1__has_label="theorem for Lyapunov functions for homogeneous systems",
     R2__has_description=(
         ""
     ),
@@ -1685,7 +1685,7 @@ I8142 = p.create_item(
 )
 
 
-with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("setting") as cm:
+with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("setting") as cm:
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
     state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
@@ -1720,7 +1720,7 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
     Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
     cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
 
-with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premise") as cm:
+with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("premise") as cm:
     F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"])) #todo relation to F_i with i=1 ??
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
     cm.new_equation(A, ma.I7481["Jacobian"](F1))
@@ -1734,7 +1734,7 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premis
     cm.new_equation(I4432["Vannelli recursive algorithm to find Lyapunov function"], True)
 
 
-with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("assertion") as cm:
+with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("assertion") as cm:
     # there exists an algorithm to iteratively calculate Lyapunov function
     cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(I4432["Vannelli recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
@@ -1757,7 +1757,7 @@ I4274 = p.create_item(
 )
 
 I7006 = p.create_item(
-    R1__has_label="Goubault recursive algorithm to find Lyapunov function",
+    R1__has_label="Goubault algorithm to find Lyapunov function",
     R2__has_description=(
         ""
     ),
@@ -1788,12 +1788,12 @@ with I4274["theorem for Lyapunov functions for polynomial systems"].scope("premi
     # using sum of squares method
     # combine invariants to create a polynomial with 3 conditions
     # if solution to exists
-    cm.new_equation(I7006["Goubault recursive algorithm to find Lyapunov function"], True)
+    cm.new_equation(I7006["Goubault algorithm to find Lyapunov function"], True)
 
 with I4274["theorem for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
     # polynomial is Lyapunov function
     cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
-    cm.new_rel(I7006["Goubault recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
+    cm.new_rel(I7006["Goubault algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
     pass
 
 # </theorem>
