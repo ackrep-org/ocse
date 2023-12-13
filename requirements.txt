@@ -1,5 +1,6 @@
-pyerk >=0.8.0
+pyirk >=0.12.0
+sympy
+
 
 # dependencies which are important to run the unittests (but not for the package itself)
 packaging
-sympy

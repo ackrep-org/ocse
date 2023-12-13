@@ -4,20 +4,20 @@ from packaging import version
 
 from os.path import join as pjoin
 from pathlib import Path
-import pyerk as p
+import pyirk as p
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
 
 if os.environ.get("IPYDEX_AIOE") == "true":
     activate_ips_on_exception()
 
-if not os.environ.get("PYERK_DISABLE_CONSISTENCY_CHECKING", "").lower() == "true":
+if not os.environ.get("PYIRK_DISABLE_CONSISTENCY_CHECKING", "").lower() == "true":
     p.cc.enable_consistency_checking()
 
 PACKAGE_ROOT_PATH = Path(__file__).parent.parent.absolute().as_posix()
-ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
-ma = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma", reuse_loaded=True)
-ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct", reuse_loaded=True)
+ag = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
+ma = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma", reuse_loaded=True)
+ct = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct", reuse_loaded=True)
 
 
 class Test_01_basics(unittest.TestCase):

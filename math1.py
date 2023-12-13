@@ -1,12 +1,12 @@
 from typing import Union
-import pyerk as p
+import pyirk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
-ag = p.erkloader.load_mod_from_path("./agents1.py", prefix="ag")
+ag = p.irkloader.load_mod_from_path("./agents1.py", prefix="ag")
 
-__URI__ = "erk:/ocse/0.2/math"
+__URI__ = "irk:/ocse/0.2/math"
 
 keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
@@ -556,7 +556,7 @@ I1594 = p.create_item(
         "then all coefficients have the same sign."
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    # TODO: test this feature (attribute name beginning with prefix) in pyerk.test_core
+    # TODO: test this feature (attribute name beginning with prefix) in pyirk.test_core
     ag__R6876__is_named_after=ag.I2276["Aurel Stodola"],
 )
 
@@ -746,7 +746,7 @@ I3058 = p.create_item(
 )
 
 # the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
-# see also https://pyerk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
+# see also https://pyirk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
 # TODO: drop branch name in above link, once the docs are in main
 
 I1566 = p.create_item(
@@ -1237,7 +1237,7 @@ class symbolicExpressionToGraphExpressionConverter:
         try:
             self.item_symbol_map = ds["item_symbol_map"]
         except KeyError:
-            raise p.aux.PyERKError("no item-symbol-associations were registered")
+            raise p.aux.PyIRKError("no item-symbol-associations were registered")
 
         # prevent sympy import on global level (because it is unnecessary in most cases)
         import sympy
@@ -1283,7 +1283,7 @@ class symbolicExpressionToGraphExpressionConverter:
 
     def _raise_error_invalid_length(self, length):
         msg = f"unexpected length of arguments: {length} while converting expression {self.symb_expression}"
-        raise p.aux.PyERKError(msg)
+        raise p.aux.PyIRKError(msg)
 
 
 def symbolic_expression_to_graph_expression(symb_expression):
@@ -1385,9 +1385,9 @@ I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_ca
 # <new_entities>
 
 # this section in the source file is helpful for bulk-insertion of new items
-# use it together with `pyerk --insert-keys-for-placeholders path/to/this_module.py`
+# use it together with `pyirk --insert-keys-for-placeholders path/to/this_module.py`
 # this will replace the `_newitemkey_` and `p.I000["..."]` strings accordingly
-# see also pyerk --help
+# see also pyirk --help
 
 # _newitemkey_ = p.create_item(
 #     R1__has_label="",
