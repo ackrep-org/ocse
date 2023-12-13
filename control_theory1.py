@@ -1193,6 +1193,8 @@ I4201 = p.create_item(
 
 I6950 = p.create_item(
     R1__has_label="controller",
+    # REM: Do sub systems of dynamical systems have to be dynamical systems to?
+    #       If yes, this would exclude all static feedback laws.
     R2__has_description="sub system of a dynamical system which is designed to impose desired behavior to the overall system",
     R4__is_instance_of=p.I50["stub"]
 )
@@ -1213,6 +1215,7 @@ I1068 = p.create_item(
 
 
 I2314 = p.create_item(
+    # REM: Why this extra instance (c.f. I5829) ?
     R1__has_label="open loop controller",
     R2__has_description="",
     R4__is_instance_of=p.I50["stub"]
@@ -1221,6 +1224,7 @@ I2314 = p.create_item(
 
 I8048 = p.create_item(
     R1__has_label="control loop",
+    # REM: Mention the plant sub system?
     R2__has_description="dynamical system consisting of components one of which is an I000__controller",
     R4__is_instance_of=p.I50["stub"]
 )
@@ -1235,6 +1239,7 @@ I4023 = p.create_item(
 
 I4596 = p.create_item(
     R1__has_label="feedback",
+    # REM: As input and output are not specified, this description is not too helpful.
     R2__has_description="type of connection between subsystems of a dynamical system: input depends on output.",
     R4__is_instance_of=p.I50["stub"]
 )
@@ -1243,6 +1248,7 @@ I4596 = p.create_item(
 # TODO: align this with the topology of the default control loop (where the controller is not located in the backward path)
 I9152 = p.create_item(
     R1__has_label="feedback law",
+    # REM: Should 'R77__has_alternative_label' be used here?
     R2__has_description="other word for controller",
     R4__is_instance_of=p.I50["stub"]
 )
@@ -1250,6 +1256,7 @@ I9152 = p.create_item(
 
 I9395 = p.create_item(
     R1__has_label="overshooting",
+    # REM: Add some info about what actually defines this behaviour?
     R2__has_description="type of behavior of a dynamical system, for some excitation, wrt. some reference",
     R4__is_instance_of=p.I50["stub"]
 )
@@ -1257,6 +1264,7 @@ I9395 = p.create_item(
 
 I3506 = p.create_item(
     R1__has_label="undershooting",
+    # REM: Add some info about what actually defines this behaviour?
     R2__has_description="type of behavior of a dynamical system, for some excitation, wrt. some reference",
     R4__is_instance_of=p.I50["stub"]
 )
@@ -1285,6 +1293,7 @@ I4741 = p.create_item(
 
 I5698 = p.create_item(
     R1__has_label="output signal to be controlled",
+    # REM: Has the signal that is to be controlled to be an output signal?
     R2__has_description="type of system quantity the numerical value of which is should be influenced (e.g. by the control facility)",
     R3__is_subclass_of=I5036["system quantity"]
 )
@@ -1305,6 +1314,7 @@ I7214 = p.create_item(
 
 
 I6873 = p.create_item(
+    # REM: Stabilizing feedback law?
     R1__has_label="stabilization (feedback law)",
     R2__has_description="specialization of feedback law that achieves some sort of I7207__stability for a dynamical system",
     R3__is_subclass_of=I9152["feedback law"]
@@ -1333,6 +1343,8 @@ I9936 = p.create_item(
 
 I4857 = p.create_item(
     R1__has_label="reference trajectory",
+    # REM: Providing a reference is also possible for open loop operation, maybe something like
+    #       desired trajectory that some system variable is to follow?
     R2__has_description="input signal of a closed control loop or a controller",
     R3__is_subclass_of=I3573["input signal"]
 )
@@ -1377,12 +1389,14 @@ I1462 = p.create_item(
 
 I9671 = p.create_item(
     R1__has_label="fractional order differential equation",
+    # REM: :-(
     R2__has_description="...",
     R3__is_subclass_of=I6197["differential equation"]
 )
 
 I8095 = p.create_item(
     R1__has_label="differential algebraic equation",
+    # REM: If vector valued, should this be called a DAE system?
     R2__has_description="type of (vector valued) equation which contains both ode and algebraic components",
     R3__is_subclass_of=I6197["differential equation"]
 )
@@ -1407,12 +1421,15 @@ I2083 = p.create_item(
 )
 
 
-# TODO: introduce alternative lable: state quantity (Zustandsgröße@de)
+# TODO: introduce alternative label: state quantity (Zustandsgröße@de)
 I8679 = p.create_item(
     R1__has_label="state (of a dynamical system)",
     R2__has_description="",
     R4__is_instance_of=p.I50["stub"],
     R72__is_generally_related_to=ma.I1168["point in state space"],
+    # REM: Add the following?
+    # R72__is_generally_related_to=I5036["system quantity"],
+
 )
 
 
@@ -1475,6 +1492,7 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("premis
 with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here @ca: global is wrong here
     cm.new_rel(cm.x0, p.R16["has property"], I2931["local Lyapunov stability"])
+    # REM: Add an actual connection to I9199?
 
 # </theorem>
 
@@ -1506,6 +1524,7 @@ with I8733["theorem for asymptotic Lyapunov stability of state space system"].sc
 # <theorem>
 I2983 = p.create_item(
     R1__has_label="theorem for global asymptotic Lyapunov stability of state space system",
+    # REM: In the re-used theorem it is not any eq. point but the origin for which the property holds.
     R2__has_description=(
         "establishes a sufficient condition for the global asymptotic stability of an equilibrium point "
         "of a state space system"
@@ -1575,6 +1594,7 @@ I9875 = p.create_item(
 )
 
 
+# REM: Why not as theorem?
 I9903 = p.create_item(
     R1__has_label="LaSalle's invariance principle",
     R2__has_description="establishes a sufficient condition for asymptotic stability",
@@ -1594,7 +1614,8 @@ I9199 = p.create_item(
     R1__has_label="strong Lyapunov Function",
     R2__has_description="Lyapunov function with a negative definite Lie Derivative",
 
-    # TODO: evaluate wether R3 is a good relation here
+    # TODO: evaluate weather R3 is a good relation here
+    # REM: See remark on I9208
     R3__is_subclass_of=I2933["Lyapunov Function"],
     R77__has_alternative_label="strict Lyapunov Function"
 )
@@ -1602,9 +1623,13 @@ I9199 = p.create_item(
 
 I9208 = p.create_item(
     R1__has_label="weak Lyapunov Function",
+    # REM: Since not vector field is needed for the definition of f(x), can the following
+    #       property stated in this form?
     R2__has_description="Lyapunov function with a negative semidefinite Lie Derivative",
 
-    # TODO: evaluate wether R3 is a good relation here
+    # TODO: evaluate weather R3 is a good relation here
+    # REM: Should the more restrictive case not be a subclass of the general case?
+    #      Thus: Weak L-Func __subclassed_by__ L-Func ?
     R3__is_subclass_of=I2933["Lyapunov Function"],
     R77__has_alternative_label="non-strict Lyapunov Function"
 )
@@ -1622,6 +1647,8 @@ I6338 = p.create_item(
 # <theorem>
 I3712 = p.create_item(
     R1__has_label="theorem on Lyapunov equation",
+    # REM: If the description is given in the direction P exists -> A stable, why is the assertion formulated
+    #      in the opposite direction? (In know its an equivalence relation, but I think it's inconsistent)
     R2__has_description="theorem characterizes asymptotic stability of the origin in terms of the solution of the "
         "Lyapunov equation",
     R4__is_instance_of=p.I17["equivalence proposition"],
@@ -1651,6 +1678,7 @@ with I3712.scope("assertion") as cm:
     cm.new_rel(P, ma.R5938["has row number"], n)
     cm.new_rel(P, p.R16["has property"], ma.I3133["positive definiteness"])
 
+    # REM shouldn't I6338 be referenced here in some way?
     cm.new_equation(ma.I1536["negation"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
                                                                    (ma.I3263["transpose"](cm.A), cm.P)))
 
@@ -1674,6 +1702,7 @@ I4432 = p.create_item(
 
 # <theorem>
 I8142 = p.create_item(
+    # REM: There we go again: Should this maybe hust be called for general systems?
     R1__has_label="theorem for Lyapunov functions for nonlinear systems",
     R2__has_description=(
         ""
@@ -1718,6 +1747,7 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
     cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
 
     Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
+    # REM: (unsure) not semi-definite?
     cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
 
 with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premise") as cm:
@@ -1835,7 +1865,9 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     # specify f(x) = Ax
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
-    # cm.new_equation(f(x), ma.I5177["matmul"](A, x)) # TODO type error vector != matrix
+    # TODO: type error vector != matrix
+    # REM: With x defined as matrix this is working, I guess?
+    cm.new_equation(f(x), ma.I5177["matmul"](A, x))
 
     LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
     LE.R8__has_domain_of_argument_1=A
