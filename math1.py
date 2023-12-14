@@ -347,15 +347,15 @@ I8133 = p.create_item(
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
-R3033 = p.create_relation(
-    R1__has_label="has type of elements",
-    R2__has_description=(
-        "specifies the item-type of the elements of a mathematical set; "
-        "should be a subclass of I12['mathematical object']"
-    ),
-    R8__has_domain_of_argument_1=p.I13["mathematical set"],
-    R11__has_range_of_result=p.I42["mathematical type (metaclass)"],
-)
+# R3033 = p.create_relation(
+#     R1__has_label="has type of elements",
+#     R2__has_description=(
+#         "specifies the item-type of the elements of a mathematical set; "
+#         "should be a subclass of I12['mathematical object']"
+#     ),
+#     R8__has_domain_of_argument_1=p.I13["mathematical set"],
+#     R11__has_range_of_result=p.I42["mathematical type (metaclass)"],
+# )
 
 I5006 = p.create_item(
     R1__has_label="imaginary part",
@@ -379,7 +379,7 @@ I2738 = p.create_item(
     R2__has_description="field of complex numbers",
     R4__is_instance_of=I8133["field of numbers"],
     R13__has_canonical_symbol=r"$\mathbb{C}$",
-    R3033__has_type_of_elements=p.I34["complex number"],
+    # R3033__has_type_of_elements=p.I34["complex number"],
 )
 
 I2739 = p.create_item(
@@ -521,6 +521,7 @@ I1063 = p.create_item(
     R1__has_label="scalar function",
     R2__has_description="function that has one (in general complex) number as result",
     R3__is_subclass_of=I1060["general function"],
+    R46__is_secondary_subclass_of=p.I42["scalar mathematical object"],
 )
 
 I4237 = p.create_item(
@@ -535,8 +536,8 @@ I6209 = p.create_item(
     R1__has_label="scalneg",
     R2__has_description="negation operator for scalars",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=p.I35["real number"],
-    R11__has_range_of_result=p.I35["real number"],
+    R8__has_domain_of_argument_1=p.I42["scalar mathematical object"],
+    R11__has_range_of_result=p.I42["scalar mathematical object"],
 )
 
 I4239 = p.create_item(
@@ -627,12 +628,6 @@ I5030 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
-I7765 = p.create_item(
-    R1__has_label="scalar mathematical object",
-    R2__has_description="mathematical object which is or can be evaluated to a single (complex number)",
-    R3__is_subclass_of=p.I12["mathematical object"],
-)
-
 
 R8736 = p.create_relation(
     R1__has_label="depends polynomially on",
@@ -678,7 +673,7 @@ I5359 = p.create_item(
     R2__has_description="returns the determinant of a square matrix",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9906["square matrix"],
-    R11__has_range_of_result=I7765["scalar mathematical object"],
+    R11__has_range_of_result=p.I42["scalar mathematical object"],
 )
 
 
@@ -765,7 +760,7 @@ I1566 = p.create_item(
 )
 
 with I1566["theorem on the successor of integer numbers"].scope("setting") as cm:
-    cm.new_var(x=p.instance_of(p.I37["integer number"]))
+    cm.new_var(x=p.uq_instance_of(p.I37["integer number"]))
 
 with I1566["theorem on the successor of integer numbers"].scope("premise") as cm:
     # no further condition apart from the setting
@@ -1019,38 +1014,34 @@ I3134 = p.create_item(
 )
 
 with I3134["definition of positive definiteness"].scope("setting") as cm:
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
-    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
-    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
-    x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
+    # todo relation to state that h and u is main subject of definition
+    h = cm.new_var(h=p.instance_of(I9923["scalar field"]))
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.instance_of(I5167["state space"]))
 
-    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
-
-    u = cm.new_var(u=p.uq_instance_of(I5843["neighborhood"]))
+    cm.new_rel(cm.h, R9651["has domain"], cm.M)
     cm.new_rel(cm.M, R3326["has dimension"], cm.n)
 
+    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
     cm.new_rel(cm.M, R3798["has origin"], cm.x0)
+
+    u = cm.new_var(u=p.uq_instance_of(I5843["neighborhood"]))
     cm.new_rel(cm.u, R4963["is neighborhood of"], cm.x0)
-    cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
+    cm.new_rel(cm.u, p.R14["is subset of"],cm.M) # todo is this necessary? maybe rule in neighborhood
 
-    cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
-    cm.new_rel(cm.h, R9651["has domain"], cm.M)
+    x = cm.new_var(x=p.uq_instance_of(I1168["point in state space"]))
 
-    # TODO: __automate_typing__ (or via convenience function)
-    # h.R8__has_domain_of_argument_1 = I1168["point in state space"]
-    # h.R11__has_range_of_result = p.I35["real number"]
-
-    cm.item.h_value = h(x)
 
 with I3134["definition of positive definiteness"].scope("premise") as cm:
-
+    cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
+    # todo: nested implication statements
     with p.ImplicationStatement() as imp1:
         imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
-        imp1.consequent_relation(lhs=cm.item.h_value, rsgn="==", rhs=I5000["scalar zero"])
+        imp1.consequent_relation(lhs=cm.h(cm.x), rsgn="==", rhs=I5000["scalar zero"])
 
     with p.ImplicationStatement() as imp2:
         imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
-        imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])
+        imp2.consequent_relation(lhs=cm.h(cm.x), rsgn=">", rhs=I5000["scalar zero"])
 
 with I3134["definition of positive definiteness"].scope("assertion") as cm:
     cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
