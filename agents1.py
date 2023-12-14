@@ -557,14 +557,24 @@ R8439 = p.create_relation(
 )
 
 
+I6514 = p.create_item(
+    R1__has_label="National University of Kharkiv",
+    R2__has_description="public university in Kharkiv, Ukraine",
+    R4__is_instance_of=I1342["academic institution"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q1458695",
+)
+
+# source: https://www.wikidata.org/wiki/Q310788
+I2151["Aleksandr Lyapunov"].set_relation(
+    R1833["has employer"], I6514["National University of Kharkiv"], qualifiers=[start_time("1885"), end_time("1902")]
+)
 
 p.end_mod()
 
 """
 key reservoir created with: `pyirk -l agents1.py ag -nk 100`
 
-I7934      R7934
-I6514      R6514
+      R6514
 I8469      R8469
 I5543      R5543
 I2792      R2792
