@@ -1461,7 +1461,7 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
     # TODO: decide about universal quantification here
-    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    D = cm.new_var(D=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
