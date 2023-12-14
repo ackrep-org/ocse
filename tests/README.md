@@ -1,1 +1,1 @@
-This directory contains unittest for the erkpackage.
+This directory contains unittest for the irkpackage.

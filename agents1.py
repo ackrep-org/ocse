@@ -9,10 +9,10 @@ If you want to be deleted from or added to this file please create a pull-reques
 """
 
 
-import pyerk as p
+import pyirk as p
 
 
-__URI__ =  "erk:/ocse/0.2/agents"
+__URI__ =  "irk:/ocse/0.2/agents"
 
 keymanager = p.KeyManager(keyseed=1239)
 p.register_mod(__URI__, keymanager)
@@ -428,7 +428,7 @@ I1511 = create_person("Nikolaï Gouryevitch", "Tchetaev", "mathematician", r33="
 
 I7934 = create_person("Nikolai", "Krasovsky", "mathematician", r33="https://www.wikidata.org/wiki/Q3710069")
 
-# template for creating more entries (then use pyerk -ik)
+# template for creating more entries (then use pyirk -ik)
 #<new_entities>
 # _newitemkey_ = create_person("", "", "researcher", r33="", r3475="")
 #</new_entities>
@@ -561,7 +561,7 @@ R8439 = p.create_relation(
 p.end_mod()
 
 """
-key reservoir created with: `pyerk -l agents1.py ag -nk 100`
+key reservoir created with: `pyirk -l agents1.py ag -nk 100`
 
 I7934      R7934
 I6514      R6514

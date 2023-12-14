@@ -4,20 +4,20 @@ from packaging import version
 
 from os.path import join as pjoin
 from pathlib import Path
-import pyerk as p
+import pyirk as p
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
 
 if os.environ.get("IPYDEX_AIOE") == "true":
     activate_ips_on_exception()
 
-if not os.environ.get("PYERK_DISABLE_CONSISTENCY_CHECKING", "").lower() == "true":
+if not os.environ.get("PYIRK_DISABLE_CONSISTENCY_CHECKING", "").lower() == "true":
     p.cc.enable_consistency_checking()
 
 PACKAGE_ROOT_PATH = Path(__file__).parent.parent.absolute().as_posix()
-ag = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
-ma = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma", reuse_loaded=True)
-ct = p.erkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct", reuse_loaded=True)
+ag = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), prefix="ag")
+ma = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma", reuse_loaded=True)
+ct = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct", reuse_loaded=True)
 
 
 class Test_01_basics(unittest.TestCase):
@@ -81,6 +81,32 @@ class Test_02_math(unittest.TestCase):
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polynomially_on, s)
 
+    def test_c04_symbolic_formula1(self):
+
+        t = p.instance_of(ma.I2917["planar triangle"])
+        sides = ma.I9148["get polygon sides ordered by length"](t)
+        a, b, c = sides.R39__has_element
+
+        la, lb, lc = ma.items_to_symbols(a, b, c, relation=ma.R2495["has length"])
+        symbolic_sum = la + lb + lc
+
+        sum_item = ma.symbolic_expression_to_graph_expression(symbolic_sum)
+        self.assertEqual(sum_item.get_arguments()[0].get_arguments(), [a.R2495__has_length, b.R2495__has_length])
+        self.assertEqual(sum_item.get_arguments()[1], c.R2495__has_length)
+        self.assertEqual(sum_item.R4__is_instance_of, ma.I6043["sum"])
+
+        symbolic_prod = la*lb
+        prod_item = ma.symbolic_expression_to_graph_expression(symbolic_prod)
+        self.assertEqual(prod_item.get_arguments(), [a.R2495__has_length, b.R2495__has_length])
+        self.assertEqual(prod_item.R4__is_instance_of, ma.I5916["product"])
+
+
+class Test_02_control_theory(unittest.TestCase):
+    def test_b01__test_multilinguality(self):
+        ct.I5290["reference value"].R1__has_label__de == "Sollwert"@p.de
+
+
+class Test_03_agents(unittest.TestCase):
     def test_c03__publications(self):
         x = ag.I7558["2002_Khalil"]
         self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])
@@ -90,8 +116,3 @@ class Test_02_math(unittest.TestCase):
 
         segment2 = ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1")
         self.assertTrue(segment2 is segment)
-
-
-class Test_02_control_theory(unittest.TestCase):
-    def test_b01__test_multilinguality(self):
-        ct.I5290["reference value"].R1__has_label__de == "Sollwert"@p.de

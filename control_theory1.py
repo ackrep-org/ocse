@@ -1,17 +1,17 @@
-import pyerk as p
+import pyirk as p
 
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
-ma = p.erkloader.load_mod_from_path("./math1.py", prefix="ma")
+ma = p.irkloader.load_mod_from_path("./math1.py", prefix="ma")
 ag = ma.ag
 
 
 # todo: rename .scope("context") to .scope("setting")
 
 
-__URI__ = "erk:/ocse/0.2/control_theory"
+__URI__ = "irk:/ocse/0.2/control_theory"
 
 keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
@@ -1461,7 +1461,7 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
 
     # TODO: decide about universal quantification here
-    D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    D = cm.new_var(D=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
@@ -1703,7 +1703,7 @@ with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"]
             evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
             cm.new_equation(ma.I3589["monovariate polynomial degree"](evaluated_F_ij), i)
 
-    cm.new_equation(f(x), ma.I5441["sum"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
+    cm.new_equation(f(x), ma.I5441["sum over index"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
 
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
@@ -1858,9 +1858,9 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion
 # <new_entities>
 
 # this section in the source file is helpful for bulk-insertion of new items
-# use it together with `pyerk --insert-keys-for-placeholders path/to/this_module.py`
+# use it together with `pyirk --insert-keys-for-placeholders path/to/this_module.py`
 # this will replace the `_newitemkey_` and `p.I000["..."]` strings accordingly
-# see also pyerk --help
+# see also pyirk --help
 
 # _newitemkey_ = p.create_item(
 #     R1__has_label="",

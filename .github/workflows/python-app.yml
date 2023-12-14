@@ -8,6 +8,7 @@ on:
     branches: 
     - main
     - develop
+    - develop_carsten
     - feature/test_bootstrap_ci
   pull_request:
     branches:
@@ -38,10 +39,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
 
-    - name: Install pyerk
+    - name: Install pyirk
       run: |
-        git clone https://github.com/ackrep-org/pyerk-core.git
-        cd pyerk-core
+        git clone https://github.com/ackrep-org/pyirk-core.git
+        cd pyirk-core
         git checkout ut__ocse__main
         pip install .
 
