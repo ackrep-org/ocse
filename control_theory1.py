@@ -1212,13 +1212,6 @@ I1068 = p.create_item(
 )
 
 
-I2314 = p.create_item(
-    R1__has_label="open loop controller",
-    R2__has_description="",
-    R4__is_instance_of=p.I50["stub"]
-)
-
-
 I8048 = p.create_item(
     R1__has_label="control loop",
     R2__has_description="dynamical system consisting of components one of which is an I000__controller",
@@ -1507,7 +1500,7 @@ with I8733["theorem for asymptotic Lyapunov stability of state space system"].sc
 I2983 = p.create_item(
     R1__has_label="theorem for global asymptotic Lyapunov stability of state space system",
     R2__has_description=(
-        "establishes a sufficient condition for the global asymptotic stability of an equilibrium point "
+        "establishes a sufficient condition for the global asymptotic stability of the origin "
         "of a state space system"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
@@ -1651,8 +1644,10 @@ with I3712.scope("assertion") as cm:
     cm.new_rel(P, ma.R5938["has row number"], n)
     cm.new_rel(P, p.R16["has property"], ma.I3133["positive definiteness"])
 
-    cm.new_equation(ma.I1536["negation"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
+    E = cm.new_equation(ma.I1536["matneg"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
                                                                    (ma.I3263["transpose"](cm.A), cm.P)))
+
+E.set_relation(p.R30["is secondary instance of"], I6338["Lyapunov equation"])
 
 # </theorem>
 
@@ -1674,9 +1669,9 @@ I4432 = p.create_item(
 
 # <theorem>
 I8142 = p.create_item(
-    R1__has_label="theorem for Lyapunov functions for homogeneous systems",
+    R1__has_label="theorem by Vannelli for Lyapunov functions for homogeneous systems",
     R2__has_description=(
-        ""
+        "use a recursive algorithm to find Lyapunov functions for systems that are the sum of homogeneous functions"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
     # A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
@@ -1685,7 +1680,7 @@ I8142 = p.create_item(
 )
 
 
-with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("setting") as cm:
+with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"].scope("setting") as cm:
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
     state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
@@ -1720,7 +1715,7 @@ with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("sett
     Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
     cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
 
-with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("premise") as cm:
+with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"].scope("premise") as cm:
     F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"])) #todo relation to F_i with i=1 ??
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
     cm.new_equation(A, ma.I7481["Jacobian"](F1))
@@ -1734,7 +1729,7 @@ with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("prem
     cm.new_equation(I4432["Vannelli recursive algorithm to find Lyapunov function"], True)
 
 
-with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("assertion") as cm:
+with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"].scope("assertion") as cm:
     # there exists an algorithm to iteratively calculate Lyapunov function
     cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(I4432["Vannelli recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
@@ -1745,9 +1740,9 @@ with I8142["theorem for Lyapunov functions for homogeneous systems"].scope("asse
 
 # <theorem>
 I4274 = p.create_item(
-    R1__has_label="theorem for Lyapunov functions for polynomial systems",
+    R1__has_label="theorem by Goubault for Lyapunov functions for polynomial systems",
     R2__has_description=(
-        ""
+        "Find Darboux polynomials, calculate differential variants using Sum-Of-Squares, get Lyapunov function"
     ),
     R4__is_instance_of=p.I15["implication proposition"],
     # E. Goubault, J.-H. Jourdan, S. Putot, and S. Sankaranarayanan, “Finding non-polynomial positive invariants and
@@ -1769,7 +1764,7 @@ I7006 = p.create_item(
     # Portland, OR, USA: IEEE, Jun. 2014, pp. 3571–3578. doi: 10.1109/ACC.2014.6859330.
 )
 
-with I4274["theorem for Lyapunov functions for polynomial systems"].scope("setting") as cm:
+with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].scope("setting") as cm:
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
     cm.new_rel(sys, R5100["has model representation property"], I5247["polynomial"])
 
@@ -1783,14 +1778,14 @@ with I4274["theorem for Lyapunov functions for polynomial systems"].scope("setti
 
     cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
 
-with I4274["theorem for Lyapunov functions for polynomial systems"].scope("premise") as cm:
+with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].scope("premise") as cm:
     # find rational differential variants of Darboux polynomials
     # using sum of squares method
     # combine invariants to create a polynomial with 3 conditions
     # if solution to exists
     cm.new_equation(I7006["Goubault algorithm to find Lyapunov function"], True)
 
-with I4274["theorem for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
+with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
     # polynomial is Lyapunov function
     cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(I7006["Goubault algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
