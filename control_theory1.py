@@ -1238,6 +1238,7 @@ I9152 = p.create_item(
     R1__has_label="feedback law",
     R2__has_description="other word for controller",
     R4__is_instance_of=p.I50["stub"]
+    # todo: formal relation to I6950["controller"], R77__alternative_label?
 )
 
 
@@ -1379,7 +1380,7 @@ I8095 = p.create_item(
     R2__has_description="type of (vector valued) equation which contains both ode and algebraic components",
     R3__is_subclass_of=I6197["differential equation"]
 )
-
+# TODO: should there be a difference between scalar and vector valued equation?
 # TODO: elaborate on the taxonomy (e.g. there could be combinations of pde, fractional, time delayed, dae-property)
 # -> find a clever way to extend the taxonomy as needed
 
@@ -1427,6 +1428,23 @@ I8092 = p.create_item(
 )
 
 
+I9199 = p.create_item(
+    R1__has_label="strong Lyapunov Function",
+    R2__has_description="Lyapunov function with a negative definite Lie Derivative",
+    # TODO: evaluate wether R3 is a good relation here
+    R3__is_subclass_of=I2933["Lyapunov Function"], # TODO: is this a subclass of weak Lyapunov func?
+    R77__has_alternative_label="strict Lyapunov Function"
+)
+
+
+I9208 = p.create_item(
+    R1__has_label="weak Lyapunov Function",
+    R2__has_description="Lyapunov function with a negative semidefinite Lie Derivative",
+    # TODO: evaluate wether R3 is a good relation here
+    R3__is_subclass_of=I2933["Lyapunov Function"],
+    R77__has_alternative_label="non-strict Lyapunov Function"
+)
+
 # <theorem>
 I4663 = p.create_item(
     R1__has_label="theorem for Lyapunov stability of state space system", # TODO this is one formulation among many
@@ -1468,8 +1486,8 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("premis
 with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here @ca: global is wrong here
     cm.new_rel(cm.x0, p.R16["has property"], I2931["local Lyapunov stability"])
-
 # </theorem>
+V.set_relation(p.R30["is secondary instance of"], I9208["weak Lyapunov Function"])
 
 
 # <theorem>
@@ -1485,6 +1503,7 @@ I8733 = p.create_item(
 
 with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
     cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
+    V = cm.V
 
 with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
@@ -1493,8 +1512,9 @@ with I8733["theorem for asymptotic Lyapunov stability of state space system"].sc
     # TODO: double check the meaning of global here
     # TODO: check wording on I5677__global_asymptotical_stability, @ca again this is a local criterion
     cm.new_rel(cm.x0, p.R16["has property"], I4900["local asymptotical stability"])
-
 # </theorem>
+V.set_relation(p.R30["is secondary instance of"], I9199["strong Lyapunov Function"])
+
 
 # <theorem>
 I2983 = p.create_item(
@@ -1509,6 +1529,7 @@ I2983 = p.create_item(
 
 with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
     cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
+    V = cm.V
 
 with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
@@ -1518,6 +1539,7 @@ with I2983["theorem for global asymptotic Lyapunov stability of state space syst
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
 
 # </theorem>
+V.set_relation(p.R30["is secondary instance of"], I9199["strong Lyapunov Function"])
 
 
 I3503 = p.create_item(
@@ -1581,26 +1603,6 @@ I9903 = p.create_item(
 I9903.set_relation(p.R77["has alternative label"], "Barbashin-Krasovskii-LaSalle principle")
 I9903.set_relation(ag.R6876["is named after"], ag.I7934["Nikolai Krasovsky"])
 
-
-
-I9199 = p.create_item(
-    R1__has_label="strong Lyapunov Function",
-    R2__has_description="Lyapunov function with a negative definite Lie Derivative",
-
-    # TODO: evaluate wether R3 is a good relation here
-    R3__is_subclass_of=I2933["Lyapunov Function"],
-    R77__has_alternative_label="strict Lyapunov Function"
-)
-
-
-I9208 = p.create_item(
-    R1__has_label="weak Lyapunov Function",
-    R2__has_description="Lyapunov function with a negative semidefinite Lie Derivative",
-
-    # TODO: evaluate wether R3 is a good relation here
-    R3__is_subclass_of=I2933["Lyapunov Function"],
-    R77__has_alternative_label="non-strict Lyapunov Function"
-)
 
 I6338 = p.create_item(
     R1__has_label="Lyapunov equation",
