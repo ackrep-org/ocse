@@ -45,7 +45,7 @@ I4895["mathematical operator"].add_method(p.create_evaluated_mapping, "_custom_c
 I9904 = p.create_item(
     R1__has_label="matrix",
     R2__has_description="matrix of (in general) complex numbers, i.e. matrix over the field of complex numbers",
-    R3__is_subclass_of=p.I12["mathematical object"],
+    R3__is_subclass_of=p.I18["mathematical expression"],
 )
 
 I7151 = p.create_item(
@@ -472,10 +472,10 @@ I9493 = p.create_item(
 )
 
 I1536 = p.create_item(
-    R1__has_label="negation",
-    R2__has_description="negation operator",
+    R1__has_label="matneg",
+    R2__has_description="negation operator for matrices",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I9904["matrix"], #(I9904["matrix"], p.I35["real number"]),
+    R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=I9904["matrix"],
 )
 
@@ -531,6 +531,13 @@ I4237 = p.create_item(
 
 I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_custom_call")
 
+I6209 = p.create_item(
+    R1__has_label="scalneg",
+    R2__has_description="negation operator for scalars",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I35["real number"],
+    R11__has_range_of_result=p.I35["real number"],
+)
 
 I4239 = p.create_item(
     R1__has_label="abstract monovariate polynomial",
@@ -928,12 +935,6 @@ R5405 = p.create_relation(
 )
 
 
-I1168 = p.create_item(
-    R1__has_label="point in state space",
-    R2__has_description="type for a point in a given state space",
-    R3__is_subclass_of=p.I12["mathematical object"],
-    R41__has_required_instance_relation=R5405["has associated state space"],
-)
 # TODO: it might be worth to generalize this: creating a type from a set (where the set is an instance of another type)
 
 I1169 = p.create_item(
@@ -942,6 +943,12 @@ I1169 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
+I1168 = p.create_item(
+    R1__has_label="point in state space",
+    R2__has_description="type for a point in a given state space",
+    R3__is_subclass_of=I1169["point in vector space"],
+    R41__has_required_instance_relation=R5405["has associated state space"],
+)
 
 R9651 = p.create_relation(
     R1__has_label="has domain",
@@ -1071,6 +1078,26 @@ I3136 = p.create_item(
     R78__is_applicable_to=I9923["scalar field"],
 )
 
+I8492 = p.create_item(
+    R1__has_label="definition of negative definiteness",
+    R2__has_description="the defining statement of negative definiteness",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I8492["definition of negative definiteness"].scope("setting") as cm:
+    cm.copy_from(I3134["definition of positive definiteness"].get_subscope("setting"))
+
+with I8492["definition of negative definiteness"].scope("premise") as cm:
+    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["positive definiteness"])
+
+with I8492["definition of negative definiteness"].scope("assertion") as cm:
+    cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"])
+
+
+I3136["negative definiteness"].set_relation(
+    p.R37["has definition"], I8492["definition of negative definiteness"]
+)
+
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
@@ -1116,6 +1143,17 @@ I1778 = p.create_item(
     R78__is_applicable_to=I1060["general function"],
 )
 
+I4864 = p.create_item(
+    R1__has_label="infinity class",
+    R2__has_description="class for typechecking of infinity-object",
+    R3__is_subclass_of=p.I18["mathematical expression"],
+)
+
+I4291 = p.create_item(
+    R1__has_label="infinity",
+    R2__has_description="infinity",
+    R4__is_instance_of=I4864["infinity class"],
+)
 
 I6043 = p.create_item(
     R1__has_label="sum",
@@ -1136,15 +1174,46 @@ I5441 = p.create_item(
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=p.I37["integer number"], # start
-    R10__has_domain_of_argument_3=p.I18["mathematical expression"], # [p.I37["integer number"], I4291["infinity"]], # stop
-    R11__has_range_of_result=I6043["sum"],
+    R10__has_domain_of_argument_3=[p.I37["integer number"], I4864["infinity class"]], # stop
+    R11__has_range_of_result=p.I18["mathematical expression"],
+
+    # TODO:
+    # R11__has_range_of_result=I6043["sum"],
 )
 
-I4291 = p.create_item(
-    R1__has_label="infinity",
-    R2__has_description="infinity",
-    R4__is_instance_of=p.I18["mathematical expression"], # TODO type?
+I9489 = p.create_item(
+    R1__has_label="vector to matrix",
+    R2__has_description="convert a vector item to a matrix item for calculus",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I7151["vector"],
+    R11__has_range_of_result=I9904["matrix"],
+    R18__has_usage_hint="Use this operator to convert to matrix, then use matmul, matadd etc.",
 )
+
+I1284 = p.create_item(
+    R1__has_label="point in vector space to vector",
+    R2__has_description="convert a point in a vector space to the vector, pointing to that point",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I1169["point in vector space"],
+    R11__has_range_of_result=I7151["vector"],
+    R18__has_usage_hint="Use this operator to convert to vector/ matrix, then use matmul, matadd etc.",
+)
+
+I4218 = p.create_item(
+    R1__has_label="matrix to vector",
+    R2__has_description="convert a nx1 matrix item to a vector item for calculus",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I7151["vector"],
+)
+
+I2328 = p.create_item(
+    R1__has_label="matrix to scalar",
+    R2__has_description="convert a 1x1 matrix item to a scalar value",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I9904["matrix"],
+    R11__has_range_of_result=I1063["scalar function"],
+) # TODO build test
 
 I7481 = p.create_item(
     R1__has_label="Jacobian",
@@ -1192,7 +1261,7 @@ I2495 = p.create_item(
 
 I9738 = p.create_item(
     R1__has_label="mul",
-    R2__has_description="general multiplcation operator",
+    R2__has_description="general multiplication operator",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=p.I18["mathematical expression"],
@@ -1414,13 +1483,13 @@ p.end_mod()
 I6117      R6117
 I9192      R9192
 I3648      R3648
-I6209      R6209
-I8492      R8492
-I1284      R1284
-I4218      R4218
-I2328      R2328
-I9489      R9489
-I4864      R4864
+      R6209
+      R8492
+      R1284
+      R4218
+      R2328
+      R9489
+      R4864
       R5094
        R2378
      R1716
