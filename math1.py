@@ -1,16 +1,19 @@
 from typing import Union
-import pyerk as p
+import pyirk as p
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  # noqa
 
-ag = p.erkloader.load_mod_from_path("./agents1.py", prefix="ag")
+ag = p.irkloader.load_mod_from_path("./agents1.py", prefix="ag")
 
-__URI__ = "erk:/ocse/0.2/math"
+__URI__ = "irk:/ocse/0.2/math"
 
 keymanager = p.KeyManager()
 p.register_mod(__URI__, keymanager)
 p.start_mod(__URI__)
+
+# data store on module level
+ds = {}
 
 
 I5000 = p.create_item(
@@ -553,7 +556,7 @@ I1594 = p.create_item(
         "then all coefficients have the same sign."
     ),
     R4__is_instance_of=p.I15["implication proposition"],
-    # TODO: test this feature (attribute name beginning with prefix) in pyerk.test_core
+    # TODO: test this feature (attribute name beginning with prefix) in pyirk.test_core
     ag__R6876__is_named_after=ag.I2276["Aurel Stodola"],
 )
 
@@ -743,7 +746,7 @@ I3058 = p.create_item(
 )
 
 # the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
-# see also https://pyerk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
+# see also https://pyirk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
 # TODO: drop branch name in above link, once the docs are in main
 
 I1566 = p.create_item(
@@ -1113,14 +1116,28 @@ I1778 = p.create_item(
     R78__is_applicable_to=I1060["general function"],
 )
 
-I5441 = p.create_item(
+
+I6043 = p.create_item(
     R1__has_label="sum",
-    R2__has_description="sum operator",
+    R2__has_description="base class for general sums (result of addition)",
+    R3__is_subclass_of=p.I18["mathematical expression"]
+)
+
+I5916 = p.create_item(
+    R1__has_label="product",
+    R2__has_description="base class for general products (result of multiplication)",
+    R3__is_subclass_of=p.I18["mathematical expression"]
+)
+
+
+I5441 = p.create_item(
+    R1__has_label="sum over index",
+    R2__has_description="summation operator (capital Sigma)",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=p.I18["mathematical expression"],
     R9__has_domain_of_argument_2=p.I37["integer number"], # start
     R10__has_domain_of_argument_3=p.I18["mathematical expression"], # [p.I37["integer number"], I4291["infinity"]], # stop
-    R11__has_range_of_result=p.I18["mathematical expression"],
+    R11__has_range_of_result=I6043["sum"],
 )
 
 I4291 = p.create_item(
@@ -1160,12 +1177,217 @@ R3263 = p.create_relation(
 
 I9827["mathematical algorithm"].set_relation(R3263["has solution"], I2378["solution to a mathematical algorithm"])
 
+
+# items to specify components of formulas
+
+
+I2495 = p.create_item(
+    R1__has_label="add",
+    R2__has_description="general addition operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I18["mathematical expression"],
+    R11__has_range_of_result=I6043["sum"],
+)
+
+I9738 = p.create_item(
+    R1__has_label="mul",
+    R2__has_description="general multiplcation operator",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I18["mathematical expression"],
+    R9__has_domain_of_argument_2=p.I18["mathematical expression"],
+    R11__has_range_of_result=I5916["product"],
+)
+
+
+# helper function to simplify creation of formulas
+
+
+def items_to_symbols(*args, relation=None) -> list:
+
+    if not "item_symbol_map" in ds:
+        ds["item_symbol_map"] = p.aux.OneToOneMapping()
+    item_symbol_map = ds["item_symbol_map"]
+
+    import sympy as sp
+    n = len(item_symbol_map.a)
+    res = []
+
+    if relation is not None:
+        # apply the provided relation
+        assert isinstance(relation, p.core.Relation)
+        args = [itm.get_relations(relation.uri, return_obj=True)[0] for itm in args]
+
+    for i, itm in enumerate(args, start=n):
+        assert isinstance(itm, p.Item)
+        # TODO: check meaningful types (numbers, expressions, evaluated mappings, but not eg. ag.I7435["human"])
+        suffix = itm.R1__has_label.split(" ")[0]
+        name = f"s{i}_{suffix}"
+        symb = sp.Symbol(name)
+        res.append(symb)
+
+        # a: keys=uris, values=symbols; b: keys=symbols, values=uris;
+        item_symbol_map.add_pair(itm.uri, symb)
+
+    return res
+
+
+class symbolicExpressionToGraphExpressionConverter:
+    def __init__(self, symb_expression) -> None:
+        try:
+            self.item_symbol_map = ds["item_symbol_map"]
+        except KeyError:
+            raise p.aux.PyIRKError("no item-symbol-associations were registered")
+
+        # prevent sympy import on global level (because it is unnecessary in most cases)
+        import sympy
+        self.sp = sympy
+
+        self.symb_expression = symb_expression
+
+    def convert(self):
+        return self._conv_object(self.symb_expression)
+
+    def _conv_object(self, obj):
+        if isinstance(obj, p.Item):
+            return obj
+        elif isinstance(obj, self.sp.Symbol):
+            try:
+                uri = self.item_symbol_map.b[obj]
+            except KeyError:
+                msg = f"unknown symbol {obj} while converting expression {self.symb_expression}"
+            return p.ds.get_entity_by_uri(uri)
+        elif isinstance(obj, self.sp.Add):
+            return self._conv_add(obj.args)
+        elif isinstance(obj, self.sp.Mul):
+            return self._conv_mul(obj.args)
+
+    def _conv_add(self, args):
+        return self._apply_operator(args, I2495["add"])
+
+    def _conv_mul(self, args):
+        return self._apply_operator(args, I9738["mul"])
+
+    def _apply_operator(self, args, operator_item):
+        if len(args) == 2:
+            arg1, arg2 = self._conv_object(args[0]), self._conv_object(args[1])
+            return operator_item(arg1, arg2)
+
+        elif len(args) > 2:
+            new_args = (self._apply_operator(args[:2], operator_item), *args[2:])
+            assert len(new_args) == len(args) - 1
+            return self._apply_operator(new_args, operator_item)
+        else:
+            self._raise_error_invalid_length(len(args))
+
+
+    def _raise_error_invalid_length(self, length):
+        msg = f"unexpected length of arguments: {length} while converting expression {self.symb_expression}"
+        raise p.aux.PyIRKError(msg)
+
+
+def symbolic_expression_to_graph_expression(symb_expression):
+    converter = symbolicExpressionToGraphExpressionConverter(symb_expression=symb_expression)
+    return converter.convert()
+
+
+
+
+# add knowledge elements of planar geometry (for Pythagorean theorem)
+
+I1913 = p.create_item(
+    R1__has_label="geometric object",
+    R2__has_description="general (unspecified) geometric object",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+
+I7280 = p.create_item(
+    R1__has_label="planar polygon",
+    R2__has_description="base class for general planar polygons",
+    R3__is_subclass_of=I1913["geometric object"],
+)
+
+
+I2917 = p.create_item(
+    R1__has_label="planar triangle",
+    R2__has_description="base class for general planar triangles",
+    R3__is_subclass_of=I7280["planar polygon"],
+)
+
+
+I8172 = p.create_item(
+    R1__has_label="polygon side",
+    R2__has_description="base class for sides of a polygon",
+    R3__is_subclass_of=I1913["geometric object"],
+)
+
+
+R2495 = p.create_relation(
+    R1__has_label="has length",
+    R2__has_description="specifies the length of a geometric object",
+    R8__has_domain_of_argument_1=I1913["geometric object"],
+    R11__has_range_of_result=p.I35["real number"],
+    R22__is_functional=True,
+)
+
+I9148 = p.create_item(
+    R1__has_label="get polygon sides ordered by length",
+    R2__has_description="operator that returns a tuple of I8172__polygon_side instances",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I7280["planar polygon"],
+
+    # TODO: find a way to specify this further (e.g. with qualifiers), because we know the type of the result
+    # another idea: introduce a callable Item like I95["typed tuple"](I8172["polygon side"])
+    R11__has_range_of_result=p.I33["tuple"],
+)
+
+I9148["get polygon sides ordered by length"].add_method(p.create_evaluated_mapping, "_custom_call")
+
+
+def I9148_cc_pp(self, res, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     instance of I33["tuple"] (determined by R11__has_range_of_result)
+    :param args:    arg tuple (<polygon>,) with which the mapping is called
+    """
+    assert len(args) == 1
+    polygon = args[0]
+    res.overwrite_statement("R1__has_label", f"sides-tuple of {polygon}")
+
+    if p.is_instance_of(polygon, I2917["planar triangle"]):
+
+        last_length = None
+        for i, name in zip(range(3), ["a", "b", "c"]):
+            # note: every assignment adds a new R39-statement
+            side = p.instance_of(I8172["polygon side"], r1=name)
+            side.R5__is_part_of = polygon
+
+            length = p.instance_of(p.I35["real number"], r1=f"l_{name}")
+            side.R2495__has_length = length
+            res.R39__has_element = side
+
+            if last_length is not None:
+                # state that this length not less then the last one
+                p.new_mathematical_relation(last_length, "<=", length)
+            last_length = last_length
+            p.core.Entity.set_relation
+    else:
+        raise p.aux.NotYetFinishedError("other types of polygons not yet supported")
+
+    return res
+
+
+I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
+
+
+
 # <new_entities>
 
 # this section in the source file is helpful for bulk-insertion of new items
-# use it together with `pyerk --insert-keys-for-placeholders path/to/this_module.py`
+# use it together with `pyirk --insert-keys-for-placeholders path/to/this_module.py`
 # this will replace the `_newitemkey_` and `p.I000["..."]` strings accordingly
-# see also pyerk --help
+# see also pyirk --help
 
 # _newitemkey_ = p.create_item(
 #     R1__has_label="",
@@ -1182,15 +1404,13 @@ p.end_mod()
 
 """
 
-I7280      R7280
-I1913      R1913
-I2917      R2917
-I8172      R8172
-I9148      R9148
-I2495      R2495
-I9738      R9738
-I6043      R6043
-I5916      R5916
+      R7280
+      R1913
+      R2917
+      R8172
+      R9148
+      R9738
+     R5916
 I6117      R6117
 I9192      R9192
 I3648      R3648

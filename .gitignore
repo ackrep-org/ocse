@@ -7,3 +7,5 @@ _backup/
 .ac_candidates.txt
 
 .vscode
+
+tmp*
