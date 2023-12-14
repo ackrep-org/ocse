@@ -469,8 +469,8 @@ I9493 = p.create_item(
 )
 
 I1536 = p.create_item(
-    R1__has_label="negation",
-    R2__has_description="negation operator",
+    R1__has_label="matneg",
+    R2__has_description="negation operator for matrices",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9904["matrix"],
     R11__has_range_of_result=I9904["matrix"],
@@ -528,6 +528,13 @@ I4237 = p.create_item(
 
 I4237["monovariate rational function"].add_method(p.create_evaluated_mapping, "_custom_call")
 
+I6209 = p.create_item(
+    R1__has_label="scalneg",
+    R2__has_description="negation operator for scalars",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=p.I35["real number"],
+    R11__has_range_of_result=p.I35["real number"],
+)
 
 I4239 = p.create_item(
     R1__has_label="abstract monovariate polynomial",
@@ -1068,6 +1075,26 @@ I3136 = p.create_item(
     R78__is_applicable_to=I9923["scalar field"],
 )
 
+I8492 = p.create_item(
+    R1__has_label="definition of negative definiteness",
+    R2__has_description="the defining statement of negative definiteness",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I8492["definition of negative definiteness"].scope("setting") as cm:
+    cm.copy_from(I3134["definition of positive definiteness"].get_subscope("setting"))
+
+with I8492["definition of negative definiteness"].scope("premise") as cm:
+    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["positive definiteness"])
+
+with I8492["definition of negative definiteness"].scope("assertion") as cm:
+    cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"])
+
+
+I3136["negative definiteness"].set_relation(
+    p.R37["has definition"], I8492["definition of negative definiteness"]
+)
+
 I3137 = p.create_item(
     R1__has_label="negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
@@ -1234,8 +1261,8 @@ I5916      R5916
 I6117      R6117
 I9192      R9192
 I3648      R3648
-I6209      R6209
-I8492      R8492
+      R6209
+      R8492
       R1284
       R4218
       R2328
