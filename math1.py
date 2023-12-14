@@ -31,6 +31,26 @@ I5001 = p.create_item(
     R24__has_LaTeX_string="$1$",
 )
 
+I3141 = p.create_item(
+    R1__has_label="pi",
+    R2__has_description="mathematical constant that is the ratio between a circle's circumference to its diameter",
+    R4__is_instance_of=p.I35["real number"],
+    R24__has_LaTeX_string=r"$\pi$",
+)
+
+I1570 = p.create_item(
+    R1__has_label="half pi",
+    R2__has_description="exact half of I3141__pi",
+    R4__is_instance_of=p.I35["real number"],
+    R24__has_LaTeX_string=r"$\frac{\pi}{2}$",
+)
+
+I6283 = p.create_item(
+    R1__has_label="two pi",
+    R2__has_description="exact double of I3141__pi",
+    R4__is_instance_of=p.I35["real number"],
+    R24__has_LaTeX_string=r"$2\pi}$",
+)
 
 I4895 = p.create_item(
     R1__has_label="mathematical operator",
@@ -1330,6 +1350,18 @@ class symbolicExpressionToGraphExpressionConverter:
             return self._conv_add(obj.args)
         elif isinstance(obj, self.sp.Mul):
             return self._conv_mul(obj.args)
+        elif isinstance(obj, self.sp.Pow):
+            base, exp = obj.args
+            if exp == 1:
+                return self._conv_object(base)
+            elif exp == 2:
+                return self._conv_mul((base, base))
+            else:
+                msg = f"yet only exponents of 1 and 2 are supported, but not {exp} as in {obj})"
+                raise p.aux.NotYetFinishedError(msg)
+        else:
+            msg = f"unexpected type ({type(obj)} of object {obj})"
+            raise p.aux.PyIRKError(msg)
 
     def _conv_add(self, args):
         return self._apply_operator(args, I2495["add"])
@@ -1401,7 +1433,7 @@ R2495 = p.create_relation(
 )
 
 I9148 = p.create_item(
-    R1__has_label="get polygon sides ordered by length",
+    R1__has_label="polygon sides ordered by length",
     R2__has_description="operator that returns a tuple of I8172__polygon_side instances",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I7280["planar polygon"],
@@ -1411,7 +1443,7 @@ I9148 = p.create_item(
     R11__has_range_of_result=p.I33["tuple"],
 )
 
-I9148["get polygon sides ordered by length"].add_method(p.create_evaluated_mapping, "_custom_call")
+I9148["polygon sides ordered by length"].add_method(p.create_evaluated_mapping, "_custom_call")
 
 
 def I9148_cc_pp(self, res, *args, **kwargs):
@@ -1447,9 +1479,40 @@ def I9148_cc_pp(self, res, *args, **kwargs):
     return res
 
 
-I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
+I9148["polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
 
 
+I9192 = p.create_item(
+    R1__has_label="angle between sides",
+    R2__has_description="operator that returns the (smallest) angle between two adjacent sides of a polygon in radians",
+    R4__is_instance_of=I4895["mathematical operator"],
+    R8__has_domain_of_argument_1=I8172["polygon side"],
+    R9__has_domain_of_argument_2=I8172["polygon side"],
+    R11__has_range_of_result=p.I35["real number"],
+)
+
+
+I6117 = p.create_item(
+    R1__has_label="simplified Pythagorean theorem",
+    R2__has_description="establishes a formula for the sides of a right-angled triangle",
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+
+with I6117["simplified Pythagorean theorem"].scope("setting") as cm:
+    # the theorem should hold for every planar triangle,
+    # thus a universally quantified instance is created
+    cm.new_var(ta=p.uq_instance_of(I2917["planar triangle"]))
+    sides = I9148["polygon sides ordered by length"](cm.ta)
+    a, b, c = sides.R39__has_element
+    la, lb, lc = items_to_symbols(a, b, c, relation=R2495["has length"])
+
+with I6117["simplified Pythagorean theorem"].scope("premise") as cm:
+    cm.new_equation(lhs=I9192["angle between sides"](a, b), rhs=I1570["half pi"])
+
+with I6117["simplified Pythagorean theorem"].scope("assertion") as cm:
+    se2ge = symbolic_expression_to_graph_expression  # abbreviation
+    cm.new_equation(lhs=se2ge(la**2 + lb**2), rhs=se2ge(lc**2))
 
 # <new_entities>
 
@@ -1480,8 +1543,8 @@ p.end_mod()
       R9148
       R9738
      R5916
-I6117      R6117
-I9192      R9192
+      R6117
+      R9192
 I3648      R3648
       R6209
       R8492

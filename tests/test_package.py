@@ -84,21 +84,34 @@ class Test_02_math(unittest.TestCase):
     def test_c04_symbolic_formula1(self):
 
         t = p.instance_of(ma.I2917["planar triangle"])
-        sides = ma.I9148["get polygon sides ordered by length"](t)
+        sides = ma.I9148["polygon sides ordered by length"](t)
         a, b, c = sides.R39__has_element
 
         la, lb, lc = ma.items_to_symbols(a, b, c, relation=ma.R2495["has length"])
         symbolic_sum = la + lb + lc
 
-        sum_item = ma.symbolic_expression_to_graph_expression(symbolic_sum)
+        se2ge = ma.symbolic_expression_to_graph_expression
+
+        sum_item = se2ge(symbolic_sum)
         self.assertEqual(sum_item.get_arguments()[0].get_arguments(), [a.R2495__has_length, b.R2495__has_length])
         self.assertEqual(sum_item.get_arguments()[1], c.R2495__has_length)
         self.assertEqual(sum_item.R4__is_instance_of, ma.I6043["sum"])
 
         symbolic_prod = la*lb
-        prod_item = ma.symbolic_expression_to_graph_expression(symbolic_prod)
+        prod_item = se2ge(symbolic_prod)
         self.assertEqual(prod_item.get_arguments(), [a.R2495__has_length, b.R2495__has_length])
         self.assertEqual(prod_item.R4__is_instance_of, ma.I5916["product"])
+
+        square = se2ge(la**2)
+        self.assertEqual(square.R4__is_instance_of, ma.I5916["product"])
+        self.assertEqual(square.get_arguments(), [a.R2495__has_length, a.R2495__has_length])
+
+        square_sum = se2ge(la**2 + lb**2)
+        self.assertEqual(square_sum.R4__is_instance_of, ma.I6043["sum"])
+        self.assertEqual(square_sum.get_arguments()[0].R4__is_instance_of, ma.I5916["product"])
+        self.assertEqual(square_sum.get_arguments()[1].R4__is_instance_of, ma.I5916["product"])
+        self.assertEqual(square_sum.get_arguments()[1].get_arguments(), [b.R2495__has_length, b.R2495__has_length])
+
 
 
 class Test_02_control_theory(unittest.TestCase):
