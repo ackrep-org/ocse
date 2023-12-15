@@ -1000,22 +1000,30 @@ R4963 = p.create_relation(
     R11__has_range_of_result=I1168["point in state space"],
 )
 
+R1536 = p.create_relation(
+    R1__has_label="is valid on set",
+    R2__has_description="specifies when a statement becomes true",
+    R18__has_usage_hint="to be used as a qualifier",
+)
+on_set = p.QualifierFactory(R1536["is valid on set"])
+
 I3133 = p.create_item(
-    R1__has_label="positive definiteness",
+    R1__has_label="local positive definiteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3134 = p.create_item(
-    R1__has_label="definition of positive definiteness",
+    R1__has_label="definition of local positive definiteness",
     R2__has_description="the defining statement of positive definite",
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I3134["definition of positive definiteness"].scope("setting") as cm:
-    # todo relation to state that h and u is main subject of definition
+with I3134["definition of local positive definiteness"].scope("setting") as cm:
     h = cm.new_var(h=p.instance_of(I9923["scalar field"]))
+    cm.new_rel(I3134["definition of local positive definiteness"], p.R79["has main subject"], h)
+
     n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
     M = cm.new_var(M=p.instance_of(I5167["state space"]))
 
@@ -1032,7 +1040,7 @@ with I3134["definition of positive definiteness"].scope("setting") as cm:
     x = cm.new_var(x=p.uq_instance_of(I1168["point in state space"]))
 
 
-with I3134["definition of positive definiteness"].scope("premise") as cm:
+with I3134["definition of local positive definiteness"].scope("premise") as cm:
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
     # todo: nested implication statements
     with p.ImplicationStatement() as imp1:
@@ -1043,16 +1051,16 @@ with I3134["definition of positive definiteness"].scope("premise") as cm:
         imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
         imp2.consequent_relation(lhs=cm.h(cm.x), rsgn=">", rhs=I5000["scalar zero"])
 
-with I3134["definition of positive definiteness"].scope("assertion") as cm:
-    cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
+with I3134["definition of local positive definiteness"].scope("assertion") as cm:
+    cm.h.set_relation(p.R16["has property"], I3133["local positive definiteness"], qualifiers=[on_set(cm.u)])
 
 
-I3133["positive definiteness"].set_relation(
-    p.R37["has definition"], I3134["definition of positive definiteness"]
+I3133["local positive definiteness"].set_relation(
+    p.R37["has definition"], I3134["definition of local positive definiteness"]
 )
 
 # TODO: for the following properties it would be nice to state the definition "relatively" to the
-# definition of I3133["positive definiteness"]
+# definition of I3133["local positive definiteness"]
 # for now: leave them as stubs
 
 I3135 = p.create_item(
@@ -1076,10 +1084,10 @@ I8492 = p.create_item(
 )
 
 with I8492["definition of negative definiteness"].scope("setting") as cm:
-    cm.copy_from(I3134["definition of positive definiteness"].get_subscope("setting"))
+    cm.copy_from(I3134["definition of local positive definiteness"].get_subscope("setting"))
 
 with I8492["definition of negative definiteness"].scope("premise") as cm:
-    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["positive definiteness"])
+    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["local positive definiteness"])
 
 with I8492["definition of negative definiteness"].scope("assertion") as cm:
     cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"])
@@ -1490,7 +1498,7 @@ I3648      R3648
       R4291
       R5441
       R1778
-      R1536
+
 
 
 

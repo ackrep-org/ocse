@@ -1469,13 +1469,14 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
 
     # uq ... because the theorem holds for all n
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
-    # TODO: decide about universal quantification here
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
     cm.new_rel(D, ma.R3798["has origin"], x0)
     # x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
-    cm.new_rel(x, p.R15["is element of"], D)
+    # cm.new_rel(x, p.R15["is element of"], D)
+    u = cm.new_var(u=p.uq_instance_of(ma.I5843["neighborhood"]))
+    cm.new_rel(u, ma.R4963["is neighborhood of"], x0)
 
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
@@ -1485,7 +1486,7 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
     cm.new_var(LfV=I1347["Lie derivative of scalar field"](V, f))
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("premise") as cm:
-    cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"])
+    cm.new_rel(V, p.R16["has property"], ma.I3133["local positive definiteness"], qualifiers=[ma.on_set(u)])
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
@@ -1649,7 +1650,7 @@ with I3712.scope("premise") as cm:
 with I3712.scope("assertion") as cm:
     P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(P, ma.R5938["has row number"], n)
-    cm.new_rel(P, p.R16["has property"], ma.I3133["positive definiteness"])
+    cm.new_rel(P, p.R16["has property"], ma.I3133["local positive definiteness"])
 
     E = cm.new_equation(ma.I1536["matneg"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
                                                                    (ma.I3263["transpose"](cm.A), cm.P)))
@@ -1720,7 +1721,7 @@ with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"]
     cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
 
     Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
-    cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
+    cm.new_rel(Q, p.R16["has property"], ma.I3133["local positive definiteness"])
 
 with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"].scope("premise") as cm:
     F1 = cm.new_var(F1=p.instance_of(ma.I9841["vector field"])) #todo relation to F_i with i=1 ??
@@ -1845,7 +1846,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
 
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
-    cm.new_rel(cm.P, p.R16["has property"], ma.I3133["positive definiteness"])
+    cm.new_rel(cm.P, p.R16["has property"], ma.I3133["local positive definiteness"])
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
