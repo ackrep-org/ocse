@@ -573,7 +573,7 @@ I1347 = p.create_item(
     R4__is_instance_of=ma.I4895["mathematical operator"],
     R8__has_domain_of_argument_1=ma.I9923["scalar field"],
     R9__has_domain_of_argument_2=ma.I9841["vector field"],
-    R10__has_domain_of_argument_3=ma.I1168["point in state space"],
+    # R10__has_domain_of_argument_3=ma.I1168["point in state space"],# todo remove argument
     R11__has_range_of_result=ma.I9923["scalar field"],
     R13__has_canonical_symbol=r"$L$",
     # TODO: complete defining equation
@@ -632,7 +632,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
     # some auxiliary expressions are stored as attributes of the parent item of the cm
 
     cm.item.subs = I2075["substitution"](deriv_evaluated, t, ma.I5000["scalar zero"])
-    cm.item.L_evaluated = I1347["Lie derivative of scalar field"](h, f, x)
+    cm.item.L_evaluated = I1347["Lie derivative of scalar field"](h, f)
 
 
 with I6229.scope("assertion") as cm:
@@ -1457,30 +1457,35 @@ I4663 = p.create_item(
 )
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("setting") as cm:
+    # todo v needs to be continuous differentiable
+    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
+    # todo a similar theorem can be formulated for systems that do not fulfill these properties
+    cm.new_rel(ode_sys, p.R16["has property"], I7733["time invariance"])
+    cm.new_rel(ode_sys, p.R16["has property"], I5718["autonomy"])
+
+    D = cm.new_var(D=p.instance_of(ma.I5167["state space"]))
+
+    cm.new_rel(ode_sys, ma.R5405["has associated state space"], D)
+
     # uq ... because the theorem holds for all n
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
-
     # TODO: decide about universal quantification here
-    D = cm.new_var(D=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
-
-    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
-    cm.new_rel(ode_sys, ma.R5405["has associated state space"], D)
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
     cm.new_rel(D, ma.R3798["has origin"], x0)
-    x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
+    # x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
     cm.new_rel(x, p.R15["is element of"], D)
 
-    V = cm.new_var(V=p.instance_of(ma.I9923["scalar field"]))
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
-
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
 
-    cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"])
-    cm.new_var(LfV=I1347["Lie derivative of scalar field"](V, f, x))
+    V = cm.new_var(V=p.instance_of(ma.I9923["scalar field"]))
+
+    cm.new_var(LfV=I1347["Lie derivative of scalar field"](V, f))
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"])
     cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
 
 with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
