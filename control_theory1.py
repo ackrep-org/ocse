@@ -588,18 +588,25 @@ I6229 = p.create_item(
 )
 
 with I6229["definition of Lie derivative of scalar field"].scope("setting") as cm:
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
-    M = cm.new_var(M=p.uq_instance_of(ma.I5167["state space"]))
     h = cm.new_var(h=p.uq_instance_of(ma.I9923["scalar field"]))
+    M = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
+
+    cm.new_rel(cm.M, ma.R3326["has dimension"], cm.n)
+    cm.new_rel(cm.h, ma.R5405["has associated state space"], cm.M)
+
 
     # TODO: this should be more specific (related to cm.M)
     # h.R8__has_domain_of_argument_1 = ma.I1168["point in state space"]
     # TODO: __automate_typing__
     # h.R11__has_range_of_result = p.I35["real number"]
 
-    f = cm.new_var(f=p.uq_instance_of(ma.I9841["vector field"]))
-
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
+    cm.new_rel(cm.ode_sys, ma.R5405["has associated state space"], cm.M)
+
+    f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
+    cm.new_rel(cm.ode_sys, R4122["has associated drift vector field"], cm.f)
+
     x = cm.new_var(x=p.instance_of(ma.I1168["point in state space"]))
 
     # TODO: check
@@ -608,11 +615,6 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
 
     t = cm.new_var(t=p.instance_of(I4122["independent variable"]))
 
-    cm.new_rel(cm.M, ma.R3326["has dimension"], cm.n)
-    cm.new_rel(cm.h, ma.R5405["has associated state space"], cm.M)
-    cm.new_rel(cm.f, ma.R5405["has associated state space"], cm.M)
-    cm.new_rel(cm.ode_sys, ma.R5405["has associated state space"], cm.M)
-    cm.new_rel(cm.ode_sys, R4122["has associated drift vector field"], cm.f)
 
     # TODO: __automate_typing__
     t.R30__is_secondary_instance_of = p.I35["real number"]
@@ -637,7 +639,7 @@ with I6229["definition of Lie derivative of scalar field"].scope("setting") as c
 
 with I6229.scope("assertion") as cm:
     # TODO: encode the directional character of this equation (lhs := rhs)
-    cm.new_equation(lhs=cm.L_evaluated, rhs=cm.subs)
+    cm.new_equation(lhs=cm.L_evaluated(x), rhs=cm.subs)
 
 I1347["Lie derivative of scalar field"].set_relation(
     p.R37["has definition"], I6229["definition of Lie derivative of scalar field"]
