@@ -100,6 +100,27 @@ class Test_02_math(unittest.TestCase):
         self.assertEqual(prod_item.get_arguments(), [a.R2495__has_length, b.R2495__has_length])
         self.assertEqual(prod_item.R4__is_instance_of, ma.I5916["product"])
 
+    def test_c05__cc_matrix_dimensions(self):
+
+        I503 = ma.I503
+
+
+        res = p.ruleengine.apply_semantic_rule(I503)
+
+        self.assertGreaterEqual(len(res.new_statements), 2)
+
+
+        # test the rule which produces a I48["constraint violation"] instance
+        res = p.ruleengine.apply_semantic_rule(I503, ma.__URI__)
+
+        self.assertEqual(len(res.new_entities), 1)
+
+        cvio, = ma.failed_multiplication.R74__has_constraint_violation
+        self.assertEqual(cvio.R76__has_associated_rule, I503)
+        self.assertEqual(p.is_instance_of(cvio), p.I48["constraint violation"])
+
+        # self.assertEqual(A2B.R74__has_constraint_violation, [])
+
 
 class Test_02_control_theory(unittest.TestCase):
     def test_b01__test_multilinguality(self):
