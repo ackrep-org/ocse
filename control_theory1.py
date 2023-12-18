@@ -1685,6 +1685,7 @@ with I3712.scope("assertion") as cm:
 # </theorem>
 
 I4432 = p.create_item(
+    # REM: Maybe add the specification of maximal?
     R1__has_label="Vannelli recursive algorithm to find Lyapunov function",
     R2__has_description=(
         ""
@@ -1694,6 +1695,7 @@ I4432 = p.create_item(
     # R9__has_domain_of_argument_2=ma.I9906["square matrix"], # R_2
     # R10__has_domain_of_argument_3=ma.I9906["square matrix"], # Q_1
     # todo how to deal with >3 inputs? nesting?
+    # REM: I thought about this too, I guess providing a list of argument san da list of their domains is not feasible?
     # R11__has_range_of_result=p.I53["bool"], #todo this is done in parent class, sufficient?
     # A. Vannelli and M. Vidyasagar, “Maximal Lyapunov Functions and Domains of Attraction for Autonomous Nonlinear
     # Systems,” Automatica, vol. 21, no. 1, pp. 69–60, 1985, doi: https://doi.org/10.1016/0005-1098(85)90099-8.
@@ -1702,7 +1704,11 @@ I4432 = p.create_item(
 
 # <theorem>
 I8142 = p.create_item(
-    # REM: There we go again: Should this maybe hust be called for general systems?
+    # REM: There we go again: Should this maybe just be called for general systems?
+    # REM: Maybe add the specification of maximal?
+    # REM: I think that the estimate for the domain of attraction,
+    #       which can be computed from the denominator polynomials Q_i (not to be confused with Q) is
+    #       also important.
     R1__has_label="theorem for Lyapunov functions for nonlinear systems",
     R2__has_description=(
         ""
@@ -1729,7 +1735,9 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
         # F_i is a vector of polynomials of degree i
         evaluated_F_i = cm.new_var(F_i_x=p.instance_of(ma.I7151["vector"]))
         cm.new_equation(F_i(x), evaluated_F_i)
-        cm.new_rel(evaluated_F_i, p.R16["has property"], ma.I1778["homogeneity"]) # todo does this apply to Fi or Fi_x?
+        # TODO: does this apply to Fi or Fi_x?
+        # REM: I say it is a property of F_i
+        cm.new_rel(evaluated_F_i, p.R16["has property"], ma.I1778["homogeneity"])
         with ma.IntegerRangeElement(start=1, stop=n) as j:
             # F_ij is the j-th element of a vector of polynomials of degree i
             evaluated_F_ij = cm.new_var(evaluated_F_ij=p.instance_of(ma.I4239["abstract monovariate polynomial"]))
@@ -1737,6 +1745,7 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
 
     cm.new_equation(f(x), ma.I5441["sum"](evaluated_F_i, ma.I5001["scalar one"], ma.I4291["infinity"]))
 
+    # REM: D is convention for state space in the OCSE, but also the denominator of V in the paper, add a comment?
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
     cm.new_rel(state_space_sys, ma.R5405["has associated state space"], D)
@@ -1747,7 +1756,6 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("settin
     cm.new_rel(x0, R5031["has trajectory"], I9820["equilibrium point"])
 
     Q = cm.new_var(Q=p.instance_of(ma.I9906["square matrix"]))
-    # REM: (unsure) not semi-definite?
     cm.new_rel(Q, p.R16["has property"], ma.I3133["positive definiteness"])
 
 with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("premise") as cm:
@@ -1768,7 +1776,8 @@ with I8142["theorem for Lyapunov functions for nonlinear systems"].scope("assert
     # there exists an algorithm to iteratively calculate Lyapunov function
     cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(I4432["Vannelli recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
-    pass
+
+    # REM: Add statement for region of attraction, based on denominator polynomials?
 
 # </theorem>
 

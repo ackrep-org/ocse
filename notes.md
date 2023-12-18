@@ -14,11 +14,11 @@ Temporary notes the somehow keep track in the review process.
 - I8733
 - I2983
 - I3503, I6994, I3303, I9875, I9903
+- I4432 (Vanelli algorithm)
+- I8142 (theorem for Lyapunov functions for nonlinear systems)
 
 ## Entries that require more theoretical knowledge to be examined
 
-- I4432 (Vanelli algorithm)
-- I8142 (theorem for Lyapunov functions for nonlinear systems)
 - I7006 (Goubault algorithm) + Theorem
 
 ## Ideas
