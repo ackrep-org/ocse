@@ -113,7 +113,8 @@ class Test_02_math(unittest.TestCase):
         # test the rule which produces a I48["constraint violation"] instance
         res = p.ruleengine.apply_semantic_rule(I503, ma.__URI__)
 
-        self.assertEqual(len(res.new_entities), 1)
+        IPS()
+        self.assertEqual(len(res.new_entities), 2)
 
         cvio, = ma.failed_multiplication.R74__has_constraint_violation
         self.assertEqual(cvio.R76__has_associated_rule, I503)

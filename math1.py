@@ -1468,17 +1468,15 @@ with I503.scope("setting") as cm:
     cm.new_var(arg1=p.instance_of(p.I1["general item"]))
     cm.new_var(arg2=p.instance_of(p.I1["general item"]))
 
-    cm.new_var(arg1_ra=p.instance_of(p.I49["reification anchor"]))
-    cm.new_var(arg2_ra=p.instance_of(p.I49["reification anchor"]))
+    if 0:
+        cm.new_var(arg1_ra=p.instance_of(p.I49["reification anchor"]))
+        cm.new_var(arg2_ra=p.instance_of(p.I49["reification anchor"]))
+
+        cm.new_var(m1=p.instance_of(p.I39["positive integer"]))
+        cm.new_var(n2=p.instance_of(p.I39["positive integer"]))
 
     cm.uses_external_entities(I5177["matmul"])
-    cm.uses_external_entities(cm.rule)
-
-    cm.uses_external_entities(I5177["matmul"])
-
-
-    cm.new_var(m1=p.instance_of(p.I39["positive integer"]))
-    cm.new_var(n2=p.instance_of(p.I39["positive integer"]))
+    # cm.uses_external_entities(cm.rule)
 
 with I503.scope("premise") as cm:
     cm.new_rel(cm.x, p.R35["is applied mapping of"], I5177["matmul"])
@@ -1487,36 +1485,38 @@ with I503.scope("premise") as cm:
     cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg1)
     cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg2)
 
-    # specify the argument order
-    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg1_ra)
-    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg2_ra)
+    if 0:
+        # specify the argument order
+        cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg1_ra)
+        cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg2_ra)
 
-    cm.new_rel(cm.arg1_ra, p.R39["has element"], cm.arg1)
-    cm.new_rel(cm.arg2_ra, p.R39["has element"], cm.arg2)
+        cm.new_rel(cm.arg1_ra, p.R39["has element"], cm.arg1)
+        cm.new_rel(cm.arg2_ra, p.R39["has element"], cm.arg2)
 
-    cm.new_rel(cm.arg1_ra, p.R40["has index"], 0)
-    cm.new_rel(cm.arg2_ra, p.R40["has index"], 1)
+        cm.new_rel(cm.arg1_ra, p.R40["has index"], 0)
+        cm.new_rel(cm.arg2_ra, p.R40["has index"], 2)
 
-    cm.new_rel(cm.arg1, R5939["has column number"], cm.m1)
-    cm.new_rel(cm.arg2, R5938["has row number"], cm.n2)
+        cm.new_rel(cm.arg1, R5939["has column number"], cm.m1)
+        cm.new_rel(cm.arg2, R5938["has row number"], cm.n2)
 
     # cm.new_math_relation(cm.m1, "!=", cm.n2)
 
     # TODO: create this condition function from the above relation
-    cm.new_condition_func(lambda self, x, y: x != y, cm.m1, cm.n2)
+        cm.new_condition_func(lambda self, x, y: x != y, cm.m1, cm.n2)
 
 def create_constraint_violation_item(anchor_item, main_arg, rule):
 
     res = p.RuleResult()
     cvio: p.Item = p.instance_of(p.I48["constraint violation"])
     res.new_entities.append(cvio)
-    res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
+    # res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
     res.new_statements.append(main_arg.set_relation(p.R74["has constraint violation"], cvio))
 
     return res
 
 with I503.scope("assertion") as cm:
-    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
+    # cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
+    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.x)
 
 
 A=p.instance_of(I9906["square matrix"])
