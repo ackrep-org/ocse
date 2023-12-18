@@ -1460,7 +1460,7 @@ I4663 = p.create_item(
 
 with I4663["theorem for local Lyapunov stability of state space system"].scope("setting") as cm:
     # todo v needs to be continuous differentiable
-    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
+    ode_sys = cm.new_var(ode_sys=p.uq_instance_of(I9273["explicit first order ODE system"]))
     # todo a similar theorem can be formulated for systems that do not fulfill these properties
     cm.new_rel(ode_sys, p.R16["has property"], I7733["time invariance"])
     cm.new_rel(ode_sys, p.R16["has property"], I5718["autonomy"])
@@ -1510,6 +1510,7 @@ I8733 = p.create_item(
 
 with I8733["theorem for local asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
     cm.copy_from(I4663["theorem for local Lyapunov stability of state space system"].get_subscope("setting"))
+    V = cm.V
 
 with I8733["theorem for local asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
     cm.new_rel(cm.V, p.R16["has property"], ma.I3133["local positive definiteness"], qualifiers=[ma.on_set(cm.u)])
@@ -1828,54 +1829,36 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
 
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
     P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
-    I = cm.new_var(I=p.instance_of(ma.I1608["identity matrix"]))
+    Q = cm.new_var(I=p.uq_instance_of(ma.I9906["square matrix"]))
     cm.new_rel(A, ma.R5938["has row number"], n)
     cm.new_rel(P, ma.R5938["has row number"], n)
-    cm.new_rel(I, ma.R5938["has row number"], n)
+    cm.new_rel(Q, ma.R5938["has row number"], n)
+    Q.set_relation(p.R16["has property"], ma.I3648["positive definiteness"])
 
     # specify f(x) = Ax
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
     cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](x)))))
 
+with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
     LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
     LE.R8__has_domain_of_argument_1=A
     LE.R9__has_domain_of_argument_2=P
-    LE.R10__has_domain_of_argument_3=I
-
-
-with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
-    cm.new_rel(cm.P, p.R16["has property"], ma.I3133["local positive definiteness"])
+    LE.R10__has_domain_of_argument_3=Q
+    cm.new_rel(cm.P, p.R16["has property"], ma.I3648["positive definiteness"])
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotic stability"])
     V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
-    defV = cm.new_var(
-        defV=p.new_mathematical_relation(
-            V, "==", ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))
-        )
+    p.new_mathematical_relation(
+        V, "==", ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))
     )
+
 
 # </theorem>
 
-I1775 = p.create_item(
-    R1__has_label="test",
-    R2__has_description="item to test for automatic error flagging",
-    R4__is_instance_of=p.I15["implication proposition"],
-)
-
-with I1775["test"].scope("setting") as cm:
-    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
-    cm.new_rel(A, ma.R5938["has row number"], 2)
-    cm.new_rel(A, ma.R5939["has column number"], 3)
-
-    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
-    cm.new_rel(P, ma.R5938["has row number"], 4)
-    cm.new_rel(P, ma.R5939["has column number"], 5)
-
-    ma.I5177["matmul"](A,P)
 
 # <new_entities>
 

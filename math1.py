@@ -1104,6 +1104,13 @@ I3137 = p.create_item(
     R78__is_applicable_to=I9923["scalar field"],
 )
 
+I3648 = p.create_item(
+    R1__has_label="positive definiteness",
+    R2__has_description="a special property of a symmetric matrix",
+    R4__is_instance_of=p.I54["mathematical property"],
+    R78__is_applicable_to=I9904["matrix"],
+)
+
 
 I9807 = p.create_item(
     R1__has_label="local Lipschitz continuity",
