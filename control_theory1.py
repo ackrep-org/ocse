@@ -1709,6 +1709,8 @@ I8142 = p.create_item(
     # REM: I think that the estimate for the domain of attraction,
     #       which can be computed from the denominator polynomials Q_i (not to be confused with Q) is
     #       also important.
+    # REM: Basically, the results only hold if the system under consideration can be written as a
+    #       polynomial system. Maybe add a comment on that?
     R1__has_label="theorem for Lyapunov functions for nonlinear systems",
     R2__has_description=(
         ""
@@ -1796,6 +1798,8 @@ I4274 = p.create_item(
 )
 
 I7006 = p.create_item(
+    # REM: How much detail is needed here? Basically this algorythm will yield non-polynomial functions
+    #       for polynomial systems.
     R1__has_label="Goubault recursive algorithm to find Lyapunov function",
     R2__has_description=(
         ""
@@ -1824,9 +1828,12 @@ with I4274["theorem for Lyapunov functions for polynomial systems"].scope("setti
 
 with I4274["theorem for Lyapunov functions for polynomial systems"].scope("premise") as cm:
     # find rational differential variants of Darboux polynomials
+    # REM: SOS-approximation instead of method?
     # using sum of squares method
     # combine invariants to create a polynomial with 3 conditions
     # if solution to exists
+
+    # REM: I know, this acts as a stub, but how is True to be understood in case of an algorythm?
     cm.new_equation(I7006["Goubault recursive algorithm to find Lyapunov function"], True)
 
 with I4274["theorem for Lyapunov functions for polynomial systems"].scope("assertion") as cm:
