@@ -895,7 +895,7 @@ I8744 = p.create_item(
 )
 
 I4900 = p.create_item(
-    R1__has_label="local asymptotical stability",
+    R1__has_label="local asymptotic stability",
     R2__has_description="states that all trajectories that start close enough to the equilibrium remain close enough \
         and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
@@ -903,13 +903,13 @@ I4900 = p.create_item(
 )
 
 I5677 = p.create_item(
-    R1__has_label="global asymptotical stability",
+    R1__has_label="global asymptotic stability",
     R2__has_description="states that all trajectories remain close enough to the equilibrium and will converge to it",
     R4__is_instance_of=I5236["general trajectory property"],
     R17__is_subproperty_of=[
         I8744["global Lyapunov stability"],
         I8059["global attractiveness"],
-        I4900["local asymptotical stability"],
+        I4900["local asymptotic stability"],
     ],
 )
 
@@ -918,7 +918,7 @@ I9642 = p.create_item(
     R2__has_description="states that an equilibrium is locally asymptotically stable and all trajectories converge at \
         least exponentially fast",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=I4900["local asymptotical stability"],
+    R17__is_subproperty_of=I4900["local asymptotic stability"],
 )
 
 I5100 = p.create_item(
@@ -926,7 +926,7 @@ I5100 = p.create_item(
     R2__has_description="states that an equilibrium is globally asymptotically stable and all trajectories converge at \
         least exponentially fast",
     R4__is_instance_of=I5236["general trajectory property"],
-    R17__is_subproperty_of=[I5677["global asymptotical stability"], I9642["local exponential stability"]],
+    R17__is_subproperty_of=[I5677["global asymptotic stability"], I9642["local exponential stability"]],
 )
 
 I8303 = p.create_item(
@@ -1449,7 +1449,7 @@ I9208 = p.create_item(
 
 # <theorem>
 I4663 = p.create_item(
-    R1__has_label="theorem for Lyapunov stability of state space system", # TODO this is one formulation among many
+    R1__has_label="theorem for local Lyapunov stability of state space system", # TODO this is one formulation among many
     R2__has_description=(
         "establishes a sufficient condition for the stability of an equilibrium point "
         "of a state space system"
@@ -1458,7 +1458,7 @@ I4663 = p.create_item(
     ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
-with I4663["theorem for Lyapunov stability of state space system"].scope("setting") as cm:
+with I4663["theorem for local Lyapunov stability of state space system"].scope("setting") as cm:
     # todo v needs to be continuous differentiable
     ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
     # todo a similar theorem can be formulated for systems that do not fulfill these properties
@@ -1469,8 +1469,7 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
 
     cm.new_rel(ode_sys, ma.R5405["has associated state space"], D)
 
-    # uq ... because the theorem holds for all n
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
@@ -1487,11 +1486,11 @@ with I4663["theorem for Lyapunov stability of state space system"].scope("settin
 
     cm.new_var(LfV=I1347["Lie derivative of scalar field"](V, f))
 
-with I4663["theorem for Lyapunov stability of state space system"].scope("premise") as cm:
-    cm.new_rel(V, p.R16["has property"], ma.I3133["local positive definiteness"], qualifiers=[ma.on_set(u)])
-    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"])
+with I4663["theorem for local Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(V, p.R16["has property"], ma.I3133["local positive definiteness"], qualifiers=[ma.on_set(cm.u)])
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["local negative semidefiniteness"], qualifiers=[ma.on_set(cm.u)])
 
-with I4663["theorem for Lyapunov stability of state space system"].scope("assertion") as cm:
+with I4663["theorem for local Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here @ca: global is wrong here
     cm.new_rel(cm.x0, p.R16["has property"], I2931["local Lyapunov stability"])
 # </theorem>
@@ -1500,7 +1499,7 @@ V.set_relation(p.R30["is secondary instance of"], I9208["weak Lyapunov Function"
 
 # <theorem>
 I8733 = p.create_item(
-    R1__has_label="theorem for asymptotic Lyapunov stability of state space system",
+    R1__has_label="theorem for local asymptotic Lyapunov stability of state space system",
     R2__has_description=(
         "establishes a sufficient condition for the asymptotic stability of an equilibrium point "
         "of a states pace system"
@@ -1509,17 +1508,15 @@ I8733 = p.create_item(
     ag__R8439__is_described_by_source=ag.get_source_segment(ag.I7558["2002_Khalil"], "Section 4.1"),
 )
 
-with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
-    cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
-    V = cm.V
+with I8733["theorem for local asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
+    cm.copy_from(I4663["theorem for local Lyapunov stability of state space system"].get_subscope("setting"))
 
-with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
-    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
+with I8733["theorem for local asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
+    cm.new_rel(cm.V, p.R16["has property"], ma.I3133["local positive definiteness"], qualifiers=[ma.on_set(cm.u)])
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"], qualifiers=[ma.on_set(cm.u)])
 
-with I8733["theorem for asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
-    # TODO: double check the meaning of global here
-    # TODO: check wording on I5677__global_asymptotical_stability, @ca again this is a local criterion
-    cm.new_rel(cm.x0, p.R16["has property"], I4900["local asymptotical stability"])
+with I8733["theorem for local asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
+    cm.new_rel(cm.x0, p.R16["has property"], I4900["local asymptotic stability"])
 # </theorem>
 V.set_relation(p.R30["is secondary instance of"], I9199["strong Lyapunov Function"])
 
@@ -1536,15 +1533,15 @@ I2983 = p.create_item(
 )
 
 with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("setting") as cm:
-    cm.copy_from(I4663["theorem for Lyapunov stability of state space system"].get_subscope("setting"))
-    V = cm.V
+    cm.copy_from(I4663["theorem for local Lyapunov stability of state space system"].get_subscope("setting"))
 
 with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("premise") as cm:
-    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"])
+    cm.new_rel(cm.V, p.R16["has property"], ma.I3133["local positive definiteness"], qualifiers=[ma.on_set(cm.D)])
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3136["negative definiteness"], qualifiers=[ma.on_set(cm.D)])
     cm.new_rel(cm.V, p.R16["has property"], ma.I5753["radially unboundedness"])
 
 with I2983["theorem for global asymptotic Lyapunov stability of state space system"].scope("assertion") as cm:
-    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
+    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotic stability"])
 
 # </theorem>
 V.set_relation(p.R30["is secondary instance of"], I9199["strong Lyapunov Function"])
@@ -1557,7 +1554,7 @@ I3503 = p.create_item(
         "in the absence of external inputs and if its trajectories are bounded by a function "
         "of the size of the input for all sufficiently large times. "
     ),
-    R17__is_subproperty_of=I5677["global asymptotical stability"],
+    R17__is_subproperty_of=I5677["global asymptotic stability"],
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q48995800",
     R72__is_generally_related_to=I7208["BIBO stability"],
 )
@@ -1602,7 +1599,7 @@ I9903 = p.create_item(
     R1__has_label="LaSalle's invariance principle",
     R2__has_description="establishes a sufficient condition for asymptotic stability",
     R4__is_instance_of=p.I15["implication proposition"],
-    R72__is_generally_related_to=I5677["global asymptotical stability"],
+    R72__is_generally_related_to=I5677["global asymptotic stability"],
     R77__has_alternative_label="Krasovskii-LaSalle principle",
     ag__R6876__is_named_after=[ag.I1257["Joseph Pierre LaSalle"]], # I7934
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Q3922068",
@@ -1691,8 +1688,9 @@ I8142 = p.create_item(
 
 
 with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"].scope("setting") as cm:
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
+    cm.sys.set_relation(p.R16["has property"], I7733["time invariance"])
     state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
 
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
@@ -1743,7 +1741,6 @@ with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"]
     # there exists an algorithm to iteratively calculate Lyapunov function
     cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(I4432["Vannelli recursive algorithm to find Lyapunov function"], ma.R3263["has solution"], V)
-    pass
 
 # </theorem>
 
@@ -1764,7 +1761,8 @@ I4274 = p.create_item(
 I7006 = p.create_item(
     R1__has_label="Goubault algorithm to find Lyapunov function",
     R2__has_description=(
-        ""
+        "Algorithm to find Lyapunov Function. Find Darboux polynomials to the system of equations, find differential "
+        "variant using Sum-Of-Squares programming, combine variants to construct a polynomial Lyapunov function"
     ),
     R4__is_instance_of=ma.I9827["mathematical algorithm"],
     # todo arguments?
@@ -1808,14 +1806,13 @@ with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].
 I2613 = p.create_item(
     R1__has_label="theorem for Lyapunov functions for linear systems",
     R2__has_description=(
-        ""
+        "Construct a Lyapunov function by solving the Lyapunov Equation."
     ),
-    R4__is_instance_of=p.I15["implication proposition"],
+    R4__is_instance_of=p.I17["equivalence proposition"],
 )
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("setting") as cm:
-    # uq ... because the theorem holds for all n
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
 
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
@@ -1839,7 +1836,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     # specify f(x) = Ax
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
-    cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](x))))) # TODO type error vector != matrix
+    cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](x)))))
 
     LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
     LE.R8__has_domain_of_argument_1=A
@@ -1851,7 +1848,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("premise")
     cm.new_rel(cm.P, p.R16["has property"], ma.I3133["local positive definiteness"])
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
-    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotical stability"])
+    cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotic stability"])
     V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
@@ -1862,6 +1859,23 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion
     )
 
 # </theorem>
+
+I1775 = p.create_item(
+    R1__has_label="test",
+    R2__has_description="item to test for automatic error flagging",
+    R4__is_instance_of=p.I15["implication proposition"],
+)
+
+with I1775["test"].scope("setting") as cm:
+    A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
+    cm.new_rel(A, ma.R5938["has row number"], 2)
+    cm.new_rel(A, ma.R5939["has column number"], 3)
+
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
+    cm.new_rel(P, ma.R5938["has row number"], 4)
+    cm.new_rel(P, ma.R5939["has column number"], 5)
+
+    ma.I5177["matmul"](A,P)
 
 # <new_entities>
 
@@ -1901,7 +1915,7 @@ I5288      R5288
 I4766      R4766
 I4147      R4147
 I6210      R6210
-I1775      R1775
+      R1775
       R7006
       R4432
       R8142

@@ -1087,10 +1087,10 @@ with I8492["definition of negative definiteness"].scope("setting") as cm:
     cm.copy_from(I3134["definition of local positive definiteness"].get_subscope("setting"))
 
 with I8492["definition of negative definiteness"].scope("premise") as cm:
-    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["local positive definiteness"])
+    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["local positive definiteness"], qualifiers=[on_set(cm.u)])
 
 with I8492["definition of negative definiteness"].scope("assertion") as cm:
-    cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"])
+    cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"], qualifiers=[on_set(cm.u)])
 
 
 I3136["negative definiteness"].set_relation(
@@ -1098,7 +1098,7 @@ I3136["negative definiteness"].set_relation(
 )
 
 I3137 = p.create_item(
-    R1__has_label="negative semidefiniteness",
+    R1__has_label="local negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
@@ -1481,7 +1481,7 @@ p.end_mod()
      R5916
 I6117      R6117
 I9192      R9192
-I3648      R3648
+      R3648
       R6209
       R8492
       R1284
