@@ -999,7 +999,7 @@ I9923 = p.create_item(
     R1__has_label="scalar field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I1168["point in state space"],
+    R8__has_domain_of_argument_1=I1169["point in vector space"],
     R11__has_range_of_result=p.I35["real number"],
 )
 
@@ -1008,7 +1008,7 @@ I9841 = p.create_item(
     R1__has_label="vector field",
     R2__has_description="...",
     R3__is_subclass_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=I1168["point in state space"],
+    R8__has_domain_of_argument_1=I1169["point in vector space"],
     R11__has_range_of_result=I7151["vector"],
 )
 
@@ -1135,17 +1135,10 @@ I3136["negative definiteness"].set_relation(
 )
 
 I3137 = p.create_item(
-    R1__has_label="local negative semidefiniteness",
+    R1__has_label="negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
-)
-
-I3648 = p.create_item(
-    R1__has_label="positive definiteness",
-    R2__has_description="a special property of a symmetric matrix",
-    R4__is_instance_of=I9192["matrix property"],
-    R78__is_applicable_to=I9904["matrix"],
 )
 
 
@@ -1543,6 +1536,50 @@ def I9148_cc_pp(self, res, *args, **kwargs):
 I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
 
 
+I3648 = p.create_item(
+    R1__has_label="positive definiteness (matrix)",
+    R2__has_description="a special property of a symmetric matrix",
+    R4__is_instance_of=I9192["matrix property"],
+    R78__is_applicable_to=I9904["matrix"],
+)
+
+I6117 = p.create_item(
+    R1__has_label="definition of positive definiteness (matrix)",
+    R2__has_description="the defining statement of positive definite",
+    R4__is_instance_of=p.I20["mathematical definition"],
+)
+
+with I6117["definition of positive definiteness (matrix)"].scope("setting") as cm:
+    M = cm.new_var(M=p.instance_of(I9906["square matrix"]))
+
+    cm.new_rel(I6117["definition of positive definiteness (matrix)"], p.R79["has main subject"], M)
+
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
+    cm.new_rel(M, R5938["has row number"], n)
+
+    D = cm.new_var(D=p.instance_of(I5166["vector space"]))
+    cm.new_rel(cm.D, R3326["has dimension"], cm.n)
+
+    x = cm.new_var(x=p.uq_instance_of(I1169["point in vector space"]))
+    cm.new_rel(x, p.R15["is element of"], D)
+
+    x_mat = I9489["vector to matrix"](I1284["point in vector space to vector"](cm.x))
+
+    s = cm.new_var(s=p.instance_of(I9923["scalar field"]))
+    cm.new_equation(s(x), I2328["matrix to scalar"](I5177["matmul"](I5177["matmul"](I3263["transpose"](x_mat), cm.M), x_mat)))
+
+
+with I6117["definition of positive definiteness (matrix)"].scope("premise") as cm:
+    cm.new_rel(s, p.R16["has property"], I3133["positive definiteness"], qualifiers=[on_set(cm.D)])
+
+with I6117["definition of positive definiteness (matrix)"].scope("assertion") as cm:
+    cm.M.set_relation(p.R16["has property"], I3648["positive definiteness (matrix)"])
+
+I3648["positive definiteness (matrix)"].set_relation(p.R37["has definition"], I6117)
+
+
+
+
 I5073 = p.create_item(
     R1__has_label="create I48__constraint_violation for invalid matmul calls",
     R2__has_description="...",
@@ -1659,7 +1696,7 @@ p.end_mod()
       R9148
       R9738
      R5916
-I6117      R6117
+      R6117
       R9192
       R3648
       R6209

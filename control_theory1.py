@@ -1488,7 +1488,7 @@ with I4663["theorem for local Lyapunov stability of state space system"].scope("
 
 with I4663["theorem for local Lyapunov stability of state space system"].scope("premise") as cm:
     cm.new_rel(V, p.R16["has property"], ma.I3133["positive definiteness"], qualifiers=[ma.on_set(cm.u)])
-    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["local negative semidefiniteness"], qualifiers=[ma.on_set(cm.u)])
+    cm.new_rel(cm.LfV, p.R16["has property"], ma.I3137["negative semidefiniteness"], qualifiers=[ma.on_set(cm.u)])
 
 with I4663["theorem for local Lyapunov stability of state space system"].scope("assertion") as cm:
     # TODO: double check the meaning of global here @ca: global is wrong here
@@ -1622,7 +1622,7 @@ I6338 = p.create_item(
 
 # <theorem>
 I3712 = p.create_item(
-    R1__has_label="theorem on Lyapunov equation",
+    R1__has_label="theorem on Lyapunov equation and Stability",
     R2__has_description="theorem characterizes asymptotic stability of the origin in terms of the solution of the "
         "Lyapunov equation",
     R4__is_instance_of=p.I17["equivalence proposition"],
@@ -1639,7 +1639,7 @@ with I3712.scope("setting") as cm:
     cm.new_rel(A, ma.R5938["has row number"], n)
     cm.new_rel(Q, ma.R5938["has row number"], n)
 
-    cm.new_rel(Q, p.R16["has property"], ma.I3135["positive semidefiniteness"])
+    cm.new_rel(Q, p.R16["has property"], ma.I3135["positive semidefiniteness"]) # todo matrix
 
     eig = cm.new_var(eig=p.instance_of(ma.I5484["finite set of complex numbers"]))
     cm.new_equation(eig, ma.I9160["set of eigenvalues of a matrix"](A))
@@ -1650,7 +1650,7 @@ with I3712.scope("premise") as cm:
 with I3712.scope("assertion") as cm:
     P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(P, ma.R5938["has row number"], n)
-    cm.new_rel(P, p.R16["has property"], ma.I3133["positive definiteness"])
+    cm.new_rel(P, p.R16["has property"], ma.I3648["positive definiteness (matrix)"])
 
     E = cm.new_equation(ma.I1536["matneg"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"](cm.P, cm.A), ma.I5177["matmul"]
                                                                    (ma.I3263["transpose"](cm.A), cm.P)))
@@ -1831,7 +1831,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     Q = cm.new_var(Q=p.uq_instance_of(ma.I9906["square matrix"]))
     cm.new_rel(A, ma.R5938["has row number"], n)
     cm.new_rel(Q, ma.R5938["has row number"], n)
-    Q.set_relation(p.R16["has property"], ma.I3648["positive definiteness"])
+    Q.set_relation(p.R16["has property"], ma.I3648["positive definiteness (matrix)"])
 
     x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
@@ -1845,7 +1845,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("premise")
     cm.new_rel(P, ma.R5938["has row number"], n)
     # TODO: this should be inferred by a rule
     cm.new_rel(P, ma.R5939["has column number"], n)
-    cm.new_rel(cm.P, p.R16["has property"], ma.I3648["positive definiteness"])
+    cm.new_rel(cm.P, p.R16["has property"], ma.I3648["positive definiteness (matrix)"])
 
     E = cm.new_equation(ma.I1536["matneg"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"]
         (ma.I3263["transpose"](cm.A), cm.P), ma.I5177["matmul"](cm.P, cm.A)))
