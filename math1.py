@@ -493,6 +493,32 @@ I3263 = p.create_item(
     R11__has_range_of_result=I9904["matrix"],
 )
 
+def I3263_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I9904["matrix"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    matrix_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        n = matrix_item.R5938__has_row_number
+        m = matrix_item.R5939__has_column_number
+
+    if res.R5938__has_row_number is None and m is not None:
+        res.set_relation(R5938["has row number"], m)
+    if res.R5939__has_column_number is None and n is not None:
+        res.set_relation(R5939["has column number"], n)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I3263["transpose"].add_method(I3263_cc_pp, "_custom_call_post_process")
+
 # copied from control_theory1:
 
 
@@ -1207,6 +1233,31 @@ I9489 = p.create_item(
     R18__has_usage_hint="Use this operator to convert to matrix, then use matmul, matadd etc.",
 )
 
+def I9489_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I9904["matrix"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    vector_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        dim = vector_item.R3326__has_dimension
+
+    if res.R5938__has_row_number is None:
+        res.set_relation(R5938["has row number"], dim)
+    if res.R5939__has_column_number is None:
+        res.set_relation(R5939["has column number"], 1)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I9489["vector to matrix"].add_method(I9489_cc_pp, "_custom_call_post_process")
+
 I1284 = p.create_item(
     R1__has_label="point in vector space to vector",
     R2__has_description="convert a point in a vector space to the vector, pointing to that point",
@@ -1215,6 +1266,31 @@ I1284 = p.create_item(
     R11__has_range_of_result=I7151["vector"],
     R18__has_usage_hint="Use this operator to convert to vector/ matrix, then use matmul, matadd etc.",
 )
+
+
+def I1284_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I7151["vector"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    point_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        dim = point_item.R15__is_element_of[0].R3326__has_dimension
+
+    if res.R3326__has_dimension is None:
+        res.set_relation(R3326["has dimension"], dim)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I1284["point in vector space to vector"].add_method(I1284_cc_pp, "_custom_call_post_process")
+
 
 I4218 = p.create_item(
     R1__has_label="matrix to vector",
@@ -1467,6 +1543,92 @@ def I9148_cc_pp(self, res, *args, **kwargs):
 I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
 
 
+I5073 = p.create_item(
+    R1__has_label="create I48__constraint_violation for invalid matmul calls",
+    R2__has_description="...",
+    R4__is_instance_of=p.I47["constraint rule"],
+)
+
+with I5073.scope("setting") as cm:
+    cm.new_var(x=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg_tuple=p.instance_of(p.I33["tuple"]))
+    cm.new_var(arg1=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg2=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg1_ra=p.instance_of(p.I49["reification anchor"]))
+    cm.new_var(arg2_ra=p.instance_of(p.I49["reification anchor"]))
+
+    if 0:
+        cm.new_var(m1=p.instance_of(p.I39["positive integer"]))
+        cm.new_var(n2=p.instance_of(p.I39["positive integer"]))
+        pass
+
+    cm.uses_external_entities(I5177["matmul"])
+    cm.uses_external_entities(cm.rule)
+
+with I5073.scope("premise") as cm:
+    cm.new_rel(cm.x, p.R35["is applied mapping of"], I5177["matmul"])
+    cm.new_rel(cm.x, p.R36["has argument tuple"], cm.arg_tuple)
+
+    cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg1)
+    cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg2)
+    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg1_ra)
+    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg2_ra)
+    cm.new_rel(cm.arg1_ra, p.R39["has element"], cm.arg1)
+    cm.new_rel(cm.arg2_ra, p.R39["has element"], cm.arg2)
+
+    cm.new_rel(cm.arg1_ra, p.R40["has index"], 0)
+    cm.new_rel(cm.arg2_ra, p.R40["has index"], 1)
+
+
+    # this is used because for some unknown reason the subgraph matching does not work
+    # with n2 and m1 (however it works in the unittests of pyirk-core)
+    # TODO: investigate further
+
+    def cond_func(_, arg1, arg2):
+        # first argument (anchor item) can be ignored here
+        cond  = arg1.R5939 is not None \
+            and arg2.R5938 is not None \
+            and  arg1.R5939 != arg2.R5938
+        return cond
+
+    cm.new_condition_func(cond_func, cm.arg1, cm.arg2)
+
+
+    if 0:
+        # specify the argument order
+        pass
+        cm.new_rel(cm.arg1, R5939["has column number"], cm.m1)
+        cm.new_rel(cm.arg2, R5938["has row number"], cm.n2)
+
+
+    # cm.new_math_relation(cm.m1, "!=", cm.n2)
+
+    # TODO: create this condition function from the above relation
+        cm.new_condition_func(lambda self, x, y: x != y, cm.m1, cm.n2)
+
+def create_constraint_violation_item(anchor_item, main_arg, rule):
+
+    res = p.RuleResult()
+    cvio: p.Item = p.instance_of(p.I48["constraint violation"])
+    res.new_entities.append(cvio)
+    res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
+    res.new_statements.append(main_arg.set_relation(p.R74["has constraint violation"], cvio))
+
+    return res
+
+with I5073.scope("assertion") as cm:
+    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
+
+
+A=p.instance_of(I9906["square matrix"])
+A.set_relation(R5938["has row number"], 2)
+A.set_relation(R5939["has column number"], 3)
+
+P=p.instance_of(I9906["square matrix"])
+P.set_relation(R5938["has row number"], 4)
+P.set_relation(R5939["has column number"], 5)
+
+failed_multiplication = I5177["matmul"](A,P)
 
 # <new_entities>
 
