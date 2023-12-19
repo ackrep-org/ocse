@@ -102,23 +102,17 @@ class Test_02_math(unittest.TestCase):
 
     def test_c05__cc_matrix_dimensions(self):
 
-        I503 = ma.I503
-
-
-        res = p.ruleengine.apply_semantic_rule(I503)
-
-        self.assertGreaterEqual(len(res.new_statements), 2)
-
+        I5073 = ma.I5073
 
         # test the rule which produces a I48["constraint violation"] instance
-        res = p.ruleengine.apply_semantic_rule(I503, ma.__URI__)
+        res = p.ruleengine.apply_semantic_rule(I5073, ma.__URI__)
 
-        IPS()
-        self.assertEqual(len(res.new_entities), 2)
+        self.assertGreaterEqual(len(res.new_statements), 1)
+        self.assertEqual(len(res.new_entities), 1)
 
         cvio, = ma.failed_multiplication.R74__has_constraint_violation
-        self.assertEqual(cvio.R76__has_associated_rule, I503)
-        self.assertEqual(p.is_instance_of(cvio), p.I48["constraint violation"])
+        self.assertEqual(cvio.R76__has_associated_rule, I5073)
+        self.assertEqual(cvio.R4__is_instance_of, p.I48["constraint violation"])
 
         # self.assertEqual(A2B.R74__has_constraint_violation, [])
 

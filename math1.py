@@ -1456,48 +1456,63 @@ def I9148_cc_pp(self, res, *args, **kwargs):
 I9148["get polygon sides ordered by length"].add_method(I9148_cc_pp, "_custom_call_post_process")
 
 
-I503 = p.create_item(
+I5073 = p.create_item(
     R1__has_label="create I48__constraint_violation for invalid matmul calls",
     R2__has_description="...",
     R4__is_instance_of=p.I47["constraint rule"],
 )
 
-with I503.scope("setting") as cm:
+with I5073.scope("setting") as cm:
     cm.new_var(x=p.instance_of(p.I1["general item"]))
     cm.new_var(arg_tuple=p.instance_of(p.I33["tuple"]))
     cm.new_var(arg1=p.instance_of(p.I1["general item"]))
     cm.new_var(arg2=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg1_ra=p.instance_of(p.I49["reification anchor"]))
+    cm.new_var(arg2_ra=p.instance_of(p.I49["reification anchor"]))
 
     if 0:
-        cm.new_var(arg1_ra=p.instance_of(p.I49["reification anchor"]))
-        cm.new_var(arg2_ra=p.instance_of(p.I49["reification anchor"]))
-
         cm.new_var(m1=p.instance_of(p.I39["positive integer"]))
         cm.new_var(n2=p.instance_of(p.I39["positive integer"]))
+        pass
 
     cm.uses_external_entities(I5177["matmul"])
-    # cm.uses_external_entities(cm.rule)
+    cm.uses_external_entities(cm.rule)
 
-with I503.scope("premise") as cm:
+with I5073.scope("premise") as cm:
     cm.new_rel(cm.x, p.R35["is applied mapping of"], I5177["matmul"])
     cm.new_rel(cm.x, p.R36["has argument tuple"], cm.arg_tuple)
 
     cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg1)
     cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg2)
+    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg1_ra)
+    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg2_ra)
+    cm.new_rel(cm.arg1_ra, p.R39["has element"], cm.arg1)
+    cm.new_rel(cm.arg2_ra, p.R39["has element"], cm.arg2)
+
+    cm.new_rel(cm.arg1_ra, p.R40["has index"], 0)
+    cm.new_rel(cm.arg2_ra, p.R40["has index"], 1)
+
+
+    # this is used because for some unknown reason the subgraph matching does not work
+    # with n2 and m1 (however it works in the unittests of pyirk-core)
+    # TODO: investigate further
+
+    def cond_func(_, arg1, arg2):
+        # first argument (anchor item) can be ignored here
+        cond  = arg1.R5939 is not None \
+            and arg2.R5938 is not None \
+            and  arg1.R5939 != arg2.R5938
+        return cond
+
+    cm.new_condition_func(cond_func, cm.arg1, cm.arg2)
+
 
     if 0:
         # specify the argument order
-        cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg1_ra)
-        cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg2_ra)
-
-        cm.new_rel(cm.arg1_ra, p.R39["has element"], cm.arg1)
-        cm.new_rel(cm.arg2_ra, p.R39["has element"], cm.arg2)
-
-        cm.new_rel(cm.arg1_ra, p.R40["has index"], 0)
-        cm.new_rel(cm.arg2_ra, p.R40["has index"], 2)
-
+        pass
         cm.new_rel(cm.arg1, R5939["has column number"], cm.m1)
         cm.new_rel(cm.arg2, R5938["has row number"], cm.n2)
+
 
     # cm.new_math_relation(cm.m1, "!=", cm.n2)
 
@@ -1509,14 +1524,13 @@ def create_constraint_violation_item(anchor_item, main_arg, rule):
     res = p.RuleResult()
     cvio: p.Item = p.instance_of(p.I48["constraint violation"])
     res.new_entities.append(cvio)
-    # res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
+    res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
     res.new_statements.append(main_arg.set_relation(p.R74["has constraint violation"], cvio))
 
     return res
 
-with I503.scope("assertion") as cm:
-    # cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
-    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.x)
+with I5073.scope("assertion") as cm:
+    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
 
 
 A=p.instance_of(I9906["square matrix"])
