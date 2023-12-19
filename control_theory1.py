@@ -1835,6 +1835,11 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     cm.new_rel(Q, ma.R5938["has row number"], n)
     Q.set_relation(p.R16["has property"], ma.I3648["positive definiteness"])
 
+
+    # TODO: this should be inferred by a rule
+    cm.new_rel(P, ma.R5939["has column number"], n)
+
+
     # specify f(x) = Ax
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
@@ -1852,8 +1857,8 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion
     V = cm.new_var(V=p.instance_of(I2933["Lyapunov Function"], qualifiers=[p.exis_quant(True)]))
     x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
-    p.new_mathematical_relation(
-        V, "==", ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))
+    cm.new_equation(
+        V, ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))
     )
 
 

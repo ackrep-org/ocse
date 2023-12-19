@@ -116,6 +116,31 @@ class Test_02_math(unittest.TestCase):
 
         # self.assertEqual(A2B.R74__has_constraint_violation, [])
 
+        # test propagation of matrix dimensions in the product: x.T * P * x
+
+        itm = ct.I2613["theorem for Lyapunov functions for linear systems"]
+        stm = itm.scp__assertion.get_inv_relations("R20", return_subj=True)[3]
+        self.assertTrue(isinstance(stm, p.Statement))
+        res = stm.object
+        self.assertEqual(res.R4__is_instance_of, ma.I1063["scalar function"])
+
+        # get the matmul-result
+        xTPx = res.R36__has_argument_tuple.R39__has_element[0]
+        xTP, x = xTPx.R36__has_argument_tuple.R39__has_element
+        xT, P = xTP.R36__has_argument_tuple.R39__has_element
+
+        x_vect = x.R36__has_argument_tuple.R39__has_element[0]
+
+        n = P.R5938__has_row_number
+        self.assertEqual(str(n.R1__has_label), "n")
+        self.assertEqual(P.R5939__has_column_number, n)
+        self.assertEqual(x_vect.R3326__has_dimension, n)
+        self.assertEqual(x.R5938__has_row_number, n)
+        self.assertEqual(x.R5939__has_column_number, 1)
+
+        self.assertEqual(xT.R5938__has_row_number, 1)
+        self.assertEqual(xT.R5939__has_column_number, n)
+
 
 class Test_02_control_theory(unittest.TestCase):
     def test_b01__test_multilinguality(self):

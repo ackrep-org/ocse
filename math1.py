@@ -487,6 +487,32 @@ I3263 = p.create_item(
     R11__has_range_of_result=I9904["matrix"],
 )
 
+def I3263_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I9904["matrix"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    matrix_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        n = matrix_item.R5938__has_row_number
+        m = matrix_item.R5939__has_column_number
+
+    if res.R5938__has_row_number is None and m is not None:
+        res.set_relation(R5938["has row number"], m)
+    if res.R5939__has_column_number is None and n is not None:
+        res.set_relation(R5939["has column number"], n)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I3263["transpose"].add_method(I3263_cc_pp, "_custom_call_post_process")
+
 # copied from control_theory1:
 
 
@@ -1196,6 +1222,31 @@ I9489 = p.create_item(
     R18__has_usage_hint="Use this operator to convert to matrix, then use matmul, matadd etc.",
 )
 
+def I9489_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I9904["matrix"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    vector_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        dim = vector_item.R3326__has_dimension
+
+    if res.R5938__has_row_number is None:
+        res.set_relation(R5938["has row number"], dim)
+    if res.R5939__has_column_number is None:
+        res.set_relation(R5939["has column number"], 1)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I9489["vector to matrix"].add_method(I9489_cc_pp, "_custom_call_post_process")
+
 I1284 = p.create_item(
     R1__has_label="point in vector space to vector",
     R2__has_description="convert a point in a vector space to the vector, pointing to that point",
@@ -1204,6 +1255,31 @@ I1284 = p.create_item(
     R11__has_range_of_result=I7151["vector"],
     R18__has_usage_hint="Use this operator to convert to vector/ matrix, then use matmul, matadd etc.",
 )
+
+
+def I1284_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I7151["vector"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    point_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        dim = point_item.R15__is_element_of[0].R3326__has_dimension
+
+    if res.R3326__has_dimension is None:
+        res.set_relation(R3326["has dimension"], dim)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I1284["point in vector space to vector"].add_method(I1284_cc_pp, "_custom_call_post_process")
+
 
 I4218 = p.create_item(
     R1__has_label="matrix to vector",
