@@ -1828,34 +1828,32 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     cm.new_rel(x, p.R15["is element of"], D)
 
     A = cm.new_var(A=p.instance_of(ma.I9906["square matrix"]))
-    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"]))
-    Q = cm.new_var(I=p.uq_instance_of(ma.I9906["square matrix"]))
+    Q = cm.new_var(Q=p.uq_instance_of(ma.I9906["square matrix"]))
     cm.new_rel(A, ma.R5938["has row number"], n)
-    cm.new_rel(P, ma.R5938["has row number"], n)
     cm.new_rel(Q, ma.R5938["has row number"], n)
     Q.set_relation(p.R16["has property"], ma.I3648["positive definiteness"])
 
-
-    # TODO: this should be inferred by a rule
-    cm.new_rel(P, ma.R5939["has column number"], n)
-
+    x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
     # specify f(x) = Ax
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
-    cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](x)))))
+    cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, x_mat)))
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
-    LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
-    LE.R8__has_domain_of_argument_1=A
-    LE.R9__has_domain_of_argument_2=P
-    LE.R10__has_domain_of_argument_3=Q
+    P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"], qualifiers=[p.exis_quant(True)]))
+    cm.new_rel(P, ma.R5938["has row number"], n)
+    # TODO: this should be inferred by a rule
+    cm.new_rel(P, ma.R5939["has column number"], n)
     cm.new_rel(cm.P, p.R16["has property"], ma.I3648["positive definiteness"])
+
+    E = cm.new_equation(ma.I1536["matneg"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"]
+        (ma.I3263["transpose"](cm.A), cm.P), ma.I5177["matmul"](cm.P, cm.A)))
+    E.set_relation(p.R30["is secondary instance of"], I6338["Lyapunov equation"])
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion") as cm:
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotic stability"])
     V = cm.new_var(V=p.instance_of(I9199["strong Lyapunov Function"]))
-    x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
     cm.new_equation(
         V, ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))

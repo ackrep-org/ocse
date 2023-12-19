@@ -1620,11 +1620,11 @@ with I5073.scope("assertion") as cm:
     cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
 
 
-A=p.instance_of(I9906["square matrix"])
+A = p.instance_of(I9906["square matrix"])
 A.set_relation(R5938["has row number"], 2)
 A.set_relation(R5939["has column number"], 3)
 
-P=p.instance_of(I9906["square matrix"])
+P = p.instance_of(I9906["square matrix"])
 P.set_relation(R5938["has row number"], 4)
 P.set_relation(R5939["has column number"], 5)
 
