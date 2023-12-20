@@ -1693,6 +1693,7 @@ with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"]
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
     cm.sys.set_relation(p.R16["has property"], I7733["time invariance"])
     state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
+    sys.set_relation(R2928["has model representation"], state_space_sys)
 
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(state_space_sys, R4122["has associated drift vector field"], f)
@@ -1775,7 +1776,10 @@ I7006 = p.create_item(
 
 with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].scope("setting") as cm:
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
-    cm.new_rel(sys, R5100["has model representation property"], I5247["polynomial"])
+    cm.sys.set_relation(p.R16["has property"], I7733["time invariance"])
+    rep = cm.new_var(rep=p.instance_of(I2928["general model representation"]))
+    sys.set_relation(R2928["has model representation"], rep)
+    cm.new_rel(rep, R5100["has model representation property"], I5247["polynomial"])
 
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
