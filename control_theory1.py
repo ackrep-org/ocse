@@ -1860,6 +1860,54 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion
     )
 
 
+# test entity
+
+
+
+I5073 = p.create_item(
+    R1__has_label="create I48__constraint_violation for is_opposite_of relation",
+    R2__has_description="...",
+    R4__is_instance_of=p.I47["constraint rule"],
+)
+
+with I5073.scope("setting") as cm:
+    cm.new_var(x=p.instance_of(p.I1["general item"]))
+    cm.new_var(prop1=p.instance_of(p.I11["general property"]))
+    cm.new_var(prop2=p.instance_of(p.I11["general property"]))
+
+    cm.uses_external_entities(cm.rule)
+
+with I5073.scope("premise") as cm:
+    # todo check also for subrelations like R16 - R7062
+    cm.new_rel(cm.x, p.R16["has property"], cm.prop1)
+    cm.new_rel(cm.x, p.R16["has property"], cm.prop2)
+
+    # this is used because for some unknown reason the subgraph matching does not work
+    # with n2 and m1 (however it works in the unittests of pyirk-core)
+    # TODO: investigate further
+
+    def cond_func(_, prop1, prop2):
+        # first argument (anchor item) can be ignored here
+        cond  = (prop1.R43 and prop1.R43[0] == prop2)
+        return cond
+
+    cm.new_condition_func(cond_func, cm.prop1, cm.prop2)
+
+
+def create_constraint_violation_item(anchor_item, main_arg, rule, prop1, prop2):
+
+    res = p.RuleResult()
+    cvio: p.Item = p.instance_of(p.I48["constraint violation"])
+    res.new_entities.append(cvio)
+    res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
+    res.new_statements.append(main_arg.set_relation(p.R74["has constraint violation"], cvio))
+    res.prop1 = prop1
+    res.prop2 = prop2
+
+    return res
+
+with I5073.scope("assertion") as cm:
+    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule, cm.prop1, cm.prop2)
 # </theorem>
 
 

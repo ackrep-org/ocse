@@ -141,6 +141,46 @@ class Test_02_math(unittest.TestCase):
         self.assertEqual(xT.R5938__has_row_number, 1)
         self.assertEqual(xT.R5939__has_column_number, n)
 
+    def test_c06__cc_opposite_relation(self):
+
+        I5073 = ct.I5073["create I48__constraint_violation for is_opposite_of relation"]
+
+        # test entities
+        ## should fail:
+        contradicting_equilibrium = p.instance_of(ct.I9820["equilibrium point"])
+        contradicting_equilibrium.set_relation(p.R16["has property"], ct.I8303["strict Lyapunov instability"])
+        contradicting_equilibrium.set_relation(p.R16["has property"], ct.I2931["local Lyapunov stability"])
+        ## shouldnt fail
+        x = p.instance_of(ct.I9820["equilibrium point"])
+        x.set_relation(p.R16["has property"], ct.I6467["saddle"])
+        x.set_relation(p.R16["has property"], ct.I2931["local Lyapunov stability"])
+
+
+        # test the rule which produces a I48["constraint violation"] instance
+        res = p.ruleengine.apply_semantic_rule(I5073, ct.__URI__)
+
+
+        # gather test entities that are expected to fail
+        expected_failed_statements = [s for s in res.new_statements if s.subject == contradicting_equilibrium]
+        self.assertEqual(len(expected_failed_statements), 1)
+
+        cvio = contradicting_equilibrium.R74__has_constraint_violation[0]
+        self.assertEqual(cvio.R76__has_associated_rule, I5073)
+        self.assertEqual(cvio.R76__has_associated_rule, I5073)
+
+        # actually problematic entities
+        wrong_statements = [[s, d] for s, d in zip(res.new_statements, res.partial_results[0].statement_reports)
+            if s.subject != contradicting_equilibrium and s.subject.R4 != p.I48["constraint violation"]]
+
+
+        msg = ""
+        for s, d in wrong_statements:
+            info = d["bindinfo"]
+            msg += f"Entity {info[1][1]} has contradicting relations {info[2][1]} and {info[3][1]}\n"
+
+        self.assertEqual(len(wrong_statements), 0, msg=msg)
+        # todo work some magic to give hint at where the problematic definitions are
+
 
 class Test_02_control_theory(unittest.TestCase):
     def test_b01__test_multilinguality(self):
