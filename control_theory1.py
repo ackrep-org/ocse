@@ -1834,6 +1834,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](x))))) # TODO type error vector != matrix
 
     LE = cm.new_var(LE=p.instance_of(I6338["Lyapunov equation"]))
+    # TODO REM_CK: discuss
     LE.R8__has_domain_of_argument_1=A
     LE.R9__has_domain_of_argument_2=P
     LE.R10__has_domain_of_argument_3=I
