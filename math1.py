@@ -367,15 +367,15 @@ I8133 = p.create_item(
     R3__is_subclass_of=p.I13["mathematical set"],
 )
 
-R3033 = p.create_relation(
-    R1__has_label="has type of elements",
-    R2__has_description=(
-        "specifies the item-type of the elements of a mathematical set; "
-        "should be a subclass of I12['mathematical object']"
-    ),
-    R8__has_domain_of_argument_1=p.I13["mathematical set"],
-    R11__has_range_of_result=p.I42["mathematical type (metaclass)"],
-)
+# R3033 = p.create_relation(
+#     R1__has_label="has type of elements",
+#     R2__has_description=(
+#         "specifies the item-type of the elements of a mathematical set; "
+#         "should be a subclass of I12['mathematical object']"
+#     ),
+#     R8__has_domain_of_argument_1=p.I13["mathematical set"],
+#     R11__has_range_of_result=p.I42["mathematical type (metaclass)"],
+# )
 
 I5006 = p.create_item(
     R1__has_label="imaginary part",
@@ -399,7 +399,7 @@ I2738 = p.create_item(
     R2__has_description="field of complex numbers",
     R4__is_instance_of=I8133["field of numbers"],
     R13__has_canonical_symbol=r"$\mathbb{C}$",
-    R3033__has_type_of_elements=p.I34["complex number"],
+    # R3033__has_type_of_elements=p.I34["complex number"],
 )
 
 I2739 = p.create_item(
@@ -507,6 +507,32 @@ I3263 = p.create_item(
     R11__has_range_of_result=I9904["matrix"],
 )
 
+def I3263_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I9904["matrix"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    matrix_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        n = matrix_item.R5938__has_row_number
+        m = matrix_item.R5939__has_column_number
+
+    if res.R5938__has_row_number is None and m is not None:
+        res.set_relation(R5938["has row number"], m)
+    if res.R5939__has_column_number is None and n is not None:
+        res.set_relation(R5939["has column number"], n)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I3263["transpose"].add_method(I3263_cc_pp, "_custom_call_post_process")
+
 # copied from control_theory1:
 
 
@@ -541,6 +567,7 @@ I1063 = p.create_item(
     R1__has_label="scalar function",
     R2__has_description="function that has one (in general complex) number as result",
     R3__is_subclass_of=I1060["general function"],
+    R46__is_secondary_subclass_of=p.I42["scalar mathematical object"],
 )
 
 I4237 = p.create_item(
@@ -555,8 +582,8 @@ I6209 = p.create_item(
     R1__has_label="scalneg",
     R2__has_description="negation operator for scalars",
     R4__is_instance_of=I4895["mathematical operator"],
-    R8__has_domain_of_argument_1=p.I35["real number"],
-    R11__has_range_of_result=p.I35["real number"],
+    R8__has_domain_of_argument_1=p.I42["scalar mathematical object"],
+    R11__has_range_of_result=p.I42["scalar mathematical object"],
 )
 
 I4239 = p.create_item(
@@ -647,12 +674,6 @@ I5030 = p.create_item(
     R3__is_subclass_of=p.I12["mathematical object"],
 )
 
-I7765 = p.create_item(
-    R1__has_label="scalar mathematical object",
-    R2__has_description="mathematical object which is or can be evaluated to a single (complex number)",
-    R3__is_subclass_of=p.I12["mathematical object"],
-)
-
 
 R8736 = p.create_relation(
     R1__has_label="depends polynomially on",
@@ -698,7 +719,7 @@ I5359 = p.create_item(
     R2__has_description="returns the determinant of a square matrix",
     R4__is_instance_of=I4895["mathematical operator"],
     R8__has_domain_of_argument_1=I9906["square matrix"],
-    R11__has_range_of_result=I7765["scalar mathematical object"],
+    R11__has_range_of_result=p.I42["scalar mathematical object"],
 )
 
 
@@ -785,7 +806,7 @@ I1566 = p.create_item(
 )
 
 with I1566["theorem on the successor of integer numbers"].scope("setting") as cm:
-    cm.new_var(x=p.instance_of(p.I37["integer number"]))
+    cm.new_var(x=p.uq_instance_of(p.I37["integer number"]))
 
 with I1566["theorem on the successor of integer numbers"].scope("premise") as cm:
     # no further condition apart from the setting
@@ -1025,63 +1046,67 @@ R4963 = p.create_relation(
     R11__has_range_of_result=I1168["point in state space"],
 )
 
+R1536 = p.create_relation(
+    R1__has_label="is valid on set",
+    R2__has_description="specifies when a statement becomes true",
+    R18__has_usage_hint="to be used as a qualifier",
+)
+on_set = p.QualifierFactory(R1536["is valid on set"])
+
 I3133 = p.create_item(
-    R1__has_label="positive definiteness",
+    R1__has_label="local positive definiteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
 )
 
 I3134 = p.create_item(
-    R1__has_label="definition of positive definiteness",
+    R1__has_label="definition of local positive definiteness",
     R2__has_description="the defining statement of positive definite",
     R4__is_instance_of=p.I20["mathematical definition"],
 )
 
-with I3134["definition of positive definiteness"].scope("setting") as cm:
-    n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
-    M = cm.new_var(M=p.uq_instance_of(I5167["state space"]))
-    h = cm.new_var(h=p.uq_instance_of(I9923["scalar field"]))
-    x = cm.new_var(x=p.instance_of(I1168["point in state space"]))
+with I3134["definition of local positive definiteness"].scope("setting") as cm:
+    h = cm.new_var(h=p.instance_of(I9923["scalar field"]))
+    cm.new_rel(I3134["definition of local positive definiteness"], p.R79["has main subject"], h)
 
-    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
+    M = cm.new_var(M=p.instance_of(I5167["state space"]))
 
-    u = cm.new_var(u=p.uq_instance_of(I5843["neighborhood"]))
+    cm.new_rel(cm.h, R9651["has domain"], cm.M)
     cm.new_rel(cm.M, R3326["has dimension"], cm.n)
 
+    x0 = cm.new_var(x0=p.instance_of(I1168["point in state space"]))
     cm.new_rel(cm.M, R3798["has origin"], cm.x0)
+
+    u = cm.new_var(u=p.uq_instance_of(I5843["neighborhood"]))
     cm.new_rel(cm.u, R4963["is neighborhood of"], cm.x0)
-    cm.new_rel(cm.u, p.R14["is subset of"],cm.M)
+    cm.new_rel(cm.u, p.R14["is subset of"],cm.M) # todo is this necessary? maybe rule in neighborhood
 
+    x = cm.new_var(x=p.uq_instance_of(I1168["point in state space"]))
+
+
+with I3134["definition of local positive definiteness"].scope("premise") as cm:
     cm.new_rel(cm.x, p.R15["is element of"], cm.u, qualifiers=p.univ_quant(True))
-    cm.new_rel(cm.h, R9651["has domain"], cm.M)
-
-    # TODO: __automate_typing__ (or via convenience function)
-    # h.R8__has_domain_of_argument_1 = I1168["point in state space"]
-    # h.R11__has_range_of_result = p.I35["real number"]
-
-    cm.item.h_value = h(x)
-
-with I3134["definition of positive definiteness"].scope("premise") as cm:
-
+    # todo: nested implication statements
     with p.ImplicationStatement() as imp1:
         imp1.antecedent_relation(lhs=cm.x, rsgn="==", rhs=cm.x0)
-        imp1.consequent_relation(lhs=cm.item.h_value, rsgn="==", rhs=I5000["scalar zero"])
+        imp1.consequent_relation(lhs=cm.h(cm.x), rsgn="==", rhs=I5000["scalar zero"])
 
     with p.ImplicationStatement() as imp2:
         imp2.antecedent_relation(lhs=cm.x, rsgn="!=", rhs=cm.x0)
-        imp2.consequent_relation(lhs=cm.item.h_value, rsgn=">", rhs=I5000["scalar zero"])
+        imp2.consequent_relation(lhs=cm.h(cm.x), rsgn=">", rhs=I5000["scalar zero"])
 
-with I3134["definition of positive definiteness"].scope("assertion") as cm:
-    cm.h.set_relation(p.R16["has property"], I3133["positive definiteness"])
+with I3134["definition of local positive definiteness"].scope("assertion") as cm:
+    cm.h.set_relation(p.R16["has property"], I3133["local positive definiteness"], qualifiers=[on_set(cm.u)])
 
 
-I3133["positive definiteness"].set_relation(
-    p.R37["has definition"], I3134["definition of positive definiteness"]
+I3133["local positive definiteness"].set_relation(
+    p.R37["has definition"], I3134["definition of local positive definiteness"]
 )
 
 # TODO: for the following properties it would be nice to state the definition "relatively" to the
-# definition of I3133["positive definiteness"]
+# definition of I3133["local positive definiteness"]
 # for now: leave them as stubs
 
 I3135 = p.create_item(
@@ -1105,13 +1130,13 @@ I8492 = p.create_item(
 )
 
 with I8492["definition of negative definiteness"].scope("setting") as cm:
-    cm.copy_from(I3134["definition of positive definiteness"].get_subscope("setting"))
+    cm.copy_from(I3134["definition of local positive definiteness"].get_subscope("setting"))
 
 with I8492["definition of negative definiteness"].scope("premise") as cm:
-    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["positive definiteness"])
+    cm.new_rel(I6209["scalneg"](cm.h(cm.x)), p.R16["has property"], I3133["local positive definiteness"], qualifiers=[on_set(cm.u)])
 
 with I8492["definition of negative definiteness"].scope("assertion") as cm:
-    cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"])
+    cm.h.set_relation(p.R16["has property"], I3136["negative definiteness"], qualifiers=[on_set(cm.u)])
 
 
 I3136["negative definiteness"].set_relation(
@@ -1119,10 +1144,17 @@ I3136["negative definiteness"].set_relation(
 )
 
 I3137 = p.create_item(
-    R1__has_label="negative semidefiniteness",
+    R1__has_label="local negative semidefiniteness",
     R2__has_description="a special property of a scalar field in a neighborhood of the origin",
     R4__is_instance_of=p.I54["mathematical property"],
     R78__is_applicable_to=I9923["scalar field"],
+)
+
+I3648 = p.create_item(
+    R1__has_label="positive definiteness",
+    R2__has_description="a special property of a symmetric matrix",
+    R4__is_instance_of=p.I54["mathematical property"],
+    R78__is_applicable_to=I9904["matrix"],
 )
 
 
@@ -1210,6 +1242,31 @@ I9489 = p.create_item(
     R18__has_usage_hint="Use this operator to convert to matrix, then use matmul, matadd etc.",
 )
 
+def I9489_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I9904["matrix"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    vector_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        dim = vector_item.R3326__has_dimension
+
+    if res.R5938__has_row_number is None:
+        res.set_relation(R5938["has row number"], dim)
+    if res.R5939__has_column_number is None:
+        res.set_relation(R5939["has column number"], 1)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I9489["vector to matrix"].add_method(I9489_cc_pp, "_custom_call_post_process")
+
 I1284 = p.create_item(
     R1__has_label="point in vector space to vector",
     R2__has_description="convert a point in a vector space to the vector, pointing to that point",
@@ -1218,6 +1275,31 @@ I1284 = p.create_item(
     R11__has_range_of_result=I7151["vector"],
     R18__has_usage_hint="Use this operator to convert to vector/ matrix, then use matmul, matadd etc.",
 )
+
+
+def I1284_cc_pp(self, res: p.Item, *args, **kwargs):
+    """
+    :param self:    mapping item (to which this function will be attached)
+    :param res:     result item (instance of I7151["vector"] (determined by R11__has_range_of_result))
+    :param args:    arg tuple (len 1) with which the mapping is called
+    """
+
+    assert len(args) == 1
+    point_item, = args
+
+    # define uri context to make the reference `R3326__has_dimension` work in other modules
+    with p.uri_context(uri=__URI__):
+        dim = point_item.R15__is_element_of[0].R3326__has_dimension
+
+    if res.R3326__has_dimension is None:
+        res.set_relation(R3326["has dimension"], dim)
+    else:
+        # this might be the case if the operator res comes from cache
+        pass
+    return res
+
+I1284["point in vector space to vector"].add_method(I1284_cc_pp, "_custom_call_post_process")
+
 
 I4218 = p.create_item(
     R1__has_label="matrix to vector",
@@ -1514,6 +1596,94 @@ with I6117["simplified Pythagorean theorem"].scope("assertion") as cm:
     se2ge = symbolic_expression_to_graph_expression  # abbreviation
     cm.new_equation(lhs=se2ge(la**2 + lb**2), rhs=se2ge(lc**2))
 
+
+I5073 = p.create_item(
+    R1__has_label="create I48__constraint_violation for invalid matmul calls",
+    R2__has_description="...",
+    R4__is_instance_of=p.I47["constraint rule"],
+)
+
+with I5073.scope("setting") as cm:
+    cm.new_var(x=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg_tuple=p.instance_of(p.I33["tuple"]))
+    cm.new_var(arg1=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg2=p.instance_of(p.I1["general item"]))
+    cm.new_var(arg1_ra=p.instance_of(p.I49["reification anchor"]))
+    cm.new_var(arg2_ra=p.instance_of(p.I49["reification anchor"]))
+
+    if 0:
+        cm.new_var(m1=p.instance_of(p.I39["positive integer"]))
+        cm.new_var(n2=p.instance_of(p.I39["positive integer"]))
+        pass
+
+    cm.uses_external_entities(I5177["matmul"])
+    cm.uses_external_entities(cm.rule)
+
+with I5073.scope("premise") as cm:
+    cm.new_rel(cm.x, p.R35["is applied mapping of"], I5177["matmul"])
+    cm.new_rel(cm.x, p.R36["has argument tuple"], cm.arg_tuple)
+
+    cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg1)
+    cm.new_rel(cm.arg_tuple, p.R39["has element"], cm.arg2)
+    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg1_ra)
+    cm.new_rel(cm.arg_tuple, p.R75["has reification anchor"], cm.arg2_ra)
+    cm.new_rel(cm.arg1_ra, p.R39["has element"], cm.arg1)
+    cm.new_rel(cm.arg2_ra, p.R39["has element"], cm.arg2)
+
+    cm.new_rel(cm.arg1_ra, p.R40["has index"], 0)
+    cm.new_rel(cm.arg2_ra, p.R40["has index"], 1)
+
+
+    # this is used because for some unknown reason the subgraph matching does not work
+    # with n2 and m1 (however it works in the unittests of pyirk-core)
+    # TODO: investigate further
+
+    def cond_func(_, arg1, arg2):
+        # first argument (anchor item) can be ignored here
+        cond  = arg1.R5939 is not None \
+            and arg2.R5938 is not None \
+            and  arg1.R5939 != arg2.R5938
+        return cond
+
+    cm.new_condition_func(cond_func, cm.arg1, cm.arg2)
+
+
+    if 0:
+        # specify the argument order
+        pass
+        cm.new_rel(cm.arg1, R5939["has column number"], cm.m1)
+        cm.new_rel(cm.arg2, R5938["has row number"], cm.n2)
+
+
+    # cm.new_math_relation(cm.m1, "!=", cm.n2)
+
+    # TODO: create this condition function from the above relation
+        cm.new_condition_func(lambda self, x, y: x != y, cm.m1, cm.n2)
+
+def create_constraint_violation_item(anchor_item, main_arg, rule):
+
+    res = p.RuleResult()
+    cvio: p.Item = p.instance_of(p.I48["constraint violation"])
+    res.new_entities.append(cvio)
+    res.new_statements.append(cvio.set_relation(p.R76["has associated rule"], rule))
+    res.new_statements.append(main_arg.set_relation(p.R74["has constraint violation"], cvio))
+
+    return res
+
+with I5073.scope("assertion") as cm:
+    cm.new_consequent_func(create_constraint_violation_item, cm.x, cm.rule)
+
+
+A=p.instance_of(I9906["square matrix"])
+A.set_relation(R5938["has row number"], 2)
+A.set_relation(R5939["has column number"], 3)
+
+P=p.instance_of(I9906["square matrix"])
+P.set_relation(R5938["has row number"], 4)
+P.set_relation(R5939["has column number"], 5)
+
+failed_multiplication = I5177["matmul"](A,P)
+
 # <new_entities>
 
 # this section in the source file is helpful for bulk-insertion of new items
@@ -1543,9 +1713,15 @@ p.end_mod()
       R9148
       R9738
      R5916
+<<<<<<< HEAD
       R6117
       R9192
 I3648      R3648
+=======
+I6117      R6117
+I9192      R9192
+      R3648
+>>>>>>> origin/matmul_test
       R6209
       R8492
       R1284
@@ -1562,7 +1738,7 @@ I3648      R3648
       R4291
       R5441
       R1778
-      R1536
+
 
 
 
