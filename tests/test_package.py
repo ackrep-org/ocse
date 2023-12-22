@@ -1,7 +1,7 @@
 import os
 import unittest
 from packaging import version
-
+import itertools
 from os.path import join as pjoin
 from pathlib import Path
 import pyirk as p
@@ -180,6 +180,141 @@ class Test_02_math(unittest.TestCase):
 
         self.assertEqual(len(wrong_statements), 0, msg=msg)
         # todo work some magic to give hint at where the problematic definitions are
+
+    def test_c07__cc_theorem_application(self):
+
+        # test system
+        # linear, but not explicitly time invariant
+        testrep_lin = p.instance_of(ct.I2928["general model representation"])
+        testrep_lin.set_relation(ct.R5100["has model representation property"], ct.I4761["linearity"])
+        testsys_lin = p.instance_of(ct.I7641["general system model"])
+        testsys_lin.set_relation(ct.R2928["has model representation"], testrep_lin)
+
+        # LTI
+        testrep_lti = p.instance_of(ct.I2928["general model representation"])
+        testrep_lti.set_relation(ct.R5100["has model representation property"], ct.I4761["linearity"])
+        testsys_lti = p.instance_of(ct.I7641["general system model"])
+        testsys_lti.set_relation(ct.R2928["has model representation"], testrep_lti)
+        testsys_lti.set_relation(ct.R8303["has general system property"], ct.I7733["time invariance"])
+
+        # polynomial, time invariant
+        testrep_ti_poly = p.instance_of(ct.I2928["general model representation"])
+        testrep_ti_poly.set_relation(ct.R5100["has model representation property"], ct.I5247["polynomial"])
+        testsys_ti_poly = p.instance_of(ct.I7641["general system model"])
+        testsys_ti_poly.set_relation(ct.R2928["has model representation"], testrep_ti_poly)
+        testsys_ti_poly.set_relation(ct.R8303["has general system property"], ct.I7733["time invariance"])
+
+        # only time invariant
+        testrep_ti = p.instance_of(ct.I2928["general model representation"])
+        testsys_ti = p.instance_of(ct.I7641["general system model"])
+        testsys_ti.set_relation(ct.R2928["has model representation"], testrep_ti)
+        testsys_ti.set_relation(ct.R8303["has general system property"], ct.I7733["time invariance"])
+
+        # <theorem>
+        I6210 = p.create_item(
+            R1__has_label="test theorem",
+            R2__has_description=("test"),
+            R4__is_instance_of=p.I17["equivalence proposition"],
+        )
+
+        with I6210["test theorem"].scope("setting") as cm:
+            sys = cm.new_var(sys=p.instance_of(ct.I7641["general system model"]))
+            rep = cm.new_var(rep=p.instance_of(ct.I2928["general model representation"]))
+            cm.new_rel(sys, ct.R2928["has model representation"], rep)
+            cm.new_rel(rep, ct.R5100["has model representation property"], ct.I5247["polynomial"])
+
+        with I6210["test theorem"].scope("premise") as cm:
+            cm.new_rel(rep, ct.R5100["has model representation property"], ct.I4761["linearity"])
+
+        with I6210["test theorem"].scope("assertion") as cm:
+            V = cm.new_var(V=p.instance_of(ct.I9199["strong Lyapunov Function"]))
+        # </theorem>
+
+
+        # test start here:
+        ds = p.core.ds
+
+        theorems = [i for i in ds.items.values() if p.is_instance(i, p.I14["mathematical proposition"])]
+        systems = [i for i in ds.items.values() if p.is_instance(i, ct.I7641["general system model"])]
+
+        def cond_func(sys, rep, th):
+            # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesnt make sense.
+            # they have to be filtered out first
+            # sys is from a setting scope:
+            if sys.get_relations("R20"):
+                if sys.get_relations("R20", return_obj=True)[0].R64 == "SETTING":
+                    return False
+
+
+            scopes = th.get_inv_relations("R21",return_subj=True)
+            set, pre, ass = None, None, None
+            for scope in scopes:
+                match scope.R64:
+                    case "SETTING":
+                        set = scope
+                    case "PREMISE":
+                        pre = scope
+                    case "ASSERTION":
+                        ass = scope
+
+            if set is None:
+                return False
+
+            setting_items = set.get_inv_relations("R20", return_subj=True)
+            systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, ct.I7641["general system model"])]
+            if len(systh) != 1:
+                return False
+            systh = systh[0]
+
+            repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, ct.I2928["general model representation"])]
+            if len(repth) != 1:
+                return False
+            repth = repth[0]
+
+            cond = True
+            # for each statement regarding sys in theorem
+            for statement in sum(systh.get_relations().values(), []):
+                # take only the property relations for now
+                if "property" in statement.relation.R1:
+                    rel_uri = statement.relation.uri
+                    obj = statement.object
+                    # make sure the systems has the same or more restrictive property as sys in th
+                    # if relation does not exist -> False
+                    cond = cond and (len(sys.get_relations(rel_uri)) > 0)
+                    for stm in sys.get_relations(rel_uri):
+                        if not p.is_subproperty(stm.object, obj):
+                            cond = False
+            # same for rep
+            for statement in sum(repth.get_relations().values(), []):
+                if "property" in statement.relation.R1:
+                    rel_uri = statement.relation.uri
+                    obj = statement.object
+                    cond = cond and (len(rep.get_relations(rel_uri)) > 0)
+                    for stm in rep.get_relations(rel_uri):
+                        if not p.is_subproperty(stm.object, obj):
+                            cond = cond and False
+
+
+            return cond
+
+        res_list = []
+        for th, sys in itertools.product(theorems, systems):
+
+            rep = sys.get_relations("irk:/ocse/0.2/control_theory#R2928", return_obj=True) # R2928__has_model_repr
+            if len(rep) == 1:
+                if cond_func(sys, rep[0], th):
+                    res_list.append((sys, th))
+            elif len(rep) == 0:
+                continue
+            else:
+                raise IndexError
+
+        res = p.RuleResult()
+        for s, t in res_list:
+            res.new_statements.append(t.set_relation(p.R80["applies to"], s))
+            # print(t, "applies to", s)
+        print(res.new_statements)
+        self.assertTrue(len(res.new_statements) >= 7)
 
 
 class Test_02_control_theory(unittest.TestCase):
