@@ -1870,30 +1870,30 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion
 
 # test system
 # linear, but not explicitly time invariant
-testrep_lin = p.instance_of(I2928["general model representation"])
-testrep_lin.set_relation(R5100["has model representation property"], I4761["linearity"])
-testsys_lin = p.instance_of(I7641["general system model"])
-testsys_lin.set_relation(R2928["has model representation"], testrep_lin)
+testreplin = p.instance_of(I2928["general model representation"])
+testreplin.set_relation(R5100["has model representation property"], I4761["linearity"])
+testsyslin = p.instance_of(I7641["general system model"])
+testsyslin.set_relation(R2928["has model representation"], testreplin)
 
 # LTI
-testrep_lti = p.instance_of(I2928["general model representation"])
-testrep_lti.set_relation(R5100["has model representation property"], I4761["linearity"])
-testsys_lti = p.instance_of(I7641["general system model"])
-testsys_lti.set_relation(R2928["has model representation"], testrep_lti)
-testsys_lti.set_relation(R8303["has general system property"], I7733["time invariance"])
+testreplti = p.instance_of(I2928["general model representation"])
+testreplti.set_relation(R5100["has model representation property"], I4761["linearity"])
+testsyslti = p.instance_of(I7641["general system model"])
+testsyslti.set_relation(R2928["has model representation"], testreplti)
+testsyslti.set_relation(R8303["has general system property"], I7733["time invariance"])
 
 # polynomial, time invariant
-testrep_ti_poly = p.instance_of(I2928["general model representation"])
-testrep_ti_poly.set_relation(R5100["has model representation property"], I5247["polynomial"])
-testsys_ti_poly = p.instance_of(I7641["general system model"])
-testsys_ti_poly.set_relation(R2928["has model representation"], testrep_ti_poly)
-testsys_ti_poly.set_relation(R8303["has general system property"], I7733["time invariance"])
+testreptipoly = p.instance_of(I2928["general model representation"])
+testreptipoly.set_relation(R5100["has model representation property"], I5247["polynomial"])
+testsystipoly = p.instance_of(I7641["general system model"])
+testsystipoly.set_relation(R2928["has model representation"], testreptipoly)
+testsystipoly.set_relation(R8303["has general system property"], I7733["time invariance"])
 
 # only time invariant
-testrep_ti = p.instance_of(I2928["general model representation"])
-testsys_ti = p.instance_of(I7641["general system model"])
-testsys_ti.set_relation(R2928["has model representation"], testrep_ti)
-testsys_ti.set_relation(R8303["has general system property"], I7733["time invariance"])
+testrepti = p.instance_of(I2928["general model representation"])
+testsysti = p.instance_of(I7641["general system model"])
+testsysti.set_relation(R2928["has model representation"], testrepti)
+testsysti.set_relation(R8303["has general system property"], I7733["time invariance"])
 
 
 
@@ -1926,46 +1926,126 @@ with I6210["test theorem"].scope("assertion") as cm:
 # Rules
 
 
-I4147 = p.create_item(
-    R1__has_label="link applicable theorems",
-    R2__has_description="...",
-    R4__is_instance_of=p.I47["constraint rule"], #todo type prolly wrong
-)
+# I4147 = p.create_item(
+#     R1__has_label="link applicable theorems",
+#     R2__has_description="...",
+#     R4__is_instance_of=p.I47["constraint rule"], #todo type prolly wrong
+# )
 
-with I4147.scope("setting") as cm:
-    cm.new_var(sys=p.instance_of(I7641["general system model"]))
-    cm.new_var(rep=p.instance_of(I2928["general model representation"]))
-    cm.new_rel(cm.sys, R2928["has model representation"], cm.rep)
+# with I4147.scope("setting") as cm:
+#     cm.new_var(sys=p.instance_of(I7641["general system model"]))
+#     cm.new_var(rep=p.instance_of(I2928["general model representation"]))
+#     cm.new_rel(cm.sys, R2928["has model representation"], cm.rep)
 
-    cm.new_var(th=p.instance_of(p.I14["mathematical proposition"]))
-    # cm.new_var(scope=p.instance_of(p.I16["scope"]))
-    # cm.new_var(premise=p.instance_of(p.I16["scope"]))
-    # cm.new_var(assertion=p.instance_of(p.I16["scope"]))
+#     cm.new_var(th=p.instance_of(p.I14["mathematical proposition"]))
+#     # cm.new_var(scope=p.instance_of(p.I16["scope"]))
+#     # cm.new_var(premise=p.instance_of(p.I16["scope"]))
+#     # cm.new_var(assertion=p.instance_of(p.I16["scope"]))
 
-    # cm.new_rel(cm.premise, p.R21["is scope of"], cm.th)
-    # cm.new_rel(cm.assertion, p.R21["is scope of"], cm.th)
+#     # cm.new_rel(cm.premise, p.R21["is scope of"], cm.th)
+#     # cm.new_rel(cm.assertion, p.R21["is scope of"], cm.th)
 
-    cm.uses_external_entities(cm.rule)
+#     cm.uses_external_entities(cm.rule)
 
-with I4147.scope("premise") as cm:
-    # cm.new_rel(cm.scope, p.R21["is scope of"], cm.th)
-    # theorem has to be about a system
-    # cm.new_var(sys_in_th=p.instance_of(I7641["general system model"]))
-    # cm.new_rel(cm.sys_in_th, p.R20["has defining scope"], cm.setting)
-    # system has to have a model rep
-    # cm.new_var(rep_in_th=p.instance_of(I2928["general model representation"]))
-    # cm.new_rel(cm.rep_in_th, p.R20["has defining scope"], cm.setting)
+# with I4147.scope("premise") as cm:
+#     # cm.new_rel(cm.scope, p.R21["is scope of"], cm.th)
+#     # theorem has to be about a system
+#     # cm.new_var(sys_in_th=p.instance_of(I7641["general system model"]))
+#     # cm.new_rel(cm.sys_in_th, p.R20["has defining scope"], cm.setting)
+#     # system has to have a model rep
+#     # cm.new_var(rep_in_th=p.instance_of(I2928["general model representation"]))
+#     # cm.new_rel(cm.rep_in_th, p.R20["has defining scope"], cm.setting)
 
-    def cond_func(_, sys, rep, th):
-        # first argument (anchor item) can be ignored here
+#     def cond_func(_, sys, rep, th):
+#         # first argument (anchor item) can be ignored here
 
-        set, prem, ass = th.get_inv_relations("R21",return_subj=True)
+#         set, prem, ass = th.get_inv_relations("R21",return_subj=True)
+
+#         setting_items = set.get_inv_relations("R20", return_subj=True)
+#         systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I7641["general system model"])]
+#         if len(systh) != 1:
+#             return False
+#         systh = systh[0]
+#         repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I2928["general model representation"])]
+#         if len(repth) != 1:
+#             return False
+#         repth = repth[0]
+
+#         cond = True
+#         # for each statement regarding sys in theorem
+#         for statement in sum(systh.get_relations().values(), []):
+#             # take only the property relations for now
+#             if "property" in statement.relation.R1:
+#                 rel_uri = statement.relation.uri
+#                 obj = statement.object
+#                 # make sure the systems has the same or more restrictive property as sys in th
+#                 # if relation not exsiting -> False
+#                 cond = cond and (len(sys.get_relations()[rel_uri]) > 0)
+#                 for stm in sys.get_relations()[rel_uri]:
+#                     if not p.is_subproperty(stm.object, obj):
+#                         cond = False
+#         # same for rep
+#         for statement in sum(repth.get_relations().values(), []):
+#             if "property" in statement.relation.R1:
+#                 rel_uri = statement.relation.uri
+#                 obj = statement.object
+#                 cond = cond and (len(rep.get_relations()[rel_uri]) > 0)
+#                 for stm in rep.get_relations()[rel_uri]:
+#                     if not p.is_subproperty(stm.object, obj):
+#                         cond = cond and False
+
+
+#         return cond
+
+#     cm.new_condition_func(cond_func, cm.sys, cm.rep, cm.th)
+
+
+# def create_applies_to_relation(anchor_item, rule, sys, th):
+#     res = p.RuleResult()
+#     res.new_statements.append(th.set_relation(p.R80["applies to"], sys))
+
+
+#     return res
+
+# with I4147.scope("assertion") as cm:
+#     cm.new_consequent_func(create_applies_to_relation, cm.rule, cm.sys, cm.th)
+
+def apply_theorems_to_systems():
+    import itertools
+    ds = p.core.ds
+
+    theorems = [i for i in ds.items.values() if p.is_instance(i, p.I14["mathematical proposition"])]
+    systems = [i for i in ds.items.values() if p.is_instance(i, I7641["general system model"])]
+
+    def cond_func(sys, rep, th):
+        # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesnt make sense.
+        # they have to be filtered out first
+        # sys is from a setting scope:
+        if sys.get_relations("R20"):
+            if sys.get_relations("R20", return_obj=True)[0].R64 == "SETTING":
+                return False
+
+
+        scopes = th.get_inv_relations("R21",return_subj=True)
+        set, pre, ass = None, None, None
+        for scope in scopes:
+            match scope.R64:
+                case "SETTING":
+                    set = scope
+                case "PREMISE":
+                    pre = scope
+                case "ASSERTION":
+                    ass = scope
+
+        if set is None:
+            return False
 
         setting_items = set.get_inv_relations("R20", return_subj=True)
         systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I7641["general system model"])]
         if len(systh) != 1:
             return False
         systh = systh[0]
+
         repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I2928["general model representation"])]
         if len(repth) != 1:
             return False
@@ -1979,9 +2059,9 @@ with I4147.scope("premise") as cm:
                 rel_uri = statement.relation.uri
                 obj = statement.object
                 # make sure the systems has the same or more restrictive property as sys in th
-                # if relation not exsiting -> False
-                cond = cond and (len(sys.get_relations()[rel_uri]) > 0)
-                for stm in sys.get_relations()[rel_uri]:
+                # if relation does not exist -> False
+                cond = cond and (len(sys.get_relations(rel_uri)) > 0)
+                for stm in sys.get_relations(rel_uri):
                     if not p.is_subproperty(stm.object, obj):
                         cond = False
         # same for rep
@@ -1989,26 +2069,33 @@ with I4147.scope("premise") as cm:
             if "property" in statement.relation.R1:
                 rel_uri = statement.relation.uri
                 obj = statement.object
-                cond = cond and (len(rep.get_relations()[rel_uri]) > 0)
-                for stm in rep.get_relations()[rel_uri]:
+                cond = cond and (len(rep.get_relations(rel_uri)) > 0)
+                for stm in rep.get_relations(rel_uri):
                     if not p.is_subproperty(stm.object, obj):
                         cond = cond and False
 
 
         return cond
 
-    cm.new_condition_func(cond_func, cm.sys, cm.rep, cm.th)
+    res_list = []
+    for th, sys in itertools.product(theorems, systems):
 
+        rep = sys.get_relations("irk:/ocse/0.2/control_theory#R2928", return_obj=True)
+        if len(rep) == 1:
+            if cond_func(sys, rep[0], th):
+                res_list.append((sys, th))
+        elif len(rep) == 0:
+            continue
+        else:
+            raise IndexError
 
-def create_applies_to_relation(anchor_item, rule, sys, th):
     res = p.RuleResult()
-    res.new_statements.append(th.set_relation(p.R80["applies to"], sys))
+    for s, t in res_list:
+        res.new_statements.append(t.set_relation(p.R80["applies to"], s))
 
 
-    return res
-
-with I4147.scope("assertion") as cm:
-    cm.new_consequent_func(create_applies_to_relation, cm.rule, cm.sys, cm.th)
+# ----------------------------------------------------------------------------------------------------------------------
+apply_theorems_to_systems()
 
 
 I5073 = p.create_item(

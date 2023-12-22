@@ -863,7 +863,7 @@ with I3749["Cayley-Hamilton theorem"].scope("setting") as cm:
     cm.new_rel(cm.A, R5940["has characteristic polynomial"], cm.P)
     cm.new_rel(cm.Z, R5938["has row number"], cm.n)
     cm.new_rel(cm.Z, R5939["has column number"], cm.n)
-    cm.new_rel(cm.Z, p.R24["has LaTeX string"], r"\mathbf{0}")
+    cm.new_rel(cm.Z, p.R24["has LaTeX string"], r"$\mathbf{0}$")
 
 with I3749["Cayley-Hamilton theorem"].scope("assertion") as cm:
     cm.new_equation(lhs=cm.P(cm.A), rhs=cm.Z)
