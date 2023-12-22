@@ -97,7 +97,7 @@ I1793 = p.create_item(
 I2928 = p.create_item(
     R1__has_label="general model representation",
     R2__has_description="general (mathematical) representation of a model of a dynamical system",
-    R4__is_instance_of=p.I2["Metaclass"],
+    R3__is_subclass_of=p.I12["mathematical object"],
 )
 
 R2928 = p.create_relation(
@@ -1689,11 +1689,12 @@ I8142 = p.create_item(
 
 
 with I8142["theorem by Vannelli for Lyapunov functions for homogeneous systems"].scope("setting") as cm:
-    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
-    cm.sys.set_relation(p.R16["has property"], I7733["time invariance"])
+    cm.sys.set_relation(R8303["has general system property"], I7733["time invariance"])
     state_space_sys = cm.new_var(state_space_sys=p.instance_of(I6886["general ode state space representation"]))
     sys.set_relation(R2928["has model representation"], state_space_sys)
+
+    n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
 
     f = cm.new_var(f=p.instance_of(ma.I9841["vector field"]))
     cm.new_rel(state_space_sys, R4122["has associated drift vector field"], f)
@@ -1776,7 +1777,7 @@ I7006 = p.create_item(
 
 with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].scope("setting") as cm:
     sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
-    cm.sys.set_relation(p.R16["has property"], I7733["time invariance"])
+    cm.sys.set_relation(R8303["has general system property"], I7733["time invariance"])
     rep = cm.new_var(rep=p.instance_of(I2928["general model representation"]))
     sys.set_relation(R2928["has model representation"], rep)
     cm.new_rel(rep, R5100["has model representation property"], I5247["polynomial"])
@@ -1784,7 +1785,7 @@ with I4274["theorem by Goubault for Lyapunov functions for polynomial systems"].
     n = cm.new_var(n=p.uq_instance_of(p.I39["positive integer"]))
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
-    cm.new_rel(sys, ma.R5405["has associated state space"], D)
+    cm.new_rel(rep, ma.R5405["has associated state space"], D)
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
     cm.new_rel(D, ma.R3798["has origin"], x0)
@@ -1817,13 +1818,16 @@ I2613 = p.create_item(
 )
 
 with I2613["theorem for Lyapunov functions for linear systems"].scope("setting") as cm:
+    sys = cm.new_var(sys=p.instance_of(I7641["general system model"]))
+    ode_sys = cm.new_var(ode_sys=p.instance_of(I6850["state space model representation"]))
+    cm.new_rel(sys, R2928["has model representation"], ode_sys)
+    cm.new_rel(ode_sys, R5100["has model representation property"], I4761["linearity"])
+
     n = cm.new_var(n=p.instance_of(p.I39["positive integer"]))
 
     D = cm.new_var(M=p.instance_of(ma.I5167["state space"]))
     cm.new_rel(D, ma.R3326["has dimension"], n)
 
-    ode_sys = cm.new_var(ode_sys=p.instance_of(I9273["explicit first order ODE system"]))
-    cm.new_rel(ode_sys, p.R16["has property"], I4761["linearity"])
     cm.new_rel(ode_sys, ma.R5405["has associated state space"], D)
 
     x0 = cm.new_var(x0=p.instance_of(ma.I1168["point in state space"]))
