@@ -384,6 +384,7 @@ with I4455.scope("premise") as cm:
     cm.new_rel(cm.set_of_roots, p.R14["is subset of"], ma.I2739["open left half plane"])
 
 with I4455.scope("assertion") as cm:
+    # TODO: this should be something like p.R000["is instances of by definition"]
     cm.new_rel(cm.P, p.R30["is secondary instance of"], I5325["Hurwitz polynomial"])
 
 I5325["Hurwitz polynomial"].set_relation(p.R37["has definition"], I4455["definition of Hurwitz polynomial"])
@@ -1840,6 +1841,8 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     cm.new_rel(A, ma.R5938["has row number"], n)
     cm.new_rel(Q, ma.R5938["has row number"], n)
     Q.set_relation(p.R16["has property"], ma.I3648["positive definiteness (matrix)"])
+    # TODO: rethink if this should be part of the premise
+    # also: introduce set of positive definite matrices (dimension-dependency!)
 
     x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](cm.x))
 
@@ -1848,6 +1851,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("setting")
     cm.new_rel(ode_sys, R4122["has associated drift vector field"], f)
     cm.new_equation(f(x), ma.I4218["matrix to vector"](ma.I5177["matmul"](A, x_mat)))
 
+
 with I2613["theorem for Lyapunov functions for linear systems"].scope("premise") as cm:
     P = cm.new_var(P=p.instance_of(ma.I9906["square matrix"], qualifiers=[p.exis_quant(True)]))
     cm.new_rel(P, ma.R5938["has row number"], n)
@@ -1855,6 +1859,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("premise")
     cm.new_rel(P, ma.R5939["has column number"], n)
     cm.new_rel(cm.P, p.R16["has property"], ma.I3648["positive definiteness (matrix)"])
 
+    # TODO: use convenient formula representation here
     E = cm.new_equation(ma.I1536["matneg"](cm.Q), ma.I9493["matadd"](ma.I5177["matmul"]
         (ma.I3263["transpose"](cm.A), cm.P), ma.I5177["matmul"](cm.P, cm.A)))
     E.set_relation(p.R30["is secondary instance of"], I6338["Lyapunov equation"])
@@ -1863,6 +1868,7 @@ with I2613["theorem for Lyapunov functions for linear systems"].scope("assertion
     cm.new_rel(cm.x0, p.R16["has property"], I5677["global asymptotic stability"])
     V = cm.new_var(V=p.instance_of(I9199["strong Lyapunov Function"]))
 
+    # TODO: use convenient formula representation here
     cm.new_equation(
         V, ma.I2328["matrix to scalar"](ma.I5177["matmul"](ma.I5177["matmul"](ma.I3263["transpose"](x_mat), cm.P), x_mat))
     )
