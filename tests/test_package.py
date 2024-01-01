@@ -318,11 +318,23 @@ class Test_02_math(unittest.TestCase):
 
 
 class Test_02_control_theory(unittest.TestCase):
+    def setUp(self):
+        p.start_mod(ct.__URI__)
+
+    def tearDown(self):
+        p.end_mod()
+
     def test_b01__test_multilinguality(self):
         ct.I5290["reference value"].R1__has_label__de == "Sollwert"@p.de
 
 
 class Test_03_agents(unittest.TestCase):
+    def setUp(self):
+        p.start_mod(ag.__URI__)
+
+    def tearDown(self):
+        p.end_mod()
+
     def test_c03__publications(self):
         x = ag.I7558["2002_Khalil"]
         self.assertEqual(x.ag__R8433__has_authors[0], ag.I9700["Hassan Khalil"])
