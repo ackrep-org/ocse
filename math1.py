@@ -1,5 +1,6 @@
 from typing import Union
 import pyirk as p
+import sympy as sp
 
 # noinspection PyUnresolvedReferences
 from ipydex import IPS, activate_ips_on_exception  # noqa
@@ -1355,6 +1356,46 @@ I9738 = p.create_item(
 )
 
 
+class SymbolConversionError(p.aux.PyIRKError):
+    pass
+
+class IRKSymbol(sp.Symbol):
+    """
+    Subclass of sympy.Symbol with some additional features
+    """
+
+    def __init__(self, name, **kwargs):
+
+        # this is probably not necessary as sympy symbols are initialized via __new__
+        # anyway: __init__ does not accept any argument
+        super().__init__()
+        assert self.name == name
+
+        self.is_transposed_of = None
+        self._transpose_result = None
+
+
+    @property
+    def T(self):
+        if self._transpose_result:
+            return self._transpose_result
+
+        new_symb = IRKSymbol(f"{self.name}_transpose")
+        new_symb.is_transposed_of = self
+
+        self_associated_item = p.ds.get_entity_by_uri(ds["item_symbol_map"].b.get(self))
+        if self_associated_item is None:
+            msg = f"unable to identify item corresponding to symbol {self} during transpose"
+            raise SymbolConversionError(msg)
+
+        transposed_item = I3263["transpose"](self_associated_item)
+        ds["item_symbol_map"].add_pair(transposed_item.uri, new_symb)
+
+        # store for later usage
+        self._transpose_result = new_symb
+        return new_symb
+
+
 # helper function to simplify creation of formulas
 
 
@@ -1364,7 +1405,6 @@ def items_to_symbols(*args, relation=None) -> list:
         ds["item_symbol_map"] = p.aux.OneToOneMapping()
     item_symbol_map = ds["item_symbol_map"]
 
-    import sympy as sp
     n = len(item_symbol_map.a)
     res = []
 
@@ -1378,7 +1418,7 @@ def items_to_symbols(*args, relation=None) -> list:
         # TODO: check meaningful types (numbers, expressions, evaluated mappings, but not eg. ag.I7435["human"])
         suffix = itm.R1__has_label.split(" ")[0]
         name = f"s{i}_{suffix}"
-        symb = sp.Symbol(name)
+        symb = IRKSymbol(name, commutative=False)
         res.append(symb)
 
         # a: keys=uris, values=symbols; b: keys=symbols, values=uris;

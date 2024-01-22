@@ -81,7 +81,7 @@ class Test_02_math(unittest.TestCase):
         d = ma.I5359["determinant"](M)
         self.assertTrue(d.ma__R8736__depends_polynomially_on, s)
 
-    def test_c04_symbolic_formula1(self):
+    def test_c04a_symbolic_formula1(self):
 
         t = p.instance_of(ma.I2917["planar triangle"])
         sides = ma.I9148["get polygon sides ordered by length"](t)
@@ -99,6 +99,33 @@ class Test_02_math(unittest.TestCase):
         prod_item = ma.symbolic_expression_to_graph_expression(symbolic_prod)
         self.assertEqual(prod_item.get_arguments(), [a.R2495__has_length, b.R2495__has_length])
         self.assertEqual(prod_item.R4__is_instance_of, ma.I5916["product"])
+
+    @unittest.expectedFailure
+    def test_c04b_symbolic_formula2(self):
+
+        A = p.instance_of(ma.I9904["matrix"])
+        P = p.instance_of(ma.I9904["matrix"])
+        A_T = ma.I3263["transpose"](A)
+
+        As, Ps = ma.items_to_symbols(A, P)
+
+        self.assertIsInstance(As.T, ma.sp.Symbol)
+        self.assertTrue(As.T is As.T)
+
+        # abbreviation for convenience
+        se_to_ge = ma.symbolic_expression_to_graph_expression
+
+        expr_item1 = ma.I9493["matadd"](ma.I5177["matmul"](ma.I3263["transpose"](A), P), ma.I5177["matmul"](P, A))
+        expr2 = As.T*Ps + Ps*As
+        expr_item2 = se_to_ge(expr2)
+        # IPS()
+
+        # this fails because we get sum and product and not matadd and matmul
+        # TODO: improve ma.symbolicExpressionToGraphExpressionConverter
+        self.assertEqual(expr_item1, expr_item2)
+
+        # x = p.instance_of(ma.I1168["point in state space"])
+
 
     def test_c05__cc_matrix_dimensions(self):
 
