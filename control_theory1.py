@@ -1935,7 +1935,7 @@ with I6210["test theorem"].scope("assertion") as cm:
 # I4147 = p.create_item(
 #     R1__has_label="link applicable theorems",
 #     R2__has_description="...",
-#     R4__is_instance_of=p.I47["constraint rule"], #todo type prolly wrong
+#     R4__is_instance_of=p.I47["constraint rule"], #todo type probably wrong
 # )
 
 # with I4147.scope("setting") as cm:
@@ -1985,7 +1985,7 @@ with I6210["test theorem"].scope("assertion") as cm:
 #                 rel_uri = statement.relation.uri
 #                 obj = statement.object
 #                 # make sure the systems has the same or more restrictive property as sys in th
-#                 # if relation not exsiting -> False
+#                 # if relation not existing -> False
 #                 cond = cond and (len(sys.get_relations()[rel_uri]) > 0)
 #                 for stm in sys.get_relations()[rel_uri]:
 #                     if not p.is_subproperty(stm.object, obj):
@@ -2024,7 +2024,7 @@ def apply_theorems_to_systems():
     systems = [i for i in ds.items.values() if p.is_instance(i, I7641["general system model"])]
 
     def cond_func(sys, rep, th):
-        # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesnt make sense.
+        # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesn't make sense.
         # they have to be filtered out first
         # sys is from a setting scope:
         if sys.get_relations("R20"):

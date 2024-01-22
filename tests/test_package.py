@@ -150,7 +150,7 @@ class Test_02_math(unittest.TestCase):
         contradicting_equilibrium = p.instance_of(ct.I9820["equilibrium point"])
         contradicting_equilibrium.set_relation(p.R16["has property"], ct.I8303["strict Lyapunov instability"])
         contradicting_equilibrium.set_relation(p.R16["has property"], ct.I2931["local Lyapunov stability"])
-        ## shouldnt fail
+        ## shouldn't fail
         x = p.instance_of(ct.I9820["equilibrium point"])
         x.set_relation(p.R16["has property"], ct.I6467["saddle"])
         x.set_relation(p.R16["has property"], ct.I2931["local Lyapunov stability"])
@@ -238,7 +238,7 @@ class Test_02_math(unittest.TestCase):
         systems = [i for i in ds.items.values() if p.is_instance(i, ct.I7641["general system model"])]
 
         def cond_func(sys, rep, th):
-            # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesnt make sense.
+            # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesn't make sense.
             # they have to be filtered out first
             # sys is from a setting scope:
             if sys.get_relations("R20"):
