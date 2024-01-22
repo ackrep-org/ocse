@@ -1424,6 +1424,9 @@ def items_to_symbols(*args, relation=None) -> list:
         # a: keys=uris, values=symbols; b: keys=symbols, values=uris;
         item_symbol_map.add_pair(itm.uri, symb)
 
+    if len(args) == 1:
+        assert len(res) == 1
+        res = res[0]
     return res
 
 

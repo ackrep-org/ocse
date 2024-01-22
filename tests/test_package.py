@@ -130,7 +130,22 @@ class Test_02_math(unittest.TestCase):
         expr_item2 = se_to_ge(expr2)
         self.assertEqual(expr_item1, expr_item2)
 
-        # x = p.instance_of(ma.I1168["point in state space"])
+        x = p.instance_of(ma.I1168["point in state space"])
+
+        D = p.instance_of(ma.I5167["state space"])
+        n = n=p.instance_of(p.I39["positive integer"])
+        D.ma__R3326__has_dimension = n
+        x.R15__is_element_of = D
+
+        x_mat = ma.I9489["vector to matrix"](ma.I1284["point in vector space to vector"](x))
+
+        xs = ma.items_to_symbols(x_mat)
+        V = xs.T*Ps*xs
+
+        V_expr_item = se_to_ge(V)
+
+        self.assertEqual(V_expr_item.R4__is_instance_of, ma.I9904["matrix"])
+        self.assertEqual(V_expr_item.R35__is_applied_mapping_of, ma.I5177["matmul"])
 
 
     def test_c05__cc_matrix_dimensions(self):
