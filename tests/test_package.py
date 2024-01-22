@@ -22,7 +22,7 @@ ct = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py
 
 class Test_01_basics(unittest.TestCase):
     def test_a00__ensure_version(self):
-        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.11.2"))
+        self.assertGreaterEqual(version.parse(p.__version__), version.parse("0.12.1"))
 
 
 class Test_02_math(unittest.TestCase):
@@ -100,7 +100,7 @@ class Test_02_math(unittest.TestCase):
         self.assertEqual(prod_item.get_arguments(), [a.R2495__has_length, b.R2495__has_length])
         self.assertEqual(prod_item.R4__is_instance_of, ma.I5916["product"])
 
-    @unittest.expectedFailure
+    # @unittest.expectedFailure
     def test_c04b_symbolic_formula2(self):
 
         A = p.instance_of(ma.I9904["matrix"])
@@ -115,13 +115,19 @@ class Test_02_math(unittest.TestCase):
         # abbreviation for convenience
         se_to_ge = ma.symbolic_expression_to_graph_expression
 
+
+        sum1 = se_to_ge(Ps + As)
+        self.assertEqual(sum1.R4__is_instance_of, ma.I9904["matrix"])
+        self.assertEqual(sum1.R35__is_applied_mapping_of, ma.I9493["matadd"])
+
+        prod1 = se_to_ge(Ps*As)
+        self.assertEqual(prod1.R4__is_instance_of, ma.I9904["matrix"])
+        self.assertEqual(prod1.R35__is_applied_mapping_of, ma.I5177["matmul"])
+
         expr_item1 = ma.I9493["matadd"](ma.I5177["matmul"](ma.I3263["transpose"](A), P), ma.I5177["matmul"](P, A))
+
         expr2 = As.T*Ps + Ps*As
         expr_item2 = se_to_ge(expr2)
-        # IPS()
-
-        # this fails because we get sum and product and not matadd and matmul
-        # TODO: improve ma.symbolicExpressionToGraphExpressionConverter
         self.assertEqual(expr_item1, expr_item2)
 
         # x = p.instance_of(ma.I1168["point in state space"])

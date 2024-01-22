@@ -1457,11 +1457,28 @@ class symbolicExpressionToGraphExpressionConverter:
         elif isinstance(obj, self.sp.Mul):
             return self._conv_mul(obj.args)
 
+    def _is_matrix(self, obj):
+        item = self._conv_object(obj)
+        return p.is_instance_of(item, I9904["matrix"], allow_R30_secondary=True)
+
     def _conv_add(self, args):
-        return self._apply_operator(args, I2495["add"])
+        is_matrix_list = [self._is_matrix(a) for a in args]
+        if any(is_matrix_list):
+            operator = I9493["matadd"]
+        else:
+            operator = I2495["add"]
+        return self._apply_operator(args, operator)
+
 
     def _conv_mul(self, args):
-        return self._apply_operator(args, I9738["mul"])
+        is_matrix_list = [self._is_matrix(a) for a in args]
+        if any(is_matrix_list):
+            operator = I5177["matmul"]
+        else:
+            # normal multiplication
+            operator = I9738["mul"]
+
+        return self._apply_operator(args, operator)
 
     def _apply_operator(self, args, operator_item):
         if len(args) == 2:
