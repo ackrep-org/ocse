@@ -1968,11 +1968,11 @@ with I6210["test theorem"].scope("assertion") as cm:
 #         set, prem, ass = th.get_inv_relations("R21",return_subj=True)
 
 #         setting_items = set.get_inv_relations("R20", return_subj=True)
-#         systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I7641["general system model"])]
+#         systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance_of(i, I7641["general system model"])]
 #         if len(systh) != 1:
 #             return False
 #         systh = systh[0]
-#         repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I2928["general model representation"])]
+#         repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance_of(i, I2928["general model representation"])]
 #         if len(repth) != 1:
 #             return False
 #         repth = repth[0]
@@ -2018,10 +2018,9 @@ with I6210["test theorem"].scope("assertion") as cm:
 
 def apply_theorems_to_systems():
     import itertools
-    ds = p.core.ds
 
-    theorems = [i for i in ds.items.values() if p.is_instance(i, p.I14["mathematical proposition"])]
-    systems = [i for i in ds.items.values() if p.is_instance(i, I7641["general system model"])]
+    theorems = p.get_all_instances_of(p.I14["mathematical proposition"])
+    systems = p.get_all_instances_of(I7641["general system model"])
 
     def cond_func(sys, rep, th):
         # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesn't make sense.
@@ -2047,12 +2046,12 @@ def apply_theorems_to_systems():
             return False
 
         setting_items = set.get_inv_relations("R20", return_subj=True)
-        systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I7641["general system model"])]
+        systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance_of(i, I7641["general system model"])]
         if len(systh) != 1:
             return False
         systh = systh[0]
 
-        repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, I2928["general model representation"])]
+        repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance_of(i, I2928["general model representation"])]
         if len(repth) != 1:
             return False
         repth = repth[0]

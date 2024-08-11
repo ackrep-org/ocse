@@ -20,10 +20,9 @@ ag = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "agents1.py"), pref
 ma = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "math1.py"), prefix="ma", reuse_loaded=True)
 ct = p.irkloader.load_mod_from_path(pjoin(PACKAGE_ROOT_PATH, "control_theory1.py"), prefix="ct", reuse_loaded=True)
 
-ds = p.core.ds
 
-theorems = [i for i in ds.items.values() if p.is_instance(i, p.I14["mathematical proposition"])]
-systems = [i for i in ds.items.values() if p.is_instance(i, ct.I7641["general system model"])]
+theorems = p.get_all_instances_of(p.I14["mathematical proposition"])
+systems = p.get_all_instances_of(ct.I7641["general system model"])
 
 def cond_func(sys, rep, th):
     # Note: most sys items here will be the systems created in the scope of a theorem. matching those doesnt make sense.
@@ -49,12 +48,12 @@ def cond_func(sys, rep, th):
         return False
 
     setting_items = set.get_inv_relations("R20", return_subj=True)
-    systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, ct.I7641["general system model"])]
+    systh = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance_of(i, ct.I7641["general system model"])]
     if len(systh) != 1:
         return False
     systh = systh[0]
 
-    repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance(i, ct.I2928["general model representation"])]
+    repth = [i for i in setting_items if isinstance(i, p.Item) and p.is_instance_of(i, ct.I2928["general model representation"])]
     if len(repth) != 1:
         return False
     repth = repth[0]
