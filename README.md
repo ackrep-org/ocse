@@ -12,3 +12,4 @@ Until 2022-10-01 the repo with primary URL (<https://github.com/ackrep-org/ocse/
 
 - Use `pytest` (executed in the root directory of this repo) to run the OCSE unittests.
 - Use `pyirk -ac` to generate `.ac_candidates.txt` file used for [autocompletion](https://github.com/ackrep-org/irk-fzf) in *code* editor.
+- USe `pyirk -l control_theory1.py ct -i` to load OCSE in iteractive mode
