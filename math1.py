@@ -430,7 +430,7 @@ I6259 = p.create_item(
 R7490 = p.create_relation(
     R1__has_label="has sequence element",
     R2__has_description=(
-        "specifies the item-type of the elements of a mathematical set; "
+        "specifies the item-type of the elements in a sequence; "
         "should be a subclass of I12['mathematical object']"
     ),
     R8__has_domain_of_argument_1=I6259["sequence"],

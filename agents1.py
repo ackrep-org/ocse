@@ -51,6 +51,10 @@ R3475 = p.create_relation(
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P2456",
 )
 
+R3476 = p.create_relation(
+    R1__has_label="has google scholar author ID",
+    R2__has_description="specifies the google scholar author ID of a researcher",
+)
 
 I7435 = p.create_item(
     R1__has_label="human",
@@ -684,6 +688,13 @@ R8436 = p.create_relation(
     R11__has_range_of_result=p.I52["string"],
 )
 
+R8438 = p.create_relation(
+    R1__has_label="has journal",
+    R2__has_description="...",
+    R8__has_domain_of_argument_1=I6591["source document"],
+    R11__has_range_of_result=p.I52["string"], # todo create entity journal
+)
+
 
 def create_source(title: str, authors, year: int, doi: str = None):
     """
@@ -740,6 +751,13 @@ R8437 = p.create_relation(
     R2__has_description="...",
     R8__has_domain_of_argument_1=I7800["source segment"],
     R11__has_range_of_result=p.I52["string"],
+)
+
+R8440 = p.create_relation(
+    R1__has_label="cites",
+    R2__has_description="specifies that souce A cites source B",
+    R8__has_domain_of_argument_1=[I6591["source document"], I7800["source segment"]],
+    R11__has_range_of_result=I6591["source document"],
 )
 
 
