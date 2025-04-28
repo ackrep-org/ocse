@@ -67,6 +67,14 @@ class Test_02_math(unittest.TestCase):
             prod = ma.I5177["matmul"](ma.I1474["matpow"](A, i), b)
             colstack3.set_relation("ma__R7490__has_sequence_element", prod)
 
+    def test_c01b__just_expected_duplicated_labels(self):
+        # this failed for pyirk < 0.15.1
+        self.assertTrue(hasattr(p.settings, "STRICT"))
+        p.settings.STRICT = True
+
+        # requires pyirk >= 0.15.2
+        p.get_label_to_item_dict(known_duplicates=["linearity", "strict nonlinearity"])
+
     def test_c02__eigenvalues(self):
         A = p.instance_of(ma.I9906["square matrix"])
         s = p.instance_of(ma.I5030["variable"])
