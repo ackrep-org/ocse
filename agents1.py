@@ -17,10 +17,18 @@ keymanager = p.KeyManager(keyseed=1239)
 p.register_mod(__URI__, keymanager)
 p.start_mod(__URI__)
 
+I7435 = p.create_item(
+    R1__has_label="human",
+    R2__has_description="human being",
+    R4__is_instance_of=p.I2["Metaclass"],
+    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q5",
+)
 
 R7781 = p.create_relation(
     R1__has_label="has family name",
     R2__has_description="part of the full name of a person",
+    R8__has_domain_of_argument_1=I7435["human"],
+    R11__has_range_of_result=p.I52["string"],
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P734",
 )
 
@@ -28,6 +36,8 @@ R7781 = p.create_relation(
 R7782 = p.create_relation(
     R1__has_label="has given name",
     R2__has_description="first name or another given name of this person",
+    R8__has_domain_of_argument_1=I7435["human"],
+    R11__has_range_of_result=p.I52["string"],
     R18__has_usage_hint=[
         "this relation is non-functional, i.e. a person can have multiple given names; order matters",
         "if given name is unknown, it is acceptable to use initials here",
@@ -39,6 +49,8 @@ R7782 = p.create_relation(
 R3474 = p.create_relation(
     R1__has_label="has ORCID",
     R2__has_description="specifies the orcid of a researcher",
+    R8__has_domain_of_argument_1=I7435["human"],
+    R11__has_range_of_result=p.I52["string"],
     R18__has_usage_hint="This can be used if no wikidata entry is yet available",
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P496",
 )
@@ -47,6 +59,8 @@ R3474 = p.create_relation(
 R3475 = p.create_relation(
     R1__has_label="has DBLP author ID",
     R2__has_description="specifies the DBLP author ID of a researcher",
+    R8__has_domain_of_argument_1=I7435["human"],
+    R11__has_range_of_result=p.I52["string"],
     R18__has_usage_hint="This can be used if neither wikidata nor ORCID is yet available",
     R33__has_corresponding_wikidata_entity="https://www.wikidata.org/wiki/Property:P2456",
 )
@@ -54,15 +68,9 @@ R3475 = p.create_relation(
 R3476 = p.create_relation(
     R1__has_label="has google scholar author ID",
     R2__has_description="specifies the google scholar author ID of a researcher",
+    R8__has_domain_of_argument_1=I7435["human"],
+    R11__has_range_of_result=p.I52["string"],
 )
-
-I7435 = p.create_item(
-    R1__has_label="human",
-    R2__has_description="human being",
-    R4__is_instance_of=p.I2["Metaclass"],
-    R33__has_corresponding_wikidata_entity="https://www.wikidata.org/entity/Q5",
-)
-
 
 def create_person(given_name: str, family_name: str, r2: str, r33=None, r3474=None, r3475=None):
     """

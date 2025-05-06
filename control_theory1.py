@@ -233,7 +233,7 @@ I2640 = p.create_item(
     R2__has_description="...",
     R4__is_instance_of=p.I2["Metaclass"],
 )
-
+# todo this should be moved to math
 I5600 = p.create_item(
     R1__has_label="denominator",
     R2__has_description="denominator of some scalar mathematical term",
