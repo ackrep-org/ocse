@@ -429,13 +429,50 @@ I6259 = p.create_item(
 
 R7490 = p.create_relation(
     R1__has_label="has sequence element",
-    R2__has_description=(
-        "specifies the item-type of the elements in a sequence; "
-        "should be a subclass of I12['mathematical object']"
-    ),
+    # R2__has_description=(
+    #     "specifies the item-type of the elements in a sequence; "
+    #     "should be a subclass of I12['mathematical object']" # TODO this is contrary to the use in test_package.py test_c01__column_stack
+    # ),
+    R2__has_description="specifies that a sequence has a given element", # TODO whats the difference to p.R39?
     R8__has_domain_of_argument_1=I6259["sequence"],
     R11__has_range_of_result=p.I12["mathematical object"],
 )
+
+R7280 = p.create_relation(
+    R1__has_label="has element type",
+    R2__has_description=(
+        "specifies the item-type of the elements in a sequence or set "
+        "should be a subclass of I12['mathematical object']"
+    ),
+    R8__has_domain_of_argument_1=[I6259["sequence"], p.I13["mathematical set"]],
+    R11__has_range_of_result=p.I12["mathematical object"],
+)
+
+I8603 = p.create_item(
+    R1__has_label="element of sequence",
+    R2__has_description=r"Operator that returns the i-th element of a sequence",
+    R4__is_instance_of=p.I8["mathematical operation with arity 2"],
+    R8__has_domain_of_argument_1=I6259["sequence"],
+    R9__has_domain_of_argument_2=p.I37["integer number"],
+)
+
+I4731 = p.create_item(
+    R1__has_label="element type rule",
+    R2__has_description=("sets the type of all elements in a sequence"), # todo or set
+    R4__is_instance_of=p.I41["semantic rule"],
+)
+
+with I4731["element type rule"].scope("setting") as cm:
+    cm.new_var(s=p.instance_of(I6259["sequence"]))
+    cm.new_var(t=p.instance_of(p.I12["mathematical object"])) # some data type (e.g. complex number)
+    cm.new_var(i=p.instance_of(p.I37["integer number"]))
+    cm.new_var(el=I8603["element of sequence"](cm.s, cm.i))
+
+with I4731["element type rule"].scope("premise") as cm:
+    cm.new_rel(cm.s, R7280["has element type"], cm.t)
+
+with I4731["element type rule"].scope("assertion") as cm:
+    cm.new_rel(cm.el, p.R30["is secondary instance of"], cm.t)
 
 
 I3237 = p.create_item(
@@ -1998,7 +2035,7 @@ p.end_mod()
 
 """
 
-      R7280
+
       R1913
       R2917
       R8172

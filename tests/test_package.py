@@ -402,6 +402,16 @@ class Test_02_math(unittest.TestCase):
         self.assertEqual(res1.R36.R39[0].R35__is_applied_mapping_of, p.I56["mul"])
         self.assertEqual(res1.R36.R39[0].R36.R39[0], I4001["b"])
 
+    @unittest.expectedFailure
+    def test_e01__element_type_rule(self):
+        v=p.instance_of(ma.I6259["sequence"])
+        v.set_relation(ma.R7280["has element type"], p.I35["real number"])
+        i = p.instance_of(p.I37["integer number"])
+        v1 = ma.I8603["element of sequence"](v, i)
+        ra = p.ruleengine.RuleApplicator(ma.I4731["element type rule"])
+        ra.apply()
+        # todo assert v1 is secondary instance of real number
+
 
 class Test_02_control_theory(unittest.TestCase):
     def setUp(self):
