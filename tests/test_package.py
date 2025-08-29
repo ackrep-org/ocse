@@ -412,6 +412,22 @@ class Test_02_math(unittest.TestCase):
         ra.apply()
         # todo assert v1 is secondary instance of real number
 
+    # def test_e02__system_of_equations(self):
+    #     I6210 = p.create_item(
+    #         R1__has_label="test theorem",
+    #         R2__has_description=("test"),
+    #         R4__is_instance_of=p.I17["equivalence proposition"],
+    #     )
+
+
+    #     with I6210["test theorem"].scope("setting") as cm:
+    #         cm.new_var(a=p.instance_of(p.I35["real number"]))
+    #         cm.new_var(b=p.instance_of(p.I35["real number"]))
+    #         with ma.SystemOfEquations() as soe:
+    #             e1 = cm.new_equation(lhs=2*cm.a, rhs=cm.b)
+    #             e2 = cm.new_equation(lhs=3*cm.a, rhs=1.5*cm.b)
+    #     pass
+
 
 class Test_02_control_theory(unittest.TestCase):
     def setUp(self):

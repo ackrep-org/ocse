@@ -4,6 +4,7 @@ import sympy as sp
 from sympy.parsing.latex import parse_latex_lark
 from sympy.external import import_module
 from sympy.parsing.latex.errors import LaTeXParsingError
+import inspect
 
 lark = import_module("lark")
 if lark:
@@ -466,14 +467,66 @@ with I4731["element type rule"].scope("setting") as cm:
     cm.new_var(s=p.instance_of(I6259["sequence"]))
     cm.new_var(t=p.instance_of(p.I12["mathematical object"])) # some data type (e.g. complex number)
     cm.new_var(i=p.instance_of(p.I37["integer number"]))
-    cm.new_var(el=I8603["element of sequence"](cm.s, cm.i))
+    cm.new_var(el=p.instance_of(p.I1["general item"]))
 
 with I4731["element type rule"].scope("premise") as cm:
+    cm.new_rel(cm.el, p.R15["is element of"], cm.s)
     cm.new_rel(cm.s, R7280["has element type"], cm.t)
 
 with I4731["element type rule"].scope("assertion") as cm:
     cm.new_rel(cm.el, p.R30["is secondary instance of"], cm.t)
 
+
+
+I3236 = p.create_item(
+    R1__has_label="system of equations",
+    R2__has_description="sequence of columns of equal length which are stacked horizontally",
+    R3__is_subclass_of=p.I12["mathematical object"],
+)
+
+R3236 = p.create_relation(
+    R1__has_label="has equation",
+    R2__has_description=(
+        "specifies that the object equation (or other math relation) is part of the subject system of equations"
+    ),
+    R8__has_domain_of_argument_1=I3236["system of equations"],
+    R11__has_range_of_result=p.I21["mathematical relation"],
+)
+# todo how does this work with the open world assumption? if a system of equations has specified 2 equations, then the
+# assumption should be that there is no third equation in this system, which is contrary to owa?
+
+R3237 = p.create_relation(
+    R1__has_label="is part of system of equations", # todo should this just be R5["is part of"]?
+    R2__has_description=(
+        "specifies that the subject equation (or other math relation) is part of the object system of equations"
+    ),
+    R8__has_domain_of_argument_1=p.I21["mathematical relation"],
+    R11__has_range_of_result=I3236["system of equations"],
+    R68__is_inverse_of=R3236["has equation"]
+)
+
+
+# class SystemOfEquations:
+#     def __init__(self):
+#         pass
+#     def __enter__(self):
+#         f = inspect.getouterframes(inspect.currentframe())[1].frame
+#         self.oldvars = dict(f.f_locals)
+
+#         # run this explicitly in the context of this module (otherwise R1616 etc. is not defined)
+#         with p.uri_context(uri=__URI__):
+#             self.sys = p.instance_of(I3236["system of equations"])
+
+#         self.sys.finalize()
+#         return self.sys
+
+#     def __exit__(self, exc_type, exc_val, exc_tb):
+#         f = inspect.getouterframes(inspect.currentframe())[1].frame
+#         for name, val in f.f_locals.items():
+#             if name not in self.oldvars:
+#                 if p.is_instance_of(val, p.I21["mathematical relation"], allow_R30_secondary=True):
+#                     with p.uri_context(uri=__URI__):
+#                         self.sys.set_relation(R3236["has equation"], val)
 
 I3237 = p.create_item(
     R1__has_label="column stack",
@@ -568,8 +621,9 @@ I5484 = p.create_item(
 I1060 = p.create_item(
     R1__has_label="general function",
     R2__has_description="function that maps from some set (domain) into another (range);",
-    R3__is_subclass_of=p.I18["mathematical expression"],
+    R3__is_subclass_of=p.I6["mathematical operation"],
     R18__has_usage_hint="this is the base class for more specific types of functions",
+    R46__is_secondary_subclass_of=p.I18["mathematical expression"],
 )
 
 I5094 = p.create_item(
@@ -819,8 +873,7 @@ I3058 = p.create_item(
 )
 
 # the following theorem demonstrate the usage of the existential quantifier ∃ (expressed as qualifiers)
-# see also https://pyirk-core.readthedocs.io/en/develop/userdoc/overview.html#universal-and-existential-quantification
-# TODO: drop branch name in above link, once the docs are in main
+# see also https://pyirk-core.readthedocs.io/en/latest/background/quantification.html
 
 I1566 = p.create_item(
     R1__has_label="theorem on the successor of integer numbers",
@@ -1016,6 +1069,14 @@ I1168 = p.create_item(
 R9651 = p.create_relation(
     R1__has_label="has domain",
     R2__has_description="specifies that the subject (a function or operator) is defined for all values of the object (a set)",
+    R8__has_domain_of_argument_1=p.I6["mathematical operation"],
+    R11__has_range_of_result=p.I13["mathematical set"],
+    R22__is_functional=True,
+)
+
+R9652 = p.create_relation(
+    R1__has_label="has codomain",
+    R2__has_description="specifies that the outputs of the subject (a function or operator) fall into the object (a set)",
     R8__has_domain_of_argument_1=p.I6["mathematical operation"],
     R11__has_range_of_result=p.I13["mathematical set"],
     R22__is_functional=True,
